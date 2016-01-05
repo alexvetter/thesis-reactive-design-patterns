@@ -1,0 +1,21 @@
+# MacOS files:
+.DS_Store
+
+# latex auxiliary files:
+*.aux
+*.acn
+*.acr
+*.alg
+*.bbl
+*.blg
+*.glg
+*.glo
+*.gls
+*.ist
+*.lof
+*.log
+*.lot
+*.toc
+*converted-to.pdf
+*.glsdefs
+*.out

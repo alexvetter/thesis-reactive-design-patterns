@@ -1,0 +1,153 @@
+%HEADER
+\def\makroEinseitig{
+	%KOMA-Script-Klasse: scrreprt
+	%deutsches Design, Schriftgröße 12, DIN A4
+	%Literaturverzeichnis und Index in Inhaltsverzerzeichnis einbinden
+	\documentclass[12pt,a4paper,listof=totoc,oneside]{scrreprt}
+
+	%Seitenspiegel einstellen
+	\usepackage[a4paper]{geometry}
+	\geometry{a4paper,left=30mm,right=25mm,bottom=20mm,top=15mm,bindingoffset=2mm,includehead,includefoot}
+}
+
+\def\makroFH-Kopfzeilenstil{
+	\pagestyle{scrheadings}
+	\setheadsepline{0.4pt}
+	\pagestyle{scrheadings}
+	\renewcommand*{\chapterpagestyle}{scrheadings}
+}
+
+\makroEinseitig{}
+
+% schalte Umlaute frei
+\usepackage[ngerman]{babel}
+
+% passende Codierung
+\usepackage[utf8]{inputenc}
+
+% Seitenspiegel einzustellen
+%\usepackage[a4paper]{geometry}
+
+% Mathematik
+\usepackage{amsmath}
+
+% Symbole
+\usepackage{amssymb}
+
+% Griechische Symbole
+\usepackage{upgreek}
+
+% weitere Symbole
+\usepackage{pxfonts}
+
+% Phonetischen Alphabete für LaTeX
+\usepackage{tipa}
+
+% farbige Schriften
+\usepackage{color}
+
+% scrhack redefines macros of packages from other authors!
+\usepackage{scrhack}
+
+% Bilder fixieren
+\usepackage{float}
+
+% Grafiken einbinden
+\usepackage{graphicx}
+
+% Kopf- und Fußzeilen
+\usepackage[automark,standardstyle,markusedcase]{scrpage2}
+
+% deutsche Überschriften
+\usepackage[ngerman]{translator}
+
+% deutsche Anführungszeichen
+\usepackage[autostyle=true,german=quotes]{csquotes}
+
+% Kopfzeilenabstand festlegen
+\setlength{\headheight}{10mm}
+
+% Captions
+\usepackage{caption3}
+\usepackage{caption}
+
+% Für Deutsch Abb. & Tab.
+\addto\captionsngerman{
+	\renewcommand{\figurename}{Abb.}
+	\renewcommand{\tablename}{Tab.}
+}
+
+% Glossar-Package (keine Seitenzahlen, Abkürzungsverzeichnis, ins Inhaltsverzeichnis)
+\usepackage[nonumberlist,acronym,toc]{glossaries}
+
+% Zitieren
+\usepackage{cite}
+
+% Glossar einschalten
+\makeglossaries{}
+
+% für URLs
+\usepackage{url}
+
+% Links sollen nicht farbig sein
+\usepackage[colorlinks=false]{hyperref}
+
+% Code Beispiele
+\usepackage{listings}
+
+% Symbole
+\usepackage{amssymb}
+
+% Style für Listings
+\lstset{
+frame=single,
+captionpos=t,
+numbers=left,
+breaklines=true,
+prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+numberstyle=\tiny,
+basicstyle=\fontfamily{pcr}\selectfont\footnotesize
+}
+
+% Biblatex für Online Quellen
+\usepackage[numbers,round]{natbib}
+
+% Um besser Tabellen zu gestalten
+\usepackage{colortbl}
+\definecolor{light-gray}{gray}{.8}
+\definecolor{lighter-gray}{gray}{.9}
+\definecolor{lightgreen}{rgb}{0.56, 0.93, 0.56}
+
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+\newcommand{\Storycard}[6]{
+	\begin{table}[H]
+		\framebox{
+			\begin{tabularx}{\textwidth}{l|l|l}
+			\textbf{Nr:} #1 & \textbf{Story Points:} #2 Pkt. & \textbf{Priorität:} #3 \\
+			\hline
+			\multicolumn{3}{p{0.97\textwidth}}{\textbf{Titel:} #4} \\
+			\hline
+			\multicolumn{3}{p{0.97\textwidth}}{\textbf{Beschreibung:} #5} \\
+			\hline
+			\multicolumn{3}{p{0.97\textwidth}}{\textbf{Akzeptanztests:} #6} \\
+			\end{tabularx}
+		}
+	\end{table}
+}
+
+% Dokument interne Referenzen
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\autoref*{#1} \nameref*{#1}}}
+
+% Fügt bei Zahlen kleiner 10  eine 0 vorne dran
+\newcommand{\leadingzero}[1]{\ifnum #1<10 0\the#1\else\the#1\fi}
+
+% ISO Datum im Format YYYY-MM-DD
+\newcommand{\todayiso}{\the\year–\leadingzero{\month}–\leadingzero{\day}}
+
+% Kein Einrücken beim Beginn eines Paragraphen (z.B. nach einem Bild)
+\setlength{\parindent}{0pt}
+
+% Inkludiere Einstellungen
+\include{0-Template/Settings}

@@ -1,0 +1,32 @@
+% !TEX root = ../Masterdatei.tex
+\chapter{Einleitung}\label{sec:einleitung}
+
+Seit dem Software entwickelt wird, dient diese einem gewissen Zweck. Software löst Probleme und erledigt Aufgaben automatisiert und ohne menschliche Fehler zu machen. Eine offensichtliche aber trotzdem sehr wichtige Eigenschaft einer Software ist, dass diese auf jegliche Eingaben reagiert. Hierfür gibt es den englischen Begriff \textit{responiveness}. Im Deutschen spricht man von der Antwortbereitschaft. Diese Anforderung ist heute nach wie vor von Bedeutung. Deshalb steht sie im Kern der Reaktiven Programmiung (engl.\ reactive programming), die jedoch weitere Anforderungen definiert.\cite{kuhn_reactive_2015}[S. 18]
+
+\section{Wandel der Anforderungen}
+Die heutigen Anforderungen an Software unterliegen dem rapiden Wachstum der Nutzung von Software im technischen wie auch im sozialen Sinne. Der Wandel hin zu einer digitalen Gesellschaft und der weltweiten Vernetzung durch das Internet machen Software allgegenwertig. Die Art und Weise wie moderne Systeme implementiert werden, unterliegt ebenfalls diesem Wandel. Um den heutigen Ansprüchen zu genügen, müssen diese robuster, skalierbarer und anpassungsfähiger sein, als es früher der Fall war.\cite{boner_reactive_2014}
+
+Früher hatte man überwiegend mathematische Probleme die gelöst werden mussten. Heutzutage sind die Aufgaben viel komplexer, nicht im Bezug auf mathematische Probleme sondern vielmehr im Bezug auf die Menge der Daten. Zum Beispiel muss der Kurznachrichten Dienst Twitter täglich über 400 Millionen Tweets verarbeiten und Nutzern auf der ganzen Welt zur Verfügung stellen. Hier wird ein weiteres Problem deutlich: \enquote{Nutzern auf der ganzen Welt}. Das Internet und deren Dienste werden von Millionen Nutzern aus der ganzen Welt genutzt. Verteilte Systeme zu konzipieren, ist keine neue Herausforderung, jedoch werden mittlerweile ganz andere Anforderungen an sie gestellt.
+
+Eine weitere Entwicklung ist bei den Prozessoren zu beobachten. Prozessoren sind bei den Frequenzen an physikalische Grenzen gestoßen, weshalb man seit einigen Jahren auf Multi-core Prozessoren setzt. Es ist nur sinnvoll, dass Anwendungen auf die Multi-core Prozessoren hin optimiert werden. Ruft man sich nun die anfänglich erwähnte Anforderung \textit{responsivness} wieder ins Gedächtnis, ist die Umsetzung in einem globalen Netz eine durch aus komplizierte Aufgaben.
+
+Die Entwicklung von Software für Cloud Computing oder Multi-Core Systemen bringt verschiedene Probleme mit sich. Traditionelle Software ist meinst synchron und blockierend und nutzt somit die Cores nicht vollständig aus, dies führt z.B. zu schlechter Skalierbarkeit.
+
+Die Autoren des Reaktiven Manifests postuliert reaktive Systeme wären skalierbarer, einfacher weiterzuentwickeln und zuverlässiger.\cite{boner_reactive_2014}
+
+In dieser Arbeit möchte ich die Frage beantworten, welche Konzepte und Design Patterns helfen reaktive Systeme zu entwicklen.
+
+\section{Reactive Manifesto}
+
+Typischerweise werden größere Applikationen mit dem \enquote{Single-threaded} Gedanken entworfen und umgesetzt. Das Reactive Manifesto definiert welche Eigenschaften eine Applikationen haben sollte, um reaktiv zu sein. Entspricht die Architektur einer Software dem Reactive Manifesto, gewährleistet man ein System welches antwortbereit (engl.\ responsive), widerstandfähig (engl.\ resilient), elastisch (engl.\ elastic) und nachrichtenorientiert (engl.\ message driven) ist.\cite{vernon_reactive_2016}[S. 5]\cite{boner_reactive_2014}
+
+% "Without resilience, nothing else matters. If your beautiful, production-grade, elastic, scalable, highly concurrent, non-blocking, asynchronous, highly responsive and performant application isn’t running, then you’re back to square one. It starts and ends with resilience." – Jonas Bonér (creator of Akka)
+
+% The four tenets of reactive systems
+% By means of an asynchronous, non-blocking message-driven approach, highly resilient and elastic systems can be formed, resulting in a consistently responsive user experience. In other words the system needs to be message-driven in order to be elastic and resilient which results in an responsive application.
+
+% Wir glauben, dass die Anforderungen, die heute an Computersysteme gestellt werden, nur zu erfüllen sind durch die gleichzeitige Ausrichtung an vier Qualitäten, deren Wert bislang nur einzeln betrachtet wurde: Systeme müssen stets antwortbereit, widerstandsfähig, elastisch und nachrichtenorientiert sein. Dann nennen wir sie reaktive Systeme.
+
+% In unterschiedlichen Zweigen der Softwareindustrie stoßen Organisationen und Entwickler auf wiederkehrende Muster in den Anforderungen und der Implementierung moderner Systeme. Um den heutigen Ansprüchen zu genügen, müssen diese robuster und anpassungsfähiger sein, als es früher der Fall war. Dieser Wandel ist bedingt durch das rapide wachsende technische und soziale Ausmaß der Verwendung von Computersystemen in unserer Gesellschaft.
+
+% Bestanden große Anwendungen vor wenigen Jahren noch aus Dutzenden von Servern, die Antwortzeiten im Sekundenbereich lieferten, regelmäßig für Stunden gewartet wurden und Daten in der Größenordnung von Gigabytes verarbeiteten, so umfassen sie heute Tausende von Vielkernprozessoren, verteilt auf mobile Endgeräte und in der Cloud. Benutzer erwarten Antwortzeiten im Bereich von Millisekunden und ständige Verfügbarkeit, die Datenmenge bemisst sich in Petabytes.

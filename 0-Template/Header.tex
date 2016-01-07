@@ -81,7 +81,7 @@
 \usepackage[nonumberlist,acronym,toc]{glossaries}
 
 % Zitieren
-\usepackage{cite}
+\usepackage[numbers,square,sort]{natbib}
 
 % Glossar einschalten
 \makeglossaries{}
@@ -99,18 +99,13 @@
 \usepackage{amssymb}
 
 % Style für Listings
-\lstset{
-frame=single,
+\lstset{frame=single,
 captionpos=t,
 numbers=left,
 breaklines=true,
 prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
 numberstyle=\tiny,
-basicstyle=\fontfamily{pcr}\selectfont\footnotesize
-}
-
-% Biblatex für Online Quellen
-\usepackage[numbers,round]{natbib}
+basicstyle=\fontfamily{pcr}\selectfont\footnotesize}
 
 % Um besser Tabellen zu gestalten
 \usepackage{colortbl}

@@ -1,5 +1,3 @@
-%MAIN-DOCUMENT - INCLUDIERT ALLER FILES DER ORDNERSTRUKTUR
-
 % Header beinhaltet Dokumentenklasse sowie includierte Packages
 \input{0-Template/Header}
 
@@ -9,24 +7,23 @@
 %Zeilenabstand * 1.5
 \renewcommand{\baselinestretch}{1.5}\normalsize
 
-%Startpunkt jedes LaTex-Dokuments
 \begin{document}
 
 % Glossar
 \input{0-Template/Glossar}
 \glsaddall{}
 
-%Titelseite
+% Titelseite
 \include{0-Template/Titelseite}
 
-%Erklärung zum selbstständigen Arbeiten
+% Erklaerung
 \include{0-Template/Erklaerung}
 
-%Verwende Abstract in Deutsch sowie in Englisch.
+% Abstract
 \input{1-Abstract/Abstract-de}
 \input{1-Abstract/Abstract-en}
 
-\clearpage % oder \cleardoublepage bei twoside
+\clearpage
 \begingroup
   \renewcommand*{\chapterpagestyle}{empty}
   \pagestyle{empty}
@@ -36,29 +33,27 @@
 
 \setcounter{page}{1}
 
-%Jedes Kapitel in eigener Ordnerstruktur
-
-%Einleitung
+% Einleitung
 \input{2-Einleitung/Einleitung}
 
-%Grundlagen
+% Grundlagen
 \input{3-Grundlagen/Grundlagen}
 
-%Hauptteil
+% Hauptteil
 \input{4-Hauptteil/Hauptteil}
 
 % Ergebnisse
 \input{5-Ergebnisse/Ergebnisse}
 
 % BibTex
+\nocite{*}
 \bibliographystyle{alphadin}
-
 \bibliography{0-Template/Bibliothek.bib}{}
 
-% Abbildungsverzeichnis, Tabellenverzeichnis und Glossar ausgeben
+% Verzeichnisse
 \listoffigures
 \listoftables
-\printglossaries{}
+\printglossary[type=main, title=Glossar,toctitle=Glossar]
+\printglossary[type=acronym, title=Akronyme,toctitle=Akronyme]
 
-%Ende jedes LaTex-Dokuments
 \end{document}

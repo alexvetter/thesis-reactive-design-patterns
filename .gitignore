@@ -19,3 +19,5 @@
 *converted-to.pdf
 *.glsdefs
 *.out
+*.fdb_latexmk
+*.fls

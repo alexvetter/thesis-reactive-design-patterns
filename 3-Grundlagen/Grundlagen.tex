@@ -1,21 +1,65 @@
 % !TEX root = ../Masterdatei.tex
-\chapter{Grundlagen}
+\chapter{Grundlagen und Begriffsbestimmung}
 
-\section{Funktionale Programmierung}
-\subsection{First-class functions}
-\subsection{Immutable State}
-\subsection{Pattern Matching}
+In diesem Teil der Arbeit geht es um die Grundlagen und Begriffsbestimmung auf diese dann im Hauptteil aufgebaut werden. Zu Beginn werden die genauen Eigenschaften reaktiver Systeme definiert. Später werden grundlegende Programmierkonzept für reaktive Systeme erklärt.
 
 \section{Eigenschaften reaktiver Systeme}
 
-By means of an asynchronous, non-blocking message-driven approach, highly resilient and elastic systems can be formed, resulting in a consistently responsive user experience. In other words the system needs to be message-driven in order to be elastic and resilient which results in an responsive application.
+Reaktive Anwendungen haben die Eigenschaften folgendes zu leisten bzw. foldenge Punkte zu erfüllen~\cite[S.~19ff]{kuhn_reactive_2015}~\cite[S.~6]{vernon_reactive_2016}.\\
+Eine reaktive Anwendung\ldots
 
-\subsection{Event-driven (Message-driven)}
-\subsection{Scalable (Elastic)}
-\subsection{Resilient}
+\begin{enumerate}
+    \item \ldots \textbf{reagiert auf Nutzer oder Komponenten}. Die Applikation erfüllt die geforderte Antwortzeit (engl. response time) und übertrifft diese eventuell sogar.
+    \item \ldots \textbf{reagiert auf Fehler}. Die Software ist von Grund auf widerständfähig gegenüber Fehlerzuständen. Die Wiederherstellung des Normalzustand erfolgt automatisch.
+    \item \ldots \textbf{reagiert entsprechend auf variable Belastung}. Das System ist automatisch in der Lage sowohl Scale-up als auch Scale-down durchzuführen.
+    \item \ldots \textbf{reagiert auf Nachrichten}. Das System verwendet asynchrone Nachrichtenübermittlung zwischen den Komponenten und ist somit nachrichtenorientiert.
+\end{enumerate}
+
+\subsection{Antwortbereit}\label{subsec:responsive}
+Eine Reaktive Anwendung muss zu jederzeit auf Anfragen reagieren. Das heißt die Anwendung ist jederzeit antwortbereit (engl. responsive). Anfragen können nicht nur durch einen Benutzer ausgelöst werden, sondern können auch von anderen Diensten von anderen Komponenten initiert werden.
+
+% responsiveness in synchronous systems
+% Waldo et al "A Note on Distributed Computing"
+% Peter Deutsch Distributed Systems
+
+\pagebreak
+
+\subsection{Widerstandsfähig}\label{subsec:resilient}
+Eine Software widerstandfähig (engl. resilient) zu entwickeln bedeutet nicht, dass die Software fehlerfrei ist. Es bedeutet, dass die Software sich von einem Fehlerzustand erholen kann \cite[S.~6]{vernon_reactive_2016}.\\
+Andernfalls kann die Antwortbereitschaft (siehe~\ref{subsec:responsive}) nicht erfüllt werden. Man versucht bei dem Entwurf der Software Fehler von vornherein zu bedenken und mit ihnen sinnvoll um zu gehen. Folgendes Zitat von Jonas Bonér macht deutlich, wie wichtig die Widerstandsfähigkeit einer Software ist.
 
 \begin{quotation}
-Without resilience, nothing else matters. If your beautiful, production-grade, elastic, scalable, highly concurrent, non-blocking, asynchronous, highly responsive and performant application isn't running, then you're back to square one. It starts and ends with resilience.~\citetext{Bonér, Jones; 2015}
+Without resilience, nothing else matters. If your beautiful, production-grade, elastic, scalable, highly concurrent, non-blocking, asynchronous, highly responsive and performant application isn't running, then you're back to square one. It starts and ends with resilience.~\citetext{Bonér, Jonas; 2015}
 \end{quotation}
 
-\subsection{Responsive}
+Im Grunde ist diese Aussage trivial. Eine Software die nicht läuft, ist unbrauchbar --- egal wie komplex und durchdacht die Architektur auch sein mag.\\
+Es ist aber nicht nur die eigene Software die betroffen sein kann. Andere externe Softwarekomponenten von denen man abhängt oder auch die Hardware kann im laufenden Betrieb Probleme bereiten.\\
+Den Schluss, den man daraus ziehen sollte, lautet deshalb nicht \textit{ob ein Fehler auftritt} sondern viel mehr \textit{wann} und \textit{wie häufig} das passiert. Für den Benutzer ist es nebensächlich warum ein interner Fehler aufgetreten ist. Die Anwendung wird in diesem Moment nicht das tun, was der Benutzer von ihr erwartet~\cite[S.~33ff]{kuhn_reactive_2015}.\\
+
+Im Reaktiven Manifest hat für dieses Problem bzw. Eigenschaft ganz bewusst den Begriff \textit{resilience} und nicht \textit{reliability} gewählt. Man möchte deutlich machen, dass es nahe zu unmöglich ist ein ausfallsicheres (engl. relabil) System zu schaffen und setzt deshalb auf widerstandsfähige (engl. resilient) Systeme, welche mit Fehlerzustanden umgehen können und vor allem sich von dieses wieder erholen können.\\
+Also ist ein reaktives System nicht nur Fehler tolerant (engl. fault tolerant) sondern kann sich auch von den Fehler selbstständig erholen. Um dieses Ziel zu erreichen muss man die Komponenten verteilen (engl. distribute) und von einander abschotten (engl. compartmentalize)~\citetext{\cite[S.~7]{vernon_reactive_2016}~\cite[S.~34]{kuhn_reactive_2015}}.
+
+%TODO isolierung
+%TODO evtl. hier noch ein paar Szenarien angeben. 
+
+\subsection{Elastisch}
+Elastisch (engl. elastic)
+
+\pagebreak
+
+\subsection{Nachrichtenorientiert}
+Nachrichtenorientiert (engl. message driven)
+
+% By means of an asynchronous, non-blocking message-driven approach, highly resilient and elastic systems can be formed, resulting in a consistently responsive user experience. In other words the system needs to be message-driven in order to be elastic and resilient which results in an responsive application.
+
+\pagebreak
+
+%
+%
+%
+
+\section{Parallel und Concurrency}
+\section{Funktionale Programmierung}
+% Non-determinism caused by concurrent threads accessing shared mutable state. To get determinism, avoid mutable state. To avoid mutable state it means to program functially.
+\subsection{First-class functions}
+\subsection{Immutable State}

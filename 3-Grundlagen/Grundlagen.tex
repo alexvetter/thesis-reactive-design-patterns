@@ -6,27 +6,33 @@ In diesem Teil der Arbeit geht es um die Grundlagen und Begriffsbestimmung auf d
 \section{Eigenschaften reaktiver Systeme}
 
 Reaktive Anwendungen haben die Eigenschaften folgendes zu leisten bzw. foldenge Punkte zu erfüllen~\cite[S.~19ff]{kuhn_reactive_2015}~\cite[S.~6]{vernon_reactive_2016}.\\
-Eine reaktive Anwendung\ldots
+Eine reaktive Anwendung muss\ldots
 
 \begin{enumerate}
-    \item \ldots \textbf{reagiert auf Nutzer oder Komponenten}. Die Applikation erfüllt die geforderte Antwortzeit (engl. response time) und übertrifft diese eventuell sogar.
-    \item \ldots \textbf{reagiert auf Fehler}. Die Software ist von Grund auf widerständfähig gegenüber Fehlerzuständen. Die Wiederherstellung des Normalzustand erfolgt automatisch.
-    \item \ldots \textbf{reagiert entsprechend auf variable Belastung}. Das System ist automatisch in der Lage sowohl Scale-up als auch Scale-down durchzuführen.
-    \item \ldots \textbf{reagiert auf Nachrichten}. Das System verwendet asynchrone Nachrichtenübermittlung zwischen den Komponenten und ist somit nachrichtenorientiert.
+    \item \ldots \textbf{auf Nutzer oder Komponenten reagieren}. Die Applikation erfüllt die geforderte Antwortzeit (engl. response time) und übertrifft diese eventuell sogar.
+    \item \ldots \textbf{auf Fehler reagieren}. Die Software ist von Grund auf widerständfähig gegenüber Fehlerzuständen. Die Wiederherstellung des Normalzustand erfolgt automatisch.
+    \item \ldots \textbf{auf variable Belastung reagieren}. Das System ist automatisch in der Lage sowohl Scale-up als auch Scale-down durchzuführen.
+    \item \ldots \textbf{auf Nachrichten reagieren}. Das System verwendet asynchrone Nachrichtenübermittlung zwischen den Komponenten und ist somit nachrichtenorientiert.
 \end{enumerate}
-
-\subsection{Antwortbereit}\label{subsec:responsive}
-Eine Reaktive Anwendung muss zu jederzeit auf Anfragen reagieren. Das heißt die Anwendung ist jederzeit antwortbereit (engl. responsive). Anfragen können nicht nur durch einen Benutzer ausgelöst werden, sondern können auch von anderen Diensten von anderen Komponenten initiert werden.
-
-% responsiveness in synchronous systems
-% Waldo et al "A Note on Distributed Computing"
-% Peter Deutsch Distributed Systems
 
 \pagebreak
 
-\subsection{Widerstandsfähig}\label{subsec:resilient}
-Eine Software widerstandfähig (engl. resilient) zu entwickeln bedeutet nicht, dass die Software fehlerfrei ist. Es bedeutet, dass die Software sich von einem Fehlerzustand erholen kann \cite[S.~6]{vernon_reactive_2016}.\\
-Andernfalls kann die Antwortbereitschaft (siehe~\ref{subsec:responsive}) nicht erfüllt werden. Man versucht bei dem Entwurf der Software Fehler von vornherein zu bedenken und mit ihnen sinnvoll um zu gehen. Folgendes Zitat von Jonas Bonér macht deutlich, wie wichtig die Widerstandsfähigkeit einer Software ist.
+\subsection{Elastic}\label{subsec:elastic}
+
+Systeme sind heute oft variabler Belastung ausgesetzt. Wird Beispielsweise ein Online Shop in einer Fernsehwerbung oder von einem bekannten Blog erwährt, muss man kurzzeitig sehr viele Anfragen angemessen abarbeiten.\\
+Um die gewünschte Antwortzeiten einzuhalten, muss das System skalieren. Traditionellerweise ist hiermit \enquote{Scaling up} gemeint. Da man aufgrund der heutigen Anforderungen schnell an die Grenzen eines einzelen Rechners stößt, muss das System auch horizontal skalieren. Dazu muss das System bzw. einzelne Komponenten auf mehrere Nodes verteilt werden.\\
+Sinnvoll wäre es auch \enquote{Scaling down} zu bereiten, also ungenutze und nicht benötigte Rechenkapazität wieder freizugeben. Deshalb hat man sich im Reactive Manifesto auf den Begriff \textit{elastic} geeinigt, um deutlich zu machen, dass man in beide Richtungen skalieren kann.\\
+Für das System bedeutet dies, dass einzelne Nodes jederzeit hinzugefügt und entfernt werden können. Deshalb muss das System \textit{location transparent} sein. Also die Komponenten bzw. deren Funktionen dürfen nicht abhängig von einem Host sein ~\cite[S.~39ff]{kuhn_reactive_2015}~\cite[S.~8f]{vernon_reactive_2016}.
+
+% partition the problem -> distribute
+% no shared state is needed
+% scale down -> cost effectiveness
+
+\pagebreak
+
+\subsection{Resilient}\label{subsec:resilient}
+Eine Software \textit{resilient} (dt. widerstandsfähig) zu entwickeln bedeutet nicht, dass die Software fehlerfrei ist. Es bedeutet, dass die Software sich von einem Fehlerzustand erholen kann \cite[S.~6]{vernon_reactive_2016}.\\
+Andernfalls kann die Antwortbereitschaft (siehe~\ref{subsec:responsive}) nicht erfüllt werden. Man versucht bei dem Entwurf der Software Fehler von vornherein zu bedenken und mit ihnen sinnvoll umzugehen. Folgendes Zitat von Jonas Bonér macht deutlich, wie wichtig die Widerstandsfähigkeit einer Software ist.
 
 \begin{quotation}
 Without resilience, nothing else matters. If your beautiful, production-grade, elastic, scalable, highly concurrent, non-blocking, asynchronous, highly responsive and performant application isn't running, then you're back to square one. It starts and ends with resilience.~\citetext{Bonér, Jonas; 2015}
@@ -34,32 +40,69 @@ Without resilience, nothing else matters. If your beautiful, production-grade, e
 
 Im Grunde ist diese Aussage trivial. Eine Software die nicht läuft, ist unbrauchbar --- egal wie komplex und durchdacht die Architektur auch sein mag.\\
 Es ist aber nicht nur die eigene Software die betroffen sein kann. Andere externe Softwarekomponenten von denen man abhängt oder auch die Hardware kann im laufenden Betrieb Probleme bereiten.\\
-Den Schluss, den man daraus ziehen sollte, lautet deshalb nicht \textit{ob ein Fehler auftritt} sondern viel mehr \textit{wann} und \textit{wie häufig} das passiert. Für den Benutzer ist es nebensächlich warum ein interner Fehler aufgetreten ist. Die Anwendung wird in diesem Moment nicht das tun, was der Benutzer von ihr erwartet~\cite[S.~33ff]{kuhn_reactive_2015}.\\
+Den Schluss, den man daraus ziehen sollte, lautet deshalb nicht, ob ein Fehler auftritt sondern viel mehr wann und wie häufig das passiert. Für den Benutzer ist es nebensächlich warum ein interner Fehler aufgetreten ist. Die Anwendung wird in diesem Moment nicht das tun, was der Benutzer von ihr erwartet~\cite[S.~33ff]{kuhn_reactive_2015}.\\
 
-Im Reaktiven Manifest hat für dieses Problem bzw. Eigenschaft ganz bewusst den Begriff \textit{resilience} und nicht \textit{reliability} gewählt. Man möchte deutlich machen, dass es nahe zu unmöglich ist ein ausfallsicheres (engl. relabil) System zu schaffen und setzt deshalb auf widerstandsfähige (engl. resilient) Systeme, welche mit Fehlerzustanden umgehen können und vor allem sich von dieses wieder erholen können.\\
+Im Reactive Manifesto hat für dieses Problem bzw. Eigenschaft ganz bewusst den Begriff \textit{resilience} und nicht \textit{reliability} gewählt. Man möchte deutlich machen, dass es nahezu unmöglich ist, ein ausfallsicheres (engl. relabil) System zu schaffen und setzt deshalb auf widerstandsfähige Systeme, welche mit Fehlerzustanden umgehen können und vorallem sich von dieses wieder erholen können.\\
 Also ist ein reaktives System nicht nur Fehler tolerant (engl. fault tolerant) sondern kann sich auch von den Fehler selbstständig erholen. Um dieses Ziel zu erreichen muss man die Komponenten verteilen (engl. distribute) und von einander abschotten (engl. compartmentalize)~\citetext{\cite[S.~7]{vernon_reactive_2016}~\cite[S.~34]{kuhn_reactive_2015}}.
 
-%TODO isolierung
+%TODO Fehler muss isoliert werden, deshalb supervisor und "restart strategy"
+%TODO a way to manage failure; one-for-one
 %TODO evtl. hier noch ein paar Szenarien angeben. 
+%TODO Don't put all eggs in one basket!
 
-\subsection{Elastisch}
-Elastisch (engl. elastic)
+\subsection{Responsive}\label{subsec:responsive}
+Eine Reaktive Anwendung muss zu jederzeit auf Anfragen reagieren. Das heißt die Anwendung ist jederzeit \textit{responsive} (dt. antwortbereit). Anfragen können nicht nur durch einen Benutzer ausgelöst werden, sondern können auch von anderen Diensten von anderen Komponenten initiert werden.
+
+% TODO respond in case of load
+% TODO respond in case of failure
 
 \pagebreak
 
-\subsection{Nachrichtenorientiert}
-Nachrichtenorientiert (engl. message driven)
+\subsection{Message-driven}\label{subsec:messagedriven}
 
 % By means of an asynchronous, non-blocking message-driven approach, highly resilient and elastic systems can be formed, resulting in a consistently responsive user experience. In other words the system needs to be message-driven in order to be elastic and resilient which results in an responsive application.
 
+% the foundation of reactive systems
+% communicate to share information, don't share information to communicate
+% Message flow
+% TODO message-passing
+% Conclusion reactive systems are distributed
+
+% TODO Decoupling
+% Single responsibility principle
+% Containment of failure, implementation details & responsibility
+% Share nothing -> clear boundaries
+
 \pagebreak
 
+\subsection{Zusammenhang}
+
+% TODO Hier noch der vier Eigenschaften erklären.
+% TODO Grafik
+% TODO vielleicht hier die Reactive Traits
+
 %
 %
 %
 
-\section{Parallel und Concurrency}
-\section{Funktionale Programmierung}
+\section{Parallelität und Nebenläufigkeit}
+
+
+% TODO responsiveness in synchronous systems
+% TODO Waldo et al "A Note on Distributed Computing"
+% TODO Peter Deutsch Distributed Systems
+
+% TODO solution for this: reactive manifesto
+
+
+\section{Functional programming}
 % Non-determinism caused by concurrent threads accessing shared mutable state. To get determinism, avoid mutable state. To avoid mutable state it means to program functially.
+
 \subsection{First-class functions}
 \subsection{Immutable State}
+
+\section{Reactive programming}
+
+%TODO imperative -> functional -> reactive programming
+%TODO Observable
+%TODO evtl. im Hauptteil

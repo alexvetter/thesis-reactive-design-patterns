@@ -54,7 +54,10 @@ Ist eine Anwendung nicht \textit{elastic} (siehe~\ref{subsec:elastic}) und/oder 
 
 \subsection{Message-driven}\label{subsec:messagedriven}
 Um die bereits erwähnten Eigenschaft \textit{elasticity}, \textit{resilience} sowie die daraus folgende \textit{responsiveness} zu erfüllen, müssen reaktive Anwendung \textit{message-driven} sein.\\
-Ist ein System \textit{message-driven} erfolgt die Kommunikation durch asynchrone Nachrichtenübermittlung zwischen den Komponenten, wodurch eine strikte Abgrenzung der Komponenten erfolgt. Es erlaubt die Komponenten von einander isoliert und \textit{location transparent} zu entwickeln.
+Ist ein System \textit{message-driven} erfolgt die Kommunikation ausschließlich über asynchronen Nachrichtenaustausch (engl. Message passing) zwischen den Komponenten, wodurch eine strikte Abgrenzung der Komponenten erfolgt. Durch die Abstraktion der Kommunikation wird eine lose Kopplung zwischen den Komponenten sichergestellt. Desweiteren werden die Komponenten von einander isoliert, wodurch es möglich wird Fehler als Nachrichten zu delegieren (siehe~\ref{subsec:resilient}).
+Durch den explizite Nachrichtenaustausch kann über \textit{message queues} und \textit{flow control} die Last verteilt und kontrolliert werden. Auch die gewünschte \textit{location transparency} wird durch die Entkopplung über den asynchronen Nachrichtenaustauch ermöglicht~\cite{boner_reactive_2015}.
+
+
 
 % As the foundation to the three traits above, Reactive Systems rely on asynchronous message-passing to establish a boundary between components that ensures loose coupling, isolation, location transparency, and provides the means to reify and delegate failures as messages. Employing explicit message-passing enables load management, elasticity, and flow control by shaping and monitoring the message queues in the system and applying back-pressure when necessary. Location transparent messaging as a means of communication makes it possible for the management of failure to work with the same constructs and semantics across a cluster or within a single host. Non-blocking communication allows recipients to only consume resources while active, leading to more efficient system utilization. 
 

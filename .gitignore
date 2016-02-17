@@ -1,6 +1,9 @@
 # MacOS files:
 .DS_Store
 
+# VIM stuff
+*.swp
+
 # latex auxiliary files:
 *.aux
 *.acn

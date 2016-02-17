@@ -9,56 +9,54 @@ Reaktive Anwendungen haben die Eigenschaften folgendes zu leisten bzw. foldenge 
 Eine reaktive Anwendung muss\ldots
 
 \begin{enumerate}
-    \item \ldots \textbf{auf Nutzer oder Komponenten reagieren}. Die Applikation erfüllt die geforderte Antwortzeit (engl. response time) und übertrifft diese eventuell sogar.
+    \item \ldots \textbf{auf Nutzer oder Komponenten reagieren}. Die Applikation erfüllt die geforderte Antwortzeit und übertrifft diese eventuell sogar.
     \item \ldots \textbf{auf Fehler reagieren}. Die Software ist von Grund auf widerständfähig gegenüber Fehlerzuständen. Die Wiederherstellung des Normalzustand erfolgt automatisch.
-    \item \ldots \textbf{auf variable Belastung reagieren}. Das System ist automatisch in der Lage sowohl Scale-up als auch Scale-down durchzuführen.
+    \item \ldots \textbf{auf variable Belastung reagieren}. Das System ist automatisch in der Lage dynamische Skalierung durchzuführen.
     \item \ldots \textbf{auf Nachrichten reagieren}. Das System verwendet asynchrone Nachrichtenübermittlung zwischen den Komponenten und ist somit nachrichtenorientiert.
 \end{enumerate}
 
 \pagebreak
 
 \subsection{Elastic}\label{subsec:elastic}
+Eine reaktive Anwendung muss auf variable Belastung ebenso variable bzw. dynamisch reagieren können. Wird Beispielsweise ein Online Shop in einer Fernsehwerbung oder von einem bekannten Blog erwährt, müssen kurzfristig sehr viele Anfragen angemessen und zufriedenstellend verarbeitet werden~\cite[S.~39]{kuhn_reactive_2015}.\\
+Um die gewünschten und geforderten Antwortzeiten einzuhalten, muss das System skalieren. Traditionellerweise ist hiermit \enquote{Scaling up} gemeint. Aufgrund der heutigen Anforderungen stößt man schnell an die Grenzen eines einzelen Hosts. Dementsprechend muss das System nicht nur vertikal sondern auch horizontal skalieren. Dazu muss das System auf mehrere Nodes verteilt werden~\cite[S.~7]{vernon_reactive_2016}. Es ist deshalb wichtig, die Teilaufgaben eines Systems zu identifizieren und auf einzelne Komponenten aufzuteilen, die dann wie bereits erwähnt auf einzelne Nodes verteilt werden können~\cite[S.~40]{kuhn_reactive_2015}.\\
+Das Reactive Manifesto fordert zudem auch, das System so zu gestalten, dass es \enquote{Scaling down} fähig ist. Das bedeutet ungenutze und nicht benötigte Ressourcen müssen wieder freigegeben werden. Dadurch kann man ein hochskalierbares reaktives System kosteneffizient betreiben. Im Reactive Manifesto hat man sich auf den Begriff \textit{elastic} geeinigt, um deutlich zu machen, dass man in beide Richtungen skalieren kann. Bei reaktiven Applikationen kann spricht man deshalb von elastischer bzw. dymanischer Skalierung~\cite[S.~8]{vernon_reactive_2016}.\\
+Für die Software bedeutet dies, dass einzelne Nodes jederzeit hinzugefügt und entfernt werden können. Als Folge dessen muss das System \textit{location transparent} sein. Insofern dürfen dessen Komponenten und deren Funktionen nicht abhängig von einem Host sein~\cite[S.~8]{vernon_reactive_2016}. 
 
-Systeme sind heute oft variabler Belastung ausgesetzt. Wird Beispielsweise ein Online Shop in einer Fernsehwerbung oder von einem bekannten Blog erwährt, muss man kurzzeitig sehr viele Anfragen angemessen abarbeiten.\\
-Um die gewünschte Antwortzeiten einzuhalten, muss das System skalieren. Traditionellerweise ist hiermit \enquote{Scaling up} gemeint. Da man aufgrund der heutigen Anforderungen schnell an die Grenzen eines einzelen Rechners stößt, muss das System auch horizontal skalieren. Dazu muss das System bzw. einzelne Komponenten auf mehrere Nodes verteilt werden.\\
-Sinnvoll wäre es auch \enquote{Scaling down} zu bereiten, also ungenutze und nicht benötigte Rechenkapazität wieder freizugeben. Deshalb hat man sich im Reactive Manifesto auf den Begriff \textit{elastic} geeinigt, um deutlich zu machen, dass man in beide Richtungen skalieren kann.\\
-Für das System bedeutet dies, dass einzelne Nodes jederzeit hinzugefügt und entfernt werden können. Deshalb muss das System \textit{location transparent} sein. Also die Komponenten bzw. deren Funktionen dürfen nicht abhängig von einem Host sein ~\cite[S.~39ff]{kuhn_reactive_2015}~\cite[S.~8f]{vernon_reactive_2016}.
-
-% partition the problem -> distribute
-% no shared state is needed
-% scale down -> cost effectiveness
+% TODO Little's Law
+% TODO Infrastructure as a Service oder Cloud Computing; Enterprise IT OpenStack
 
 \pagebreak
 
 \subsection{Resilient}\label{subsec:resilient}
-Eine Software \textit{resilient} (dt. widerstandsfähig) zu entwickeln bedeutet nicht, dass die Software fehlerfrei ist. Es bedeutet, dass die Software sich von einem Fehlerzustand erholen kann \cite[S.~6]{vernon_reactive_2016}.\\
-Andernfalls kann die Antwortbereitschaft (siehe~\ref{subsec:responsive}) nicht erfüllt werden. Man versucht bei dem Entwurf der Software Fehler von vornherein zu bedenken und mit ihnen sinnvoll umzugehen. Folgendes Zitat von Jonas Bonér macht deutlich, wie wichtig die Widerstandsfähigkeit einer Software ist.
+Eine Software \textit{resilient} (dt. widerstandsfähig) zu entwickeln bedeutet nicht, dass die Software fehlerfrei ist. Es bedeutet, dass die Software sich von einem Fehlerzustand erholen kann~\cite[S.~6]{vernon_reactive_2016}.\\
+Man versucht bei dem Entwurf der Software Fehler von vornherein zu bedenken und mit ihnen sinnvoll umzugehen. Folgendes Zitat von Jonas Bonér macht deutlich, wie wichtig die Widerstandsfähigkeit einer Software ist.
 
 \begin{quotation}
 Without resilience, nothing else matters. If your beautiful, production-grade, elastic, scalable, highly concurrent, non-blocking, asynchronous, highly responsive and performant application isn't running, then you're back to square one. It starts and ends with resilience.~\citetext{Bonér, Jonas; 2015}
 \end{quotation}
 
 Im Grunde ist diese Aussage trivial. Eine Software die nicht läuft, ist unbrauchbar --- egal wie komplex und durchdacht die Architektur auch sein mag.\\
-Es ist aber nicht nur die eigene Software die betroffen sein kann. Andere externe Softwarekomponenten von denen man abhängt oder auch die Hardware kann im laufenden Betrieb Probleme bereiten.\\
-Den Schluss, den man daraus ziehen sollte, lautet deshalb nicht, ob ein Fehler auftritt sondern viel mehr wann und wie häufig das passiert. Für den Benutzer ist es nebensächlich warum ein interner Fehler aufgetreten ist. Die Anwendung wird in diesem Moment nicht das tun, was der Benutzer von ihr erwartet~\cite[S.~33ff]{kuhn_reactive_2015}.\\
+Es ist aber nicht nur die eigene Software die betroffen sein kann. Andere externe Softwarekomponenten von denen man abhängt oder auch die Hardware kann im laufenden Betrieb Probleme bereiten~\cite[S.~33]{kuhn_reactive_2015}.\\
+Den Schluss, den man daraus ziehen sollte, lautet deshalb nicht, ob ein Fehler auftritt sondern viel mehr wann und wie häufig das passiert. Für den Benutzer ist es nebensächlich warum ein interner Fehler aufgetreten ist. Die Anwendung wird in diesem Moment nicht das tun, was der Benutzer von ihr erwartet~\cite[S.~33]{kuhn_reactive_2015}.\\
 
-Im Reactive Manifesto hat für dieses Problem bzw. Eigenschaft ganz bewusst den Begriff \textit{resilience} und nicht \textit{reliability} gewählt. Man möchte deutlich machen, dass es nahezu unmöglich ist, ein ausfallsicheres (engl. relabil) System zu schaffen und setzt deshalb auf widerstandsfähige Systeme, welche mit Fehlerzustanden umgehen können und vorallem sich von dieses wieder erholen können.\\
-Also ist ein reaktives System nicht nur Fehler tolerant (engl. fault tolerant) sondern kann sich auch von den Fehler selbstständig erholen. Um dieses Ziel zu erreichen muss man die Komponenten verteilen (engl. distribute) und von einander abschotten (engl. compartmentalize)~\citetext{\cite[S.~7]{vernon_reactive_2016}~\cite[S.~34]{kuhn_reactive_2015}}.
+Im Reactive Manifesto hat man für dieses Problem bzw. die Eigenschaft ganz bewusst den Begriff \textit{resilience} und nicht \textit{reliability} (dt. Ausfallsicherheit) gewählt. Man möchte deutlich machen, dass es nahezu unmöglich ist, ein ausfallsicheres System zu schaffen. Deshalb setzt auf widerstandsfähige Systeme, welche mit Fehlerzustanden umgehen können und vorallem sich von dieses wieder erholen können. Folglich ist ein reaktives System nicht nur \textit{fault tolerant} (dt. Fehler tolerant) sondern kann sich auch von einem Fehlerzustand selbstständig wieder erholen~\cite[S.~34]{kuhn_reactive_2015}.
 
-%TODO Fehler muss isoliert werden, deshalb supervisor und "restart strategy"
-%TODO a way to manage failure; one-for-one
-%TODO evtl. hier noch ein paar Szenarien angeben. 
-%TODO Don't put all eggs in one basket!
+Um die Eigenschaft \textit{resilience} zu erfüllen, müssen das System in Komponenten aufgeteilt und anschließend verteilen (engl. distribute) werden. Zusätzlich ist es nötwendig die verteilen Komponenten von einander abzuschotten (engl. compartmentalize)~\cite[S.~34]{kuhn_reactive_2015}~\cite[S.~7]{vernon_reactive_2016}.\\
+Aufgrund der verteilten und abgeschottenten Komponenten können Fehler isoliert werden. Hierfür führt man das Prinzip der \textit{supervisor} ein. Nach- bzw. untergeordnete Komponenten informieren ihren \textit{supervisor} im Falle eines Fehlers. Dieser hat nun die Möglichkeit die Subkomponente z.B. neuzustarten oder eine erneute Anfrage zustellen. 
 
 \subsection{Responsive}\label{subsec:responsive}
-Eine Reaktive Anwendung muss zu jederzeit auf Anfragen reagieren. Das heißt die Anwendung ist jederzeit \textit{responsive} (dt. antwortbereit). Anfragen können nicht nur durch einen Benutzer ausgelöst werden, sondern können auch von anderen Diensten von anderen Komponenten initiert werden.
-
-% TODO respond in case of load
-% TODO respond in case of failure
+Eine reaktive Anwendung muss zu jederzeit auf jede Anfragen reagieren. Das heißt die Anwendung ist jederzeit \textit{responsive} (dt. antwortbereit). Anfragen können nicht nur durch einen Benutzer ausgelöst werden, sondern können auch von anderen Diensten oder Komponenten initiert werden. Als Client einer reaktiven Anwendung muss man sich drauf verlassen können, dass eine Antwort in einem festgelegten Zeitraum eintrifft. Das bedeutet es müssen \textit{timeouts} festgelegt werden, nachdem eine Anfrage für fehlerhaft erklärt wird.\\
+(Außerdem muss eine reaktive Anwendung Anfragen nebenläufig und parallel bearbeiten.)
+Ist eine Anwendung nicht \textit{elastic} (siehe~\ref{subsec:elastic}) und/oder nicht \textit{resilient} (siehe~\ref{subsec:resilient}) kann sie auch nicht \textit{responsive} sein. Eine reaktive Anwendung muss unter Last skalieren, um die geforderte maximale Antwortzeit einzuhalten oder zu vermeiden, dass das System gar ganz ausfällt. Fallen Komponenten aus, z.B. durch einen unvorhergesehenen Hardwarefehler, könnten diese aufgrund der \textit{location transparency} auf einem anderen Node neugestartet werden.
 
 \pagebreak
 
 \subsection{Message-driven}\label{subsec:messagedriven}
+Um die bereits erwähnten Eigenschaft \textit{elasticity}, \textit{resilience} sowie die daraus folgende \textit{responsiveness} zu erfüllen, müssen reaktive Anwendung \textit{message-driven} sein.\\
+Ist ein System \textit{message-driven} erfolgt die Kommunikation durch asynchrone Nachrichtenübermittlung zwischen den Komponenten, wodurch eine strikte Abgrenzung der Komponenten erfolgt. Es erlaubt die Komponenten von einander isoliert und \textit{location transparent} zu entwickeln.
+
+% As the foundation to the three traits above, Reactive Systems rely on asynchronous message-passing to establish a boundary between components that ensures loose coupling, isolation, location transparency, and provides the means to reify and delegate failures as messages. Employing explicit message-passing enables load management, elasticity, and flow control by shaping and monitoring the message queues in the system and applying back-pressure when necessary. Location transparent messaging as a means of communication makes it possible for the management of failure to work with the same constructs and semantics across a cluster or within a single host. Non-blocking communication allows recipients to only consume resources while active, leading to more efficient system utilization. 
 
 % By means of an asynchronous, non-blocking message-driven approach, highly resilient and elastic systems can be formed, resulting in a consistently responsive user experience. In other words the system needs to be message-driven in order to be elastic and resilient which results in an responsive application.
 

@@ -1,0 +1,17 @@
+set nonumber
+
+set wrap
+set linebreak
+
+set columns=100
+set linespace=8
+
+set guifont=Monaco:h13
+
+colorscheme sunburst
+set bg=dark
+
+map <Up> g<Up>
+map <Down> g<Down>
+imap <Up> <C-[> g<Up> i
+imap <Down> <C-[> g<Down> i

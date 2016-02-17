@@ -4,10 +4,17 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )" # this get the location of shell the script
 cd $DIR
 
-# delete those creepy latex files
-read -p "Do a clean up? " -n 1 -r
+clearflag='false'
 
-if [[ $REPLY =~ ^[Yy]$ ]]
+while getopts 'c' flag; do
+  case "${flag}" in
+    c) clearflag='true' ;;
+    *) error "Unexpected option ${flag}" ;;
+  esac
+done
+
+# delete those creepy latex files
+if [ "$clearflag" = 'true' ]
 then
   echo -e "\nDelete latex files now."
   find . -name "Masterdatei*" ! -name Masterdatei.pdf ! -name Masterdatei.tex -type f -delete

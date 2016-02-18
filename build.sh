@@ -5,10 +5,12 @@ DIR="$( cd "$( dirname "$0" )" && pwd )" # this get the location of shell the sc
 cd $DIR
 
 clearflag='false'
+watchflag=''
 
-while getopts 'c' flag; do
+while getopts 'cw' flag; do
   case "${flag}" in
     c) clearflag='true' ;;
+    w) watchflag='-pvc' ;;
     *) error "Unexpected option ${flag}" ;;
   esac
 done
@@ -26,4 +28,4 @@ fi
 export LC_CTYPE=de_DE.UTF-8
 export LC_ALL=de_DE.UTF-8
 
-latexmk -pdf $master
+latexmk $watchflag -pdf $master

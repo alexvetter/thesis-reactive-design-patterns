@@ -13,15 +13,17 @@ while getopts 'c' flag; do
   esac
 done
 
+master='Masterarbeit'
+
 # delete those creepy latex files
 if [ "$clearflag" = 'true' ]
 then
   echo -e "\nDelete latex files now."
-  find . -name "Masterdatei*" ! -name Masterdatei.pdf ! -name Masterdatei.tex -type f -delete
+  find . -name "$master*" ! -name "$master\.pdf" ! -name "$master\.tex" -type f -delete
   find . -name "*.aux" -type f -delete
 fi
 
 export LC_CTYPE=de_DE.UTF-8
 export LC_ALL=de_DE.UTF-8
 
-latexmk -pdf Masterdatei
+latexmk -pdf $master

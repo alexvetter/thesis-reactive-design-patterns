@@ -7,7 +7,6 @@ Da die Umsetzung reaktiver Systeme gewisse Programmierparadigmen vorausgesetzt, 
 Reaktive Anwendungen haben die Eigenschaften folgendes zu leisten bzw. foldenge Punkte zu erfüllen~\cite[S.~19ff]{kuhn_reactive_2015}~\cite[S.~6]{vernon_reactive_2016}.\\
 
 \textbf{Eine reaktive Anwendung muss\ldots}
-
 \begin{enumerate}
 \item \ldots \textbf{auf variable Belastung reagieren (siehe~\ref{subsec:elastic}.).} Das System ist automatisch in der Lage dynamische Skalierung durchzuführen und nicht benötigte Ressourcen wieder freizugeben.
 \item \ldots \textbf{auf Fehler reagieren (siehe~\ref{subsec:resilient}).} Die Software ist von Grund auf widerständsfähig gegenüber Fehlerzuständen. Die Wiederherstellung des Normalzustand erfolgt automatisch.
@@ -52,10 +51,10 @@ Ist eine Anwendung nicht \textit{elastic} (siehe~\ref{subsec:elastic}) und/oder 
 \pagebreak
 
 \subsection{Message-driven}\label{subsec:messagedriven}
-Um die bereits erwähnten Eigenschaft \textit{elasticity} (\ref{subsec:elastic}), \textit{resilience} (\ref{subsec:resilient}) sowie die daraus folgende \textit{responsiveness} (\ref{subsec:responsive}) zu erfüllen, müssen reaktive Anwendung \textit{message-driven} sein~\cite{webber_what_2014}~\cite[S.~43]{kuhn_reactive_2015}. Somit ist die Basis einer reaktiven Anwendung die vierte Eigenschaft aus dem Reactive Manifesto~\cite{boner_reactive_2014}.\\
-Ist ein System \textit{message-driven} erfolgt die Kommunikation ausschließlich über asynchronen Nachrichtenaustausch zwischen den Komponenten, wodurch eine strikte Abgrenzung der Komponenten erfolgt. Durch die Abstraktion der Kommunikation wird eine lose Kopplung zwischen den Komponenten sichergestellt. Desweiteren sind die Komponenten von einander isoliert, wodurch es möglich ist Fehler als Nachrichten zu delegieren (siehe~\ref{subsec:resilient}).\\
-Durch den expliziten Nachrichtenaustausch kann über \textit{message queues} und \textit{flow control} die Last verteilt und kontrolliert werden. Auch die gewünschte \textit{location transparency} wird durch die Entkopplung über den asynchronen Nachrichtenaustauch ermöglicht~\cite{boner_reactive_2015}~\cite[S.~43]{kuhn_reactive_2015}.\\
-Die folgende Abbildung (Abb. \ref{fig:four-traits}) bringt die vier Eigenschaften bzw. die vier Merkmale nochmal in einen deutlicheren Zusammenhang. Eine reaktive Anwendung ist responsive, wartbar und erweiterbar aufgrund der Eigenschaften elastic und resilient und dies erreicht man wiederum durch die asynchrone und nicht-blockierende Kommunikation die message-driven erfolgt.
+Um die bereits erwähnten Eigenschaften \textit{elasticity} (\ref{subsec:elastic}), \textit{resilience} (\ref{subsec:resilient}) sowie die daraus folgende \textit{responsiveness} (\ref{subsec:responsive}) zu erfüllen, müssen reaktive Anwendungen \textit{message-driven} sein~\cite{webber_what_2014}~\cite[S.~43]{kuhn_reactive_2015}. Somit ist die Basis einer reaktiven Anwendung die vierte Eigenschaft aus dem Reactive Manifesto~\cite{boner_reactive_2014}.\\
+Ist ein System \textit{message-driven} erfolgt die Kommunikation ausschließlich über asynchronen Nachrichtenaustausch zwischen den Komponenten, wodurch eine strikte Abgrenzung der Komponenten erfolgt. Durch die Abstraktion der Kommunikation wird eine lose Kopplung zwischen den Komponenten sichergestellt. Darüber hinaus sind die Komponenten voneinander isoliert, wodurch es möglich ist, Fehler als Nachrichten zu delegieren (siehe~\ref{subsec:resilient}).\\
+Durch den expliziten Nachrichtenaustausch kann über \textit{message queues} und \textit{flow control} die Last verteilt und kontrolliert werden. Ebenso wird die gewünschte \textit{location transparency} durch die Entkopplung über den asynchronen Nachrichtenaustausch ermöglicht~\cite{boner_reactive_2015}~\cite[S.~43]{kuhn_reactive_2015}.\\
+Die folgende Abbildung (Abb. \ref{fig:four-traits}) sollen den Zusammenhang der vier Merkmale nochmals verdeutlichen. Neben dem wohl wichtigesten Ziel (\textit{responsive}) hat die reaktive Architektur den Vorteil ebenso wartbare wie auch erweiterbare Anwendungen zu schaffen. Jedoch werde die weiteren Ziele nur in der Einleitung des Reactive Manifestos und nicht als Kerneigenschaft formuliert~\cite{boner_reactive_2014}. Die Ziele ereicht man durch die Eigenschaften \textit{elasticity} und \textit{resilience}. Das Grundgerust von alle dem ist die asynchrone, nicht-blockierende und Nachrichtengetriebene Kommunikation (\textit{message-driven}).
 
 \begin{figure}[H]
  \centering
@@ -67,6 +66,7 @@ Die folgende Abbildung (Abb. \ref{fig:four-traits}) bringt die vier Eigenschafte
 \pagebreak
 
 \section{Parallelität und Nebenläufigkeit}
+
 
 We need to bring distributed computing down to the level of CPUs, because latency will be always a problem. Moore's Law. To speed up you can't wait for faster CPUs anymore, you need to scale on multiple CPUs.
 

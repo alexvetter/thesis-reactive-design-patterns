@@ -1,14 +1,14 @@
 % !TEX root = ../Masterarbeit.tex
 \chapter{Einführung}\label{sec:einfuehrung}
-Software wird entwickelt um Probleme zu lösen und Aufgaben automatisiert zu erledigen, ohne dabei menschliche Fehler zu machen. Deshalb ist es nicht verwunderlich, dass man an Software die Anforderung stellt, in angemessener Zeit auf Eingaben zu reagieren. Hierfür gibt es den Begriff \textit{responsiveness} (dt.\ Antwortbereitschaft)~\cite[S.~18]{kuhn_reactive_2015}.\\
+Software wird entwickelt, um Probleme zu lösen und Aufgaben automatisiert zu erledigen --- ohne dabei menschliche Fehler zu machen. Deshalb ist es nicht verwunderlich, dass man an Software die Anforderung stellt, in angemessener Zeit auf Eingaben zu reagieren. Hierfür gibt es den Begriff \textit{responsiveness} (dt.\ Antwortbereitschaft)~\cite[S.~18]{kuhn_reactive_2015}.\\
 Ein System welches auf externe Ereignisse bzw. Eingaben antwortet (reagiert), nennt man reaktives System. David Harel und Amir Pnueli unterschieden in ihrer Arbeit \enquote{On the Development of Reactive Systems} (1985) zwischen reaktiven und transformativen Systemen~\cite{harel_development_1985}. Sie definierten reaktive Systeme wie folgt:
 
 \begin{quotation}
   Reactive systems [...] are repeatedly prompted by the outside world and their role is to continuously respond to external inputs~\cite{harel_development_1985}.
 \end{quotation}
 
-Transformative Systeme hingegen berechnen Ergebnisse einmalig auf Basis bestimmter Eingabewerte (z.B. Compiler)~\cite[S.~2]{carkci_dataflow_2014}~\cite{wieringa_design_2003}. Bei reaktiven Systemen handelt es sich üblicherweise um durchgehend laufende Anwendungen wie zum Beispiel eine Web Applikation.\\
-In dieser Arbeit wird die Entwicklung von reaktiven Software Systeme behandelt, bei welchen die erwähnte \textit{responsiveness}, sowie weitere Anforderungen von großer Bedeutung sind.
+Transformative Systeme hingegen berechnen Ergebnisse einmalig auf Basis bestimmter Eingabewerte (z.B. Compiler)~\cite[S.~2]{carkci_dataflow_2014}~\cite{wieringa_design_2003}. Bei reaktiven Systemen handelt es sich üblicherweise um durchgehend laufende Anwendungen, wie zum Beispiel eine Web Applikation.\\
+In dieser Arbeit wird die Entwicklung von reaktiven Software Systeme behandelt, bei welchen die erwähnte \textit{responsiveness} und weitere Anforderungen von großer Bedeutung sind.
 
 \pagebreak
 
@@ -31,8 +31,7 @@ Eine weitere Entwicklung ist bei den Prozessoren zu beobachten. Die Prozessorher
 
 \pagebreak
 
-\section{Reaktives Manifest}
-Um den erwähnten Anforderungen gerecht zu werden, muss sich die moderne Software Architektur anpassen. Bonér et al. postulieren in dem \enquote{Reactive Manifesto}, reaktive Systeme währen skalierbarer, einfacher weiterzuentwickeln und zuverlässiger~\cite{boner_reactive_2014}. Aufgrund der im Manifest definierten Eigenschaften bzw. Anforderungen sollen reaktive Systeme den heutigen Herausforderungen besser gewachsen sein. Entspricht die Architektur einer Software dem Reactive Manifesto, gewährleistet man ein System welches resilient (dt.~widerstandfähig) sowie elastic (dt.~elastisch) ist und deshalb auch immer responsive (dt.~antwortbereit). Um das zuereichen muss ein System messagen~driven (dt.~nachrichtenorientiert) sein~\cite[S.~5]{vernon_reactive_2016}~\cite{boner_reactive_2014}.\\
-Man bezeichnet diese Anwendungen dann als reaktive Anwendungen im Sinne des Manifests~\cite{boner_reactive_2014}.\\
-Das Reactive Manifesto beschreibt keine neuen Konzepte oder Paradigmen, vielmehr formalisiert es Begriffe und bietet Technologie-übergreifende Definitionen für reaktive Systeme.\\
-Die Arbeit soll die Frage beantworten, welche Konzepte und Design Patterns helfen reaktive Systeme zu entwicklen.
+\section{Reactive Manifesto}
+Um den erwähnten Anforderungen gerecht zu werden, muss sich die moderne Software Architektur anpassen. Bonér et al. postulieren in dem \enquote{Reactive Manifesto}, reaktive Systeme währen skalierbarer, einfacher weiterzuentwickeln und zuverlässiger~\cite{boner_reactive_2014}. Aufgrund der im Manifest definierten Eigenschaften bzw. Anforderungen sollen reaktive Systeme den heutigen Herausforderungen besser gewachsen sein. Entspricht die Architektur einer Software dem Reactive Manifesto, gewährleistet man ein System welches resilient (dt.~widerstandsfähig) sowie elastic (dt.~elastisch) ist und deshalb auch immer responsive (dt.~antwortbereit). Um das zuerreichen, muss ein System messagen~driven (dt.~nachrichtenorientiert) sein~\cite[S.~5]{vernon_reactive_2016}. Man bezeichnet diese Anwendungen dann als reaktive Anwendungen im Sinne des Manifests~\cite{boner_reactive_2014}.\\
+Das Reactive Manifesto beschreibt keine neuen Konzepte oder Paradigmen, vielmehr formalisiert es Begriffe und bietet technologieübergreifende Definitionen für reaktive Systeme.\\
+Die Arbeit soll die Frage beantworten, welche Konzepte und Design Patterns helfen reaktive Systeme zu entwickeln.

@@ -20,6 +20,7 @@
 *.lot
 *.toc
 *converted-to.pdf
+*.pdf
 *.glsdefs
 *.out
 *.fdb_latexmk

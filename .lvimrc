@@ -6,10 +6,9 @@ set linebreak
 set columns=100
 set linespace=8
 
-set guifont=Monaco:h13
+set laststatus=1
 
-colorscheme sunburst
-set bg=dark
+set guifont=Monaco:h13
 
 map <Up> g<Up>
 map <Down> g<Down>

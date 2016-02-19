@@ -66,36 +66,41 @@ Die folgende Abbildung (Abb. \ref{fig:four-traits}) sollen den Zusammenhang der 
 \pagebreak
 
 \section{Parallelität und Nebenläufigkeit}
+Die Prozessorhersteller sind in den letzten Jahren an gewisse Grenzen bei der Entwicklung von CPUs gestoßen. Seit 2003 stagniert die Entwicklung hinsichtlich der Taktraten von Prozessoren. Obwohl die Beobachtung von Gordon Moores (\enquote{Moore's Law}) nach wie vor seine Gültigkeit zu haben scheint und sich die Zahl der Transistoren alle zwei Jahre verdoppelt, werde diese nicht genutzt, um einen einzelnen CPU schneller zu machen. Hersteller setzen seit einigen Jahren auf Multi-core Architekturen~\cite[S.~1]{butcher_seven_2014}~\cite[S.~108]{vernon_reactive_2016}~\cite{sutter_free_2004}.\\
+Herb Sutter veröffentlichte diesbezüglich 2004 einen Artikel mit dem Titel \enquote{The free lunch is over}. Mit \enquote{free lunch} meinte er, die Tatsache, dass sequentielle Anwendungen ohne das Zutun von Entwicklern aufgrund der damals noch steigenden Taktraten schneller wurden --- vielmehr schneller ausgeführt wurden. Im Hinblick auf die Multi-core Prozessoren und der mehr oder weniger stagnierenden Taktraten müssen Anwendungen ihre Aufgaben und Teilaufgaben nebenläufig und parallel ausführen, um die heutigen Prozessoren optimal auszulasten~\cite{sutter_free_2004}~\cite[S.~1]{butcher_seven_2014}.\\
 
+Sequentielle Programme werden Schritt für Schritt ausgeführt. Genauer gesagt, die Ausführung der einzelnen Befehle erfolgt nacheinander. Es ist somit eine feste Reihenfolge vorgegeben. Ein sequentielles Programm profitiert nicht von modernen Multi-core Prozessoren. Hier kommen nun Nebenläufigkeit (engl. concurrency) und Parallelität (engl. parallelism) ins Spiel.\\
+Kann man ein Problem fragmentieren und auf mehreren Cores gleichzeitig bzw. parallel bearbeiten, spricht man von Parallelität. Ebenso ist es möglich mehrere zum Teil unterschiedliche Probleme nebenläufig zu bearbeiten, um mehrere Cores auszunutzen.
 
-We need to bring distributed computing down to the level of CPUs, because latency will be always a problem. Moore's Law. To speed up you can't wait for faster CPUs anymore, you need to scale on multiple CPUs.
+\pagebreak
 
-% Non-blocking communication allows recipients to only consume resources while active, leading to more efficient system utilization. 
+\subsection{Asynchronous \& Non-Blocking IO}
+Eine reaktive Anwendung impliziert verteilte und isolierte Komponenten. Es ist nicht zwingend erforderlich, dass die Komponenten auf verschiedenen Hosts laufen und dennoch ist dies aufgrund der \textit{location transparency} möglich. Selbst auf einem Node mit lokaler Kommunikation hat man Latenzen. In traditionellen Applikationen wartet eine Komponente auf die Antwort einer angefragten Komponente. Man spricht hier von synchroner und blockierender (eng. \textit{blocking}) Kommunikation. Das System muss warten und Ressourcen (z.B. CPU) werden nicht optimal genutzt. Darunter leidet kann die \textit{responsiveness}.
 
-% communicate to share information, don't share information to communicate
-% Conclusion reactive systems are distributed
-
+%(Beispiel typischer Applicationcontainer mit 20 Threads)
 
 \subsection{Share nothing}
-Decoupling and single responsibility principle will result in clear boundaries.\\
-Share memory to communicate.\\
-Communicate to share memory.
-% TODO Decoupling
-% Single responsibility principle
+Da einzelne Komponenten von einander isoliert sein müssen, dürfen sie auch keinen \textit{state} bzw. keine Informationen teilen. Die Komponenten haben somit keinen \textit{shared memory}. Ein reaktives System fordert die Komponenten dazu auf, zu kommunizieren, um Informationen auszutauschen. In einem \textit{message driven} System werden Nachrichten verschickt, um Komponenten über z.B. eine Zustandsänderung zu informieren.\\
+Durch diese klare Entkopplung erhält man ebenso klare Grenzen zwischen den Komponenten. Dies führt zu Kapselung von Fehlern, Implementierungsdetails und Verantwortlichkeiten.
+
+% Share nothing & Decoupling -> clear boundaries
 % Containment of failure, implementation details & responsibility
 % Share nothing -> clear boundaries
+
 % TODO responsiveness in synchronous systems
 % TODO Waldo et al "A Note on Distributed Computing"
 % TODO Peter Deutsch Distributed Systems
-
 % TODO solution for this: reactive manifesto & actor model
 
+\pagebreak
 
 \section{Functional programming}
 % Non-determinism caused by concurrent threads accessing shared mutable state. To get determinism, avoid mutable state. To avoid mutable state it means to program functially.
 
 \subsection{First-class functions}
 \subsection{Immutable State}
+In traditioneller sequentieller Programmierung nutzt man so genannten \textit{mutable state}. Also ein Zustand bzw. eine Variable die jederzeit verändert werden kann. Da reaktive Anwendungen nebenläufig ausgeführt werden, muss der Zugriff auf \textit{mutable state} synchronisiert werden. Es entstehen ähnliche Probleme wie bei synchroner Kommunikation, teile der Anwendungen müssen warten und somit werden Systemressourcen blockiert.\\
+Ist eine Variable \textit{immutable} bedeutet das sie ist nach dem initiale Setzen eines Wertes nicht mehr veränderbar. Der gleichzeitige Zugriff auf einen \textit{shared immutable state} muss somit nicht mehr synchronisiert werden, da die Variable nur einmal beschrieben werden kann.
 
 \section{Reactive programming}
 Reaktive Programmierung in der Entwicklung von Benutzeroberflächen üblich und verbreitet. Als Entwickler einer GUI stetig auf eingehende Events reagieren (z.B. Cursorbewegung, Tastendruck). Während der Verarbeitung dieser soll die Benutzeroberfläche nicht blockieren und Eingaben dadurch verhindern. Eine Benutzeroberfläche muss responsive sein, um den Benutzer nicht zu verärgern.

@@ -66,7 +66,7 @@ Die folgende Abbildung (Abb. \ref{fig:four-traits}) sollen den Zusammenhang der 
 \pagebreak
 
 \section{Parallelität und Nebenläufigkeit}
-Die Prozessorhersteller sind in den letzten Jahren an gewisse Grenzen bei der Entwicklung von CPUs gestoßen. Seit 2003 stagniert die Entwicklung hinsichtlich der Taktraten von Prozessoren. Obwohl die Beobachtung von Gordon Moores (\enquote{Moore's Law}) nach wie vor seine Gültigkeit zu haben scheint und sich die Zahl der Transistoren alle zwei Jahre verdoppelt, werde diese nicht genutzt, um eine einzelne CPU schneller zu machen. Hersteller setzen stattdessen seit einigen Jahren auf Multicore-Architekturen~\cite[S.~1]{butcher_seven_2014}~\cite[S.~108]{vernon_reactive_2016}~\cite{sutter_free_2004}.\\
+Die Prozessorhersteller sind in den letzten Jahren an gewisse Grenzen bei der Entwicklung von CPUs gestoßen. Seit 2003 stagniert die Entwicklung hinsichtlich der Taktraten von Prozessoren. Obwohl die Beobachtung von Gordon Moore (\enquote{Moore's Law}) nach wie vor seine Gültigkeit zu haben scheint und sich die Zahl der Transistoren alle zwei Jahre verdoppelt, werde diese nicht genutzt, um eine einzelne CPU schneller zu machen. Hersteller setzen stattdessen seit einigen Jahren auf Multicore-Architekturen~\cite[S.~1]{butcher_seven_2014}~\cite[S.~108]{vernon_reactive_2016}~\cite{sutter_free_2004}.\\
 Herb Sutter veröffentlichte diesbezüglich 2004 einen Artikel mit dem Titel \enquote{The free lunch is over}. Mit \enquote{free lunch} bezog er sich auf die Tatsache, dass sequenzielle Anwendungen ohne das Zutun von Entwicklern aufgrund der damals noch steigenden Taktraten schneller wurden --- vielmehr schneller ausgeführt wurden.\\
 Im Hinblick auf die Multicore-Prozessoren und der mehr oder weniger stagnierenden Taktraten müssen Anwendungen ihre Aufgaben und Teilaufgaben nebenläufig und parallel ausführen, um die heutigen Prozessoren optimal auszulasten~\cite{sutter_free_2004}~\cite[S.~1]{butcher_seven_2014}.\\
 Sequenzielle Programme werden Schritt für Schritt ausgeführt. Genauer gesagt, erfolgt die Ausführung der einzelnen Befehle nach einer vorgegebenen Reihenfolge. Folglich protifiert ein sequenzielles Programm nicht von modernen Multicore-Prozessoren. Hier kommen nun Nebenläufigkeit (engl. concurrency) und Parallelität (engl. parallelism) ins Spiel~\cite[S.~3]{butcher_seven_2014}.\\
@@ -80,8 +80,14 @@ Rob Pike forumlierte den Unterschied zwischen Nebenläufigkeit und Parallelität
 \cite[S.~10]{pike_concurrency_2012}
 \end{quotation}
 
-Nebenläufigkeit beschreibt die nichtdeterministische Koordination mehrerer unabhängiger Abläufe. Parallelität hingegen die simultane bzw. gleichzeitige Ausführung von deterministischen Berechnungen die nicht zwingendermaßen zusammenhängen~\cite[S.~8-9]{pike_concurrency_2012}.\\
-Kann ein Problem bzw. eine Anwendung nebenläufig beschrieben bzw. entworfen werden, ist es möglich die Anwendung parallel und entsprechend schneller auszuführt~\cite[S.~19~\&~S.~30]{pike_concurrency_2012}. Ein nebenläufiges Design erlaubt es einer Anwendung \textit{responsive}, fehlertolerant und effizient zu sein~\cite[S.~4]{butcher_seven_2014}. Die heutigen Anforderungen an Software erfordern \textit{concurrency} in einem hohen Maße und reaktive Anwendungen sind deshalb auch immer \textit{concurrent}.
+Nebenläufigkeit beschreibt die Koordination mehrerer unabhängiger Abläufe. Parallelität hingegen die simultane bzw. gleichzeitige Ausführung von Berechnungen die nicht zwingendermaßen zusammenhängen~\cite[S.~8-9]{pike_concurrency_2012}~\cite[S.~3]{butcher_seven_2014}.\\
+Kann ein Problem bzw. eine Anwendung nebenläufig beschrieben bzw. entworfen werden, ist es möglich die Anwendung parallel und entsprechend schneller auszuführt~\cite[S.~19~\&~S.~30]{pike_concurrency_2012}.\\
+
+Die Welt ist durch und durch nebenläufig und demnach sollten heutigen Anwendungen ebenso nebenläufig sein, um den heutigen Anforderungen zu entsprechen~\cite[S.~5]{butcher_seven_2014}~\cite[S.~3]{armstrong_programming_2013}.\\
+Ein nebenläufiges Design erlaubt es einer Anwendung \textit{responsive}, fehlertolerant und effizient zu sein~\cite[S.~4~\&~S.~6]{butcher_seven_2014}~\cite[S.~6]{armstrong_programming_2013}.\\
+Nur eine Anwendung die nebenläufig mehrere Ereignisse verarbeiten kann, ist in der Lange \textit{responsive} zu sein. Beispielsweise kann ein Browser mehrere Webseiten gleichzeitig (nebenläufig) laden und der Benutzer hat die Möglichkeit währenddessen eine weitere Seite zu öffnen ohne auf die Beendigung der anderen Ladevorgänge warten zu müssen. Verteilt man eine Anwendung auf mehrere Nodes muss diese implizit nebenläufig sein --- oder anders ausgedrückt, nebenläufiges Design erlaubt das Verteilen auf mehreren Nodes. Die Möglichkeit eine Anwendung zu verteilen und somit redundant zu betreiben, ist Basis für \textit{resilience} und \textit{elasticity}~\cite[S.~6]{butcher_seven_2014}~\cite[S.~6~\&~S.~7]{armstrong_programming_2013}.\\
+
+Zusammenfassend kann man diesem Abschnitt entnehmen, dass reaktive Anwendung per Definition nebenläufig entworfen und umgesetzt werden müssen, um die Eigenschaften des Reactive Manifestos erfüllen zu können.
 
 \pagebreak
 

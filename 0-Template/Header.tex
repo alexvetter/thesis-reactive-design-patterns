@@ -1,14 +1,13 @@
 %HEADER
-\def\makroEinseitig{
-	%KOMA-Script-Klasse: scrreprt
-	%deutsches Design, Schriftgröße 12, DIN A4
-	%Literaturverzeichnis und Index in Inhaltsverzerzeichnis einbinden
-	\documentclass[12pt,a4paper,listof=totoc,oneside]{scrreprt}
 
-	%Seitenspiegel einstellen
-	\usepackage[a4paper]{geometry}
-	\geometry{a4paper,left=30mm,right=25mm,bottom=20mm,top=15mm,bindingoffset=2mm,includehead,includefoot}
-}
+%KOMA-Script-Klasse: scrreprt
+%deutsches Design, Schriftgröße 12, DIN A4
+%Literaturverzeichnis und Index in Inhaltsverzerzeichnis einbinden
+\documentclass[12pt,a4paper,listof=totoc,oneside]{scrreprt}
+
+%Seitenspiegel einstellen
+\usepackage[a4paper]{geometry}
+\geometry{a4paper,left=30mm,right=25mm,bottom=20mm,top=15mm,bindingoffset=2mm,includehead,includefoot}
 
 \def\makroFH-Kopfzeilenstil{
 	\pagestyle{scrheadings}
@@ -16,8 +15,6 @@
 	\pagestyle{scrheadings}
 	\renewcommand*{\chapterpagestyle}{scrheadings}
 }
-
-\makroEinseitig{}
 
 % passende Codierung
 \usepackage[utf8]{inputenc}
@@ -84,7 +81,9 @@
 \usepackage[nonumberlist,acronym,toc]{glossaries}
 
 % Zitieren
-\usepackage[numbers,square,sort]{natbib}
+\usepackage[backend=biber,style=alphabetic,natbib=true]{biblatex}
+\bibliography{0-Template/Bibliothek.bib}
+\nocite{*}
 
 % Glossar einschalten
 \makeglossaries{}
@@ -119,6 +118,7 @@ basicstyle=\fontfamily{pcr}\selectfont\footnotesize}
 \usepackage{booktabs}
 \usepackage{tabularx}
 
+% Storycards
 \newcommand{\Storycard}[6]{
 	\begin{table}[H]
 		\framebox{

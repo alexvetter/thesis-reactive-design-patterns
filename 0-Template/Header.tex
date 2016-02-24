@@ -136,7 +136,7 @@ basicstyle=\fontfamily{pcr}\selectfont\footnotesize}
 }
 
 % Dokument interne Referenzen
-\newcommand*{\fullref}[1]{\hyperref[{#1}]{\autoref*{#1} \nameref*{#1}}}
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\nameref*{#1}~\ref{#1}}}
 
 % Fügt bei Zahlen kleiner 10  eine 0 vorne dran
 \newcommand{\leadingzero}[1]{\ifnum #1<10 0\the#1\else\the#1\fi}

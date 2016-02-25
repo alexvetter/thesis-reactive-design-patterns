@@ -10,7 +10,7 @@ Reaktive Anwendungen haben die Eigenschaften folgendes zu leisten bzw. folgende 
 \begin{enumerate}
 \item \ldots \textbf{auf variable Belastung reagieren (siehe~\fullref{subsec:elastic}).} Das System ist automatisch in der Lage dynamische Skalierung durchzuführen und nicht benötigte Ressourcen wieder freizugeben.
 \item \ldots \textbf{auf Fehler reagieren (siehe~\fullref{subsec:resilient}).} Die Software ist von Grund auf widerständsfähig gegenüber Fehlerzuständen. Die Wiederherstellung des Normalzustand erfolgt automatisch.
-\item \ldots \textbf{auf Nutzer oder Komponenten reagieren (siehe~\fullref{subsec:responsive}).} Jede Anfrage wird in der geforderte Antwortzeit bearbeitet und übertrifft diese eventuell sogar.
+\item \ldots \textbf{auf Nutzer oder Komponenten reagieren (siehe~\fullref{subsec:responsive}).} Jede Anfrage wird in der geforderten Antwortzeit oder schneller bearbeitet.
 \item \ldots \textbf{auf Nachrichten reagieren (siehe~\fullref{subsec:messagedriven}).} Das System verwendet asynchrone Nachrichtenübermittlung zwischen den Komponenten und ist somit \textit{message-driven}.
 \end{enumerate}
 
@@ -64,16 +64,18 @@ Die folgende Abbildung (Abb. \ref{fig:four-traits}) soll den Zusammenhang der vi
 
 \pagebreak
 
-\section{Parallelität und Nebenläufigkeit}
+\section{Parallelität \& Nebenläufigkeit}
+
+\subsection{Notwendigkeit}\label{subsec:notwendigkeit}
 Die Prozessorhersteller sind in den letzten Jahren an gewisse Grenzen bei der Entwicklung von CPUs gestoßen. Seit 2003 stagniert die Entwicklung hinsichtlich der Taktraten von Prozessoren. Obwohl die Beobachtung von Gordon Moore (\enquote{Moore's Law}) nach wie vor seine Gültigkeit zu haben scheint und sich die Zahl der Transistoren alle zwei Jahre verdoppelt, werde diese nicht genutzt, um eine einzelne CPU schneller zu machen. Hersteller setzen stattdessen seit einigen Jahren auf Multicore-Architekturen~\cite[S.~1]{butcher_seven_2014}~\cite[S.~108]{vernon_reactive_2016}~\cite{sutter_free_2004}.\\
 Herb Sutter veröffentlichte diesbezüglich 2004 einen Artikel mit dem Titel \enquote{The free lunch is over}. Mit \enquote{free lunch} bezog er sich auf die Tatsache, dass sequenzielle Anwendungen ohne das Zutun von Entwicklern aufgrund der damals noch steigenden Taktraten schneller wurden --- vielmehr schneller ausgeführt wurden.\\
 Im Hinblick auf die Multicore-Prozessoren und der mehr oder weniger stagnierenden Taktraten müssen Anwendungen ihre Aufgaben und Teilaufgaben nebenläufig und parallel ausführen, um die heutigen und zukünftigen Prozessoren optimal auszulasten~\cite{sutter_free_2004}~\cite[S.~1]{butcher_seven_2014}.\\
 Sequenzielle Programme werden Schritt für Schritt ausgeführt. Genauer gesagt, erfolgt die Ausführung der einzelnen Befehle nach einer vorgegebenen Reihenfolge. Folglich profitiert ein sequenzielles Programm nicht von modernen Multicore-Prozessoren. Hier kommen nun Nebenläufigkeit (engl. concurrency) und Parallelität (engl. parallelism) ins Spiel~\cite[S.~3]{butcher_seven_2014}.\\
 
 Die Welt in der wir leben ist hochgradig parallel. Während man Auto fährt, nimmt man, wenn auch  meist unterbewusst, viele unterschiedliche Dinge gleichzeitig wahr. Während man sich sportlich betätigt, hört man gleichzeitig zum Laufen noch Musik, um sich anzuspornen. Während man seinem Smartphone mit dem Finger sagt was es tun soll, kann man trotzdem derweil Emails empfangen.\\
-In Hinblick auf Prozessoren und Software muss man zwischen mehreren Ebenen von Parallelität unterscheiden. Zum Beispiel kann ein Singlecore-Prozessor aufgrund von Technologien wie Pipelining mehrere Schritte parallelisieren. Ebenso sind Multitasking Betriebssysteme in der Lage auf einem Singlecore-Prozessor mehrere Prozesse nebenläufig bzw. quasi-parallel auszuführen~\cite[S.~3~\&~S.~4]{butcher_seven_2014}. Der folgende Abschnitt bezieht sich auf Parallelität im Bezug auf Multicore-Prozessoren und wie diese erreicht werden kann.\\
-Nebenläufigkeit und Parallelität werden fälschlicherweise oft als Synonyme verwendet. Die beiden Begriffe sind verwandt, beschreiben jedoch verschiedene Sachverhalte. Eine nebenläufige Applikation besitzt mehrere logische Threads (\textit{threads of control}). Diese können aber müssen nicht parallel ausgeführt werden. Eine parallele Anwendung berechnet Ergebnisse eventuell schneller als eine sequenzielle Anwendung durch die gleichzeitige Ausführung von Teilproblemen. Meist gibt es dann jedoch nur einen logischen Thread~\cite[S.~1]{butcher_seven_2014}.\\
-Betrachtet man Nebenläufigkeit und Parallelität aus der Sicht eines Problems (Problemdomäne), bedeutet Nebenläufigkeit das Bearbeiten gleichzeitig oder annähernd gleichzeitig eintreffender Ereignisse. Im Gegensatz dazu bezieht sich Parallelität auf die beschleunigte Lösung eines Problems durch Fragmentierung und der simultanen Bearbeitung der Teilprobleme~\cite[S.~2]{butcher_seven_2014}~\cite[S.~15]{vernon_reactive_2016}.\\
+Blickt man nun auf Parallelität im Bezug auf Prozessoren und Software, wird zwischen mehreren Ebenen von Parallelität unterscheiden. Zum Beispiel kann ein Singlecore-Prozessor aufgrund von Technologien wie Pipelining mehrere Schritte parallelisieren. Ebenso sind Multitasking Betriebssysteme in der Lage auf einem Singlecore-Prozessor mehrere Prozesse nebenläufig bzw. quasi-parallel auszuführen~\cite[S.~3~\&~S.~4]{butcher_seven_2014}. Der folgende Abschnitt bezieht sich auf Parallelität im Bezug auf Multicore-Prozessoren und wie diese erreicht werden kann.\\
+Nebenläufigkeit und Parallelität werden fälschlicherweise oft als Synonyme verwendet. Die beiden Begriffe sind verwandt, beschreiben jedoch verschiedene Sachverhalte.\\
+Aus der Sicht eines Problems (Problemdomäne), bedeutet Nebenläufigkeit das Bearbeiten gleichzeitig oder annähernd gleichzeitig eintreffender Ereignisse. Im Gegensatz dazu bezieht sich Parallelität auf die beschleunigte Lösung eines Problems durch Fragmentierung und der simultanen Bearbeitung der Teilprobleme~\cite[S.~1~\&~S.~2]{butcher_seven_2014}~\cite[S.~15]{vernon_reactive_2016}.\\
 Rob Pike formulierte den Unterschied zwischen Nebenläufigkeit und Parallelität wie folgt:
 
 \begin{quotation}
@@ -81,10 +83,11 @@ Rob Pike formulierte den Unterschied zwischen Nebenläufigkeit und Parallelität
 \cite[S.~10]{pike_concurrency_2012}
 \end{quotation}
 
-Nebenläufigkeit beschreibt die Koordination mehrerer unabhängiger Abläufe. Parallelität hingegen die simultane bzw. gleichzeitige Ausführung von Berechnungen, die nicht zwingendermaßen zusammenhängen~\cite[S.~8-9]{pike_concurrency_2012}~\cite[S.~3]{butcher_seven_2014}.\\
-Kann ein Problem bzw. eine Anwendung nebenläufig beschrieben bzw. entworfen werden, ist es möglich, die Anwendung parallel und entsprechend schneller auszuführen~\cite[S.~19~\&~S.~30]{pike_concurrency_2012}. Gene Amdahl stelle hierfür bereits 1967 ein Modell auf (\enquote{Amdahl's Law}). Das Modell beschreibt den Grad der Beschleunigung einer Anwendungen durch dessen parallele Anteile. So kann eine Anwendung, die nur zu 90~\% parallelisiert ist, maximal um den Faktor 10 schneller ausgeführt werden~\cite{amdahl_validity_1967}.\\
+Im Grunde bedeutet das, die Nebenläufigkeit beschreibt die Koordination mehrerer unabhängiger Abläufstränge (\textit{threads of control}). Parallelität hingegen die simultane bzw. gleichzeitige Ausführung von Berechnungen, die nicht zwingendermaßen zusammenhängen~\cite[S.~8-9]{pike_concurrency_2012}~\cite[S.~3]{butcher_seven_2014}.\\
+Kann ein Problem bzw. eine Anwendung nebenläufig beschrieben bzw. entworfen werden, ist es möglich, die Anwendung parallel und entsprechend effizienter auszuführen~\cite[S.~19~\&~S.~30]{pike_concurrency_2012}.\\
+Die effizientere Ausführung hat jedoch Grenzen und diese hängen von den sequenziellen Segmenten ab. Gene Amdahl stelle hierfür bereits 1967 ein Modell auf (\enquote{Amdahl's Law}), welches den Grad der Beschleunigung einer Anwendungen durch dessen parallele Anteile beschreibt. So zum Beispiel kann eine Anwendung, die nur zu 90~\% parallelisiert ist, maximal um den Faktor 10 schneller ausgeführt werden~\cite{amdahl_validity_1967}. Dies zeigt, wie wichtig es ist, auf sequenzielle Abschnitte zu achten und diese möglichst zu vermeiden.\\
 
-Die Art und Weise, wie wir heute mit der digitalen Welt interagieren, ist nebenläufig und parallel. Demnach müssen Anwendungen ebenso nebenläufig sein, um den Anforderungen zu entsprechen~\cite[S.~5]{butcher_seven_2014}~\cite[S.~3]{armstrong_programming_2013}.\\
+Die Art und Weise, wie wir heute mit der digitalen Welt interagieren, ist nebenläufig und parallel. Demnach müssen Anwendungen ebenso nebenläufig sein, um den Anforderungen zu entsprechen~\cite[S.~5]{butcher_seven_2014}~\cite[S.~3~\&~S.~178]{armstrong_programming_2013}.\\
 Ein nebenläufiges Design erlaubt es einer Anwendung \textit{responsive}, fehlertolerant und effizient zu sein~\cite[S.~4~\&~S.~6]{butcher_seven_2014}~\cite[S.~6]{armstrong_programming_2013}.\\
 Nur eine Anwendung, die nebenläufig mehrere Ereignisse verarbeiten kann, ist in der Lage \textit{responsive} zu sein. Beispielsweise kann ein Browser mehrere Webseiten gleichzeitig (nebenläufig) laden und der Benutzer hat die Möglichkeit währenddessen eine weitere Seite zu öffnen, ohne auf die Beendigung der anderen Ladevorgänge warten zu müssen. Verteilt man eine Anwendung auf mehrere Nodes, muss diese implizit nebenläufig sein --- oder anders ausgedrückt, nebenläufiges Design erlaubt das Verteilen auf mehreren Nodes. Die Möglichkeit eine Anwendung zu verteilen und somit redundant zu betreiben, ist Basis für \textit{resilience} und \textit{elasticity}~\cite[S.~6]{butcher_seven_2014}~\cite[S.~6~\&~S.~7]{armstrong_programming_2013}.\\
 
@@ -92,23 +95,24 @@ Zusammenfassend kann man diesem Abschnitt entnehmen, dass reaktive Anwendungen p
 
 \pagebreak
 
-\subsection{Responsivness in synchronen Anwendungen}
-Die einfachste Kommunikation zwischen zwei Komponenten ist die synchrone Kommunikation. Komponente \textit{a} ruft eine Funktion \textit{f} der Komponente \textit{b} auf. Die Berechnung erfolgt synchron und deshalb wartet Komponente \textit{a} auf das Ergebnis und kann dann erst die weiteren Schritte sequenziell abarbeiten. Die weiteren Schritte müssen jedoch nicht bedingt von dem Ergebnis der Funktion \textit{f} abhängig sein. Sollte bei dem Funktionsaufruf ein Fehler auftreten, werden die nachfolgenden Befehle nicht ausgeführt. Jedoch ist Komponente \textit{b} von diesem Fehler betroffen, solange die beiden Komponenten im gleichen Thread ausgeführt werden. Komponente \textit{a} und \textit{b} sind stark voneinander abhängig~\cite[S.~22]{kuhn_reactive_2015}.\\
-Sobald die Komponenten \textit{a} und \textit{b} verteilt werden, löst sich die Kopplung. Dies kann durch Ausführung in jeweils eigenen Threads geschehen oder durch die Verteilung auf mehrere Nodes und die Kommunikation über das Netzwerk.\\
-
-%TODO Waldo et al \enquote{A Note on Distributed Computing}\\
-%TODO Deutsch et al \enquote{Fallacies of Distributed Computing}
-
-\subsection{Asynchronous \& Non-Blocking IO}
-Ein wichtiger Schritt zu einer reaktiven Anwendung impliziert verteilte und isolierte Komponenten. Es ist nicht zwingend erforderlich, dass die Komponenten auf verschiedenen Hosts laufen und dennoch ist dies aufgrund der \textit{location transparency} möglich. Selbst auf einem Node mit lokaler Kommunikation hat man Latenzen. In traditionellen Applikationen wartet eine Komponente auf die Antwort einer angefragten Komponente. Man spricht hier von synchroner und blockierender (eng. \textit{blocking}) Kommunikation. Das System muss warten und Ressourcen (z.B. CPU) werden nicht optimal genutzt. Darunter leidet dann die \textit{responsiveness}.
-
-%(Beispiel typischer Applicationcontainer mit 20 Threads)
-
 \subsection{Share nothing}
-Da einzelne Komponenten voneinander isoliert sein müssen, dürfen sie auch keinen \textit{state} bzw. keine Informationen teilen. Die Komponenten haben somit keinen \textit{shared memory}. Ein reaktives System fordert die Komponenten dazu auf, zu kommunizieren, um Informationen auszutauschen. In einem \textit{message driven} System werden Nachrichten verschickt, um Komponenten über z.B. eine Zustandsänderung zu informieren.\\
-Durch diese klare Entkopplung erhält man ebenso klare Grenzen zwischen den Komponenten. Dies führt zu Kapselung von Fehlern, Implementierungsdetails und Verantwortlichkeiten.
+Nebenläufige Komponenten teilen sich traditionellerweise Daten, um zu interagieren. Der Zugriff auf den sogenannten \textit{shared memory} kann nebenläufig und parallel erfolgen, deshalb müssen die Operationen synchroniziert werden. Hierfür nutzt man das Konzept der \textit{mutual exclusion}. Man stellt über sogenannte \textit{locks} sicher, dass nur ein \textit{thread of control} zur selben Zeit auf die Daten zugreifen kann~\cite[S.~10]{butcher_seven_2014}. Der Zugriff auf die Daten ist somit sequenziell, weshalb die Vorteile einer nebenläufigen Anwendung an dieser Stelle zunichtegemacht werden (siehe \fullref{subsec:notwendigkeit})~\cite[S.~45]{kuhn_reactive_2015}. Zudem haben Anwendungen mit \textit{shared memory} unteranderem mit Problemen wie \textit{memory corruption}, \textit{deadlocks} und \textit{starvation} zu kämpfen~\cite[S.~117]{vernon_reactive_2016}.\\
+In reaktiven Anwendungen müssen Komponenten voneinander isoliert sein (siehe \fullref{subsec:resilient}), folglich dürfen sie keine Informationen teilen (\textit{share nothing}). Um mit einer anderen Komponente zu interagieren, müssen reaktiven Komponente asynchrone Nachrichten ausgetauscht (siehe \fullref{subsec:messagedriven}). Dieses Konzept zur nebenläufign Interaktion wird \textit{message passing} genannt und ist eine Alternative zum \textit{shared memory}. Der Vorteil ist, da Informationen nur durch den expliziten Nachrichtenaustausch geteilt werden, benötigt man keine \textit{mutual exclusion} und hat somit eine \textit{lock-free concurrency}.\\
+Durch diese klare Entkopplung erhält man ebenso klare Grenzen zwischen den Komponenten. Dies führt zu Kapselung von Fehlern, Implementierungsdetails und Verantwortlichkeiten. Desweiteren hilft es bei der Umsetzung von \textit{location transparency}.
 
-% TODO solution for this: reactive manifesto & actor model
+\pagebreak
+
+\subsection{Kommunikation}
+Eine reaktive Anwendung ist \textit{message-driven}. Hierzu müssen Nachrichten zwischen den Komponenten ausgetauscht werden. Es gibt zwei Möglichkeiten der Kommunikation. Zum einen die synchrone und zum anderen die asynchrone Kommunikation.\\
+
+\subsubsection{Synchrone Kommunikation}
+Die traditionelle Kommunikation zwischen zwei Komponenten ist die synchrone Kommunikation. Komponente \textit{a} ruft eine Funktion \textit{f} der Komponente \textit{b} auf. Die Berechnung erfolgt synchron und deshalb wartet Komponente \textit{a} auf das Ergebnis und kann dann erst die weiteren Schritte sequenziell abarbeiten. Die weiteren Schritte müssen jedoch nicht von dem Ergebnis der Funktion \textit{f} abhängig sein und trotzdem wird deren Berechnung blockiert. Sollte bei dem Funktionsaufruf ein Fehler auftreten, werden die nachfolgenden Befehle nicht ausgeführt. Die Komponente \textit{b} ist von diesem Fehler ebenfalls betroffen, solange die beiden Komponenten im gleichen Thread ausgeführt werden. Folglich sind die Komponenten \textit{a} und \textit{b} stark voneinander abhängig~\cite[S.~22]{kuhn_reactive_2015}. Es wird klar, dass diese Art der Kommunikation für \textit{responsivness}, \textit{resilience} und \textit{elasticity} nicht förderlich ist.\\
+
+\subsubsection{Asynchrone Kommunikation}
+Sobald die Komponenten \textit{a} und \textit{b} verteilt werden, löst sich die angesprochene Kopplung. Dies kann durch Ausführung in jeweils eigenen Threads geschehen oder durch die Verteilung auf mehrere Nodes und die Kommunikation über das Netzwerk. Dies ist ein notwendiger Schritt hinzu einer reaktiven Anwendung. Es ist nicht zwingend erforderlich, dass die Komponenten auf verschiedenen Hosts laufen und dennoch ist dies aufgrund der \textit{location transparency} möglich~\cite[S.~22]{kuhn_reactive_2015}.\\
+Synchrone Kommunikation (in seiner einfachsten Form eine Funktionsaufruf), ist bei verteilten Anwendungen nicht möglich, wie bereits erwähnt auch nicht wünschenswert. Peter Deutsch forumlierte diesbezüglich sieben Irrtümer bzw. Annahmen die im Bezug auf verteile Systeme gemacht werden. Zum Beispiel die Annahme ein Netzwerk wäre ausfallsicher --- was definitiv nicht der Fall ist~
+\cite[S.~1]{[rotem_fallacies_2015]}. Desweiteren haben sich Waldo et al in ihrem Artikel \enquote{A Note on Distributed Computing} mit Problemen der Kommunikation innerhalb verteilter Systeme beschäftigt~\cite{waldo_note_1994}.\\
+Aynchrone Kommunikation bedeutet der Sender führt seine Aktivitäten und Berechnungen vor und wartet nicht auf die Empfangsbestätigung des Empfängers. Der Empfänger selbst arbeitet meist auch asynchron in dem eingehende Nachrichten zu erst in einer \textit{message queue} bis zur Bearbeitung zwischengelagert werden.
 
 \pagebreak
 
@@ -121,9 +125,8 @@ Ist eine Variable \textit{immutable} bedeutet das, sie ist nach dem initialen Se
 \section{Reactive programming}
 Reaktive Programmierung ist in der Entwicklung von Benutzeroberflächen üblich und verbreitet. Als Entwickler einer GUI stetig auf eingehende Events reagieren (z.B. Cursorbewegung, Tastendruck). Während der Verarbeitung dieser soll die Benutzeroberfläche nicht blockieren und Eingaben dadurch verhindern. Eine Benutzeroberfläche muss responsive sein, um dem Benutzer keinen Ärger zu bereiten.\\
 
-%TODO Nachrichtenstorm\\
+%TODO Nachrichtenstorm
 %TODO Events: facts about things that have happend
-
-\subsection{Reactive extensions \& Oberservable}
-%TODO Rx are libraries for asynchronous and therefore reactive programming.\\
+%TODO Reactive extensions & Observable 
+%TODO Rx are libraries for asynchronous and therefore reactive programming.
 %TODO Evolution: imperative -> functional -> reactive

@@ -118,13 +118,39 @@ Aufgrund des \textit{share nothing} Prinzips (siehe~\ref{subsec:sharenothing}) m
 
 \pagebreak
 
-\section{Functional programming}
+\section{Funktionale Programmierung}
+Funktionale Programmierung ist ein Programmierparadigma, bei dem die Anwendungen ausschließlich aus Ausdrücken (engl. \textit{expressions}) bzw. Funktionen besteht. Diese Funktionen haben keine Seiteneffekte, man nennt diese deshalb auch \textit{pure functions}. Funktionen werden zudem behandelt, wie übliche Datentypen (z.B. Integer oder Boolean) und können Variablen zugewiesen werden oder an Funktionen übergeben werden. Man spricht deshalb von sogenannten \textit{higher order functions}~\cite[S.~50]{butcher_seven_2014}~\cite[S.~3~\&~S.~19]{chiusano_functional_2015}.\\
+Folgende Abschnitt sollen gewisse Grundkonzepte der Funktionalen Programmierung erklären und ihren Bezug zu reaktiven Anwendungen deutlichen machen. 
 
 \subsection{Immutable}
-In traditioneller sequentieller Programmierung nutzt man so genannten \textit{mutable state}. Also ein Zustand bzw. eine Variable, die jederzeit verändert werden kann. Da reaktive Anwendungen nebenläufig ausgeführt werden, muss der Zugriff auf \textit{mutable state} synchronisiert werden. Es entstehen ähnliche Probleme wie bei synchroner Kommunikation, teile der Anwendungen müssen warten und somit werden Systemressourcen blockiert.\\
-Ist eine Variable \textit{immutable} bedeutet das, sie ist nach dem initialen Setzen eines Wertes nicht mehr veränderbar. Der gleichzeitige Zugriff auf einen \textit{shared immutable state} muss somit nicht mehr synchronisiert werden, da die Variable nur einmal beschrieben werden kann.
+In traditioneller imperativer Programmierung nutzt man so genannten veränderbaren Zustand (engl.~\textit{mutable state}). Ein veränderbarer Zustand ist eine Variable, die jederzeit verändert werden kann. Im Abschnitt zu \textit{share nothing} (\ref{subsec:sharenothing}) wurde bereits deutlich gemacht, dass veränderbarer \textit{shared memory} bzw. \textit{shared mutable state} bei nebenläufigen Anwendungen zu verschiedenen Problemen führen kann. Funktionale Programmierung versucht \textit{mutable state} von vornherein zu verhindern~\cite[S.~50]{butcher_seven_2014}.\\
+Ist eine Variable \textit{immutable} bedeutet das, sie ist nach dem initialen Setzen eines Wertes nicht mehr veränderbar. Der gleichzeitige Zugriff auf einen \textit{shared immutable state} muss somit nicht mehr synchronisiert werden, da die Variable nur einmal beschrieben werden kann~\cite[S.~50]{butcher_seven_2014}~\cite[S.~62]{kuhn_reactive_2015}.
+
+\pagebreak
 
 \subsection{Pure functions}
+Die sogenannten \textit{pure functions} sind Funktionen ohne Seiteneffekte. Eine \textit{pure function} liefert immer das gleiche Ergebnis bei gleicher Eingabe~\cite[S.~61]{kuhn_reactive_2015}. Eine Funktion die eine global definierte Zählvariable inkrementiert, hat somit Seiteneffekte. Desweiteren darf eine \textit{pure function} keine höheren Datentypen, wie Objekte oder Listen verändern. Auch der Zugriff auf Netzwerk oder Dateisystem gilt als Seiteneffekt~\cite[S.~3]{chiusano_functional_2015}~\cite[S.~62]{kuhn_reactive_2015}.
+Der Vorteil von \textit{pure functions} ist, dass der Aufruf durch das Ergebnis ersetzt werden kann. Man spricht von der sogenannten \textit{referential transparency}. Folgendes Beispiel (\autoref{lst:lst1}) zeigt eine Funktion die zwei Zahlen addiert. Diese Funktion ändert keine bestehenden Variablenwerte und hat auch sonst keine Seiteneffekte und deren Aufruf kann mit dem Ergebnis ersetzt werden.
+
+\begin{lstlisting}[caption={Beispiel für eine \textit{pure funcition}},label={lst:lst1}]
+def add(a: Int, b: Int): Int = {
+  return a + b
+}
+add(add(1, 2), add(3, 4)) // = (1 + 2) + (3 + 4) = 10
+add(3, 7) // = 3 + 7 = 10
+\end{lstlisting}
+
+Ein weiteres Beispiel für die \textit{referenctial transparency} sind Funktionen die einen bestehenden Wert kopieren und bei diesem Vorgang Veränderungen durchführen ohne den alten Wert bzw. die alte Referenz zu verändern (siehe~\autoref{lst:lst2}).
+
+\begin{lstlisting}[caption={Beispiel einer Funktion mit \textit{referential transparency}.},label={lst:lst2}]
+def moveX(p: Point, x: Int): Point = {
+  return new Point(p.x + x, p.y)
+}
+val p1 = new Point(1, 1)
+val p2 = moveX(p1, 2)
+// p1 = new Point(1, 1)
+// p2 = new Point(3, 1)
+\end{lstlisting}
 
 \subsection{First-class functions}
 

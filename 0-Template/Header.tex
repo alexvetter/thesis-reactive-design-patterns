@@ -100,6 +100,8 @@
 
 % Code Beispiele
 \usepackage{listings}
+\renewcommand{\lstlistlistingname}{Quellcodeverzeichnis}
+\renewcommand{\lstlistingname}{Quellcode}
 
 % Symbole
 \usepackage{amssymb}
@@ -121,23 +123,6 @@ basicstyle=\fontfamily{pcr}\selectfont\footnotesize}
 
 \usepackage{booktabs}
 \usepackage{tabularx}
-
-% Storycards
-\newcommand{\Storycard}[6]{
-	\begin{table}[H]
-		\framebox{
-			\begin{tabularx}{\textwidth}{l|l|l}
-			\textbf{Nr:} #1 & \textbf{Story Points:} #2 Pkt. & \textbf{Priorität:} #3 \\
-			\hline
-			\multicolumn{3}{p{0.97\textwidth}}{\textbf{Titel:} #4} \\
-			\hline
-			\multicolumn{3}{p{0.97\textwidth}}{\textbf{Beschreibung:} #5} \\
-			\hline
-			\multicolumn{3}{p{0.97\textwidth}}{\textbf{Akzeptanztests:} #6} \\
-			\end{tabularx}
-		}
-	\end{table}
-}
 
 % Dokument interne Referenzen
 \newcommand*{\fullref}[1]{\hyperref[{#1}]{\nameref*{#1}~\ref{#1}}}

@@ -119,7 +119,7 @@ Aufgrund des \textit{share nothing} Prinzips (siehe~\ref{subsec:sharenothing}) m
 \pagebreak
 
 \section{Funktionale Programmierung}
-Funktionale Programmierung ist ein Programmierparadigma, bei dem die Anwendungen ausschließlich aus Ausdrücken (engl. \textit{expressions}) bzw. Funktionen besteht. Diese Funktionen haben keine Seiteneffekte, man nennt diese deshalb auch \textit{pure functions}. Funktionen werden zudem behandelt, wie übliche Datentypen (z.B. Integer oder Boolean) und können Variablen zugewiesen werden oder an Funktionen übergeben werden. Man spricht deshalb von sogenannten \textit{higher order functions}~\cite[S.~50]{butcher_seven_2014}~\cite[S.~3~\&~S.~19]{chiusano_functional_2015}.\\
+Funktionale Programmierung ist ein Programmierparadigma, bei diesem die Anwendungen ausschließlich aus Ausdrücken (engl. \textit{expressions}) bzw. Funktionen bestehen. Diese Funktionen haben keine Seiteneffekte, man nennt diese deshalb auch \textit{pure functions}. Funktionen werden zudem behandelt, wie übliche Datentypen (z.B. Integer oder Boolean) und können Variablen zugewiesen oder als Funktionswert übergeben werden. Man spricht deshalb von sogenannten \textit{higher order functions}~\cite[S.~50]{butcher_seven_2014}~\cite[S.~3~\&~S.~19]{chiusano_functional_2015}.\\
 Folgende Abschnitt sollen gewisse Grundkonzepte der Funktionalen Programmierung erklären und ihren Bezug zu reaktiven Anwendungen deutlichen machen. 
 
 \subsection{Immutable}
@@ -129,20 +129,26 @@ Ist eine Variable \textit{immutable} bedeutet das, sie ist nach dem initialen Se
 \pagebreak
 
 \subsection{Pure functions}
-Die sogenannten \textit{pure functions} sind Funktionen ohne Seiteneffekte. Eine \textit{pure function} liefert immer das gleiche Ergebnis bei gleicher Eingabe~\cite[S.~61]{kuhn_reactive_2015}. Eine Funktion die eine global definierte Zählvariable inkrementiert, hat somit Seiteneffekte. Desweiteren darf eine \textit{pure function} keine höheren Datentypen, wie Objekte oder Listen verändern. Auch der Zugriff auf Netzwerk oder Dateisystem gilt als Seiteneffekt~\cite[S.~3]{chiusano_functional_2015}~\cite[S.~62]{kuhn_reactive_2015}.
-Der Vorteil von \textit{pure functions} ist, dass der Aufruf durch das Ergebnis ersetzt werden kann. Man spricht von der sogenannten \textit{referential transparency}. Folgendes Beispiel (\autoref{lst:lst1}) zeigt eine Funktion die zwei Zahlen addiert. Diese Funktion ändert keine bestehenden Variablenwerte und hat auch sonst keine Seiteneffekte und deren Aufruf kann mit dem Ergebnis ersetzt werden.
+Die sogenannten \textit{pure functions} sind Funktionen ohne Seiteneffekte. Eine \textit{pure function} liefert bei gleicher Eingabe auch immer das gleiche Ergebnis~\cite[S.~61]{kuhn_reactive_2015}. Eine Funktion die eine global definierte Zählvariable inkrementiert, hat somit Seiteneffekte. Desweiteren darf eine \textit{pure function} keine höheren Datentypen, wie Objekte oder Listen verändern. Auch der Zugriff auf Netzwerk oder Dateisystem gilt als Seiteneffekt~\cite[S.~3]{chiusano_functional_2015}~\cite[S.~62]{kuhn_reactive_2015}.
+Der Vorteil von \textit{pure functions} ist, dass der Aufruf durch das Ergebnis ersetzt werden kann. Verallgemeinert man dieses Prinzip auch auf Ausdrücke, spricht man von der sogenannten \textit{referential transparency}~\cite[S.~9]~\cite[S.~62]{kuhn_reactive_2015}. Folgendes Beispiel zeigt eine Funktion die zwei Zahlen addiert (\ref{lst:lst1}). Diese Funktion ändert keine bestehenden Variablenwerte und hat auch sonst keinerlei Seiteneffekte. Der Aufruf dieser Funktion kann folglich mit dem Ergebnis ersetzt werden, wie die letzte Zeile des Beispiels zeigt.
 
 \begin{lstlisting}[caption={Beispiel für eine \textit{pure funcition}},label={lst:lst1}]
 def add(a: Int, b: Int): Int = {
   return a + b
 }
-add(add(1, 2), add(3, 4)) // = (1 + 2) + (3 + 4) = 10
-add(3, 7) // = 3 + 7 = 10
+
+add(add(1, 2), add(3, 4))
+// = (1 + 2) + (3 + 4) = 10
+
+add(3, 7)
+// = 3 + 7 = 10
 \end{lstlisting}
+
+Dieses einfache Beispiel nutzt wiederum eine \textit{pure functions} die bereits durch die Programmiersprache, in diesem Fall Scala, bereitgestellt wird. Die Addition zweiter Zahlen durch den \textit{+} Operator. Auch in nicht funktionalen Sprachen, gibt es viele Ausdrücke und \textit{pure functions}, die die \textit{referenctial transparency} waren. Zum Beispiel die mathematischen Operatoren oder die Funktion zur Bestimmung der Länge einer Zeichenkette --- meist \textit{length} genannt.\\
 
 Ein weiteres Beispiel für die \textit{referenctial transparency} sind Funktionen die einen bestehenden Wert kopieren und bei diesem Vorgang Veränderungen durchführen ohne den alten Wert bzw. die alte Referenz zu verändern (siehe~\autoref{lst:lst2}).
 
-\begin{lstlisting}[caption={Beispiel einer Funktion mit \textit{referential transparency}.},label={lst:lst2}]
+\begin{lstlisting}[caption={Beispiel einer Funktion mit \textit{referenctial transparency}.},label={lst:lst2}]
 def moveX(p: Point, x: Int): Point = {
   return new Point(p.x + x, p.y)
 }
@@ -152,7 +158,48 @@ val p2 = moveX(p1, 2)
 // p2 = new Point(3, 1)
 \end{lstlisting}
 
-\subsection{First-class functions}
+Die Funktion \textit{moveX} verändert den übergebenen Wert \textit{p} nicht, sondern kopiert bestehende Variablen des Typs und verändert diese. Der Wert von \textit{p1} wird somit nicht verändert und bleibt auch nach Aufruf der Funktion bestehen.
+
+\pagebreak
+
+\subsection{Higher-order functions}
+In funktionalen Programmiersprachen werden Funktionen, wie ein weiterer Datentyp behandelt. Funktionen können Variablen zugewiesen werden oder als Argument an eine anderen Funktion übergeben werden. Man spricht von \textit{first-class functions} und \textit{higher-order functions}~\cite[S.~50]{butcher_seven_2014}~\cite[S.~3~\&~S.~19]{chiusano_functional_2015}.\\
+Das nächste Beispiel zeigt die Definition einer Funktion, welche einen String als Argument übergeben bekommt und prüft, ob dessen Länge gerade ist (\ref{lst:lst3}).
+
+\begin{lstlisting}[caption={Funktion, welche prüft, ob die Länge eines Strings gerade ist.},label={lst:lst3}]
+def evenStringLength(str: String): Boolean = {
+  str.length \% 2 == 0
+}
+
+val list = List("Hallo", "Hello", "Servus", "Hi")
+
+val firstValue = list.head // = "Hallo"
+evenStringLength(firstValue) // = false
+
+val thirdValue = list(2) // = "Servus"
+evenStringLength(thirdValue) // = true
+\end{lstlisting}
+
+Die Funktion \textit{evenStringLength} soll nun durch eine rekursive Funktion auf alle Elemente der Liste angewendet werden. Diese rekursive Funktion \textit{findFirst} wird das erste Element, bei dem die Funktion \textit{evenStringLength} den Boolschen Wert \textit{true} zurückliefert, zurückgeben (\ref{lst:lst4}).
+
+\pagebreak
+  
+\begin{lstlisting}[caption={Rekursive Funktion zur Suche des ersten passenden Elements.},label={lst:lst4}]
+def findFirst(arr: List[String], func: String => Boolean): String = {
+  if (arr.isEmpty) {
+    null
+  } else if (func(arr.head)) {
+    arr.head
+  } else {
+    findFirst(arr.tail, func)
+  }
+}
+
+findFirst(list, evenStringLength) // = "Servus"
+\end{lstlisting}
+
+Die Funktion \textit{findFirst} ist eine \textit{higher-order function}. Als zweites Argument wird eine Funktion vom Typ \textit{String => Boolean} erwartet. Also eine Funktion die ein Argument vom Typ String entgegen nimmt, eine Berechnung durch führt und dann einen Boolean zurückliefert. Die Funktion \textit{evenStringLength} entspricht eben genau dieser Definition.\\
+Durch diese generische Definition von \textit{findFirst} können nun auch andere Funktionen vom Typ \textit{String => Boolean} übergeben werden, ohne die eigentliche Suchfunktion von \textit{findFirst} zu verändern.
 
 % Non-determinism caused by concurrent threads accessing shared mutable state. To get determinism, avoid mutable state. To avoid mutable state it means to program functially.
 

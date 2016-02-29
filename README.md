@@ -4,31 +4,32 @@ Meine Masterarbeit zum Thema `Reactive Design Patterns`.
 
 ## Latex Hints
 
-Kapitel
+#### Kapitel
 
     \chapter{Grundlagen}
 
-Section & Subsection mit Label
+#### Section & Subsection mit Label
 
     \section{Funktionale Programmierung}
     \subsection{First-class functions}\label{sec:point-to-point}
 
-Referenz auf Label
+#### Referenz auf Label
 
     \nameref{sec:point-to-point}
 
-Glossar Referenz
+#### Glossar Referenz
 
     \glslink{glos:MW}{Middleware}
 
-Zitat
+#### Zitat
+
     \cite[S. 2]{Schuldt2009}
 
-Kursiver Text
+#### Kursiver Text
 
     \textit{Queue}
 
-Abbildung und Verweis auf Abbildung
+#### Abbildung und Verweis auf Abbildung
 
 ```
 \begin{figure}[H]
@@ -41,15 +42,15 @@ Abbildung und Verweis auf Abbildung
 Verweis auf Abbildung \ref{fig:one-to-one}
 ```
 
-Seitenumbruch
+#### Seitenumbruch
 
     \pagebreak
 
-Vertikaler Abstand
+#### Vertikaler Abstand
 
     \vspace{5mm}
 
-Code Listing
+#### Code Listing
 
     \begin{lstlisting}[caption={Beispiel für einen CONNECTED Frame},label={lst:connected_frame}]
     CONNECTED

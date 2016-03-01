@@ -199,15 +199,21 @@ findFirst(list, evenStringLength) // = "Servus"
 \end{lstlisting}
 
 Die Funktion \textit{findFirst} ist eine \textit{higher-order function}. Als zweites Argument wird eine Funktion vom Typ \textit{String => Boolean} erwartet. Also eine Funktion, die ein Argument vom Typ String entgegen nimmt, eine Berechnung durchführt und dann einen Boolean zurückliefert. Die Funktion \textit{evenStringLength} entspricht eben genau dieser Definition.\\
-Durch diese generische Definition von \textit{findFirst} können nun auch andere Funktionen vom Typ \textit{String => Boolean} übergeben werden, ohne die eigentliche Suchfunktion von \textit{findFirst} zu verändern.
+Durch diese generische Definition von \textit{findFirst} können nun auch andere Funktionen vom Typ \textit{String => Boolean} übergeben werden, ohne die eigentliche Suchfunktion von \textit{findFirst} zu verändern.\\
 
-% Non-determinism caused by concurrent threads accessing shared mutable state. To get determinism, avoid mutable state. To avoid mutable state it means to program functially.
+Durch Nebenläufigkeit und Parallelität kann der Zugriff auf \textit{shared mutable state} nicht-deterministisch sein. Die Probleme die dadurch entstehen wurden bereits erwähnt (siehe ?). Durch funktionale Programmierung kann man \textit{mutable state} vermeiden.
+
+\pagebreak
 
 \section{Reactive programming}
-Reaktive Programmierung ist in der Entwicklung von Benutzeroberflächen üblich und verbreitet. Als Entwickler einer GUI stetig auf eingehende Events reagieren (z.B. Cursorbewegung, Tastendruck). Während der Verarbeitung dieser soll die Benutzeroberfläche nicht blockieren und Eingaben dadurch verhindern. Eine Benutzeroberfläche muss responsive sein, um dem Benutzer keinen Ärger zu bereiten.\\
+Reaktive Programmierung ist in der Entwicklung von Benutzeroberflächen üblich und verbreitet. Eine Software mit Benutzernutzeroberfläche muss stetig auf Eingaben durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Dieser stetige Nachrichtenstrom mit neuen Informationen muss verarbeitet werden, ohne dabei die Benutzeroberfläche zu blockieren. Nichts ist ärgerlicher, als eine Software, die nach einem Klick auf einen Button nicht reagiert bis der Vorgang abgeschlossen ist. Ebenso verhält sich es mit Serveranwendungen, die auf eine Vielzahl von gleichzeitigen Anfragen reagieren müssen.\\
+Zu Beginn der Arbeit wurde bereits die Definition reaktiver Systeme von Harel und Pnueli genannt. Allgemeiner betrachtet bedeutet das englische Wort \textit{reactive} laut dem Merriam-Webster Wörterbuch \enquote{readily responsive to a stimulus}. Demgemäß ist etwas \textit{reactive}, wenn es bereitwillig auf einen Reiz reagiert. Im Bezug auf Software sind Reize zum Beispiel Cursorbewegungen, Mausklicks oder Anfragen --- allgemein formuliert sind das Nachrichten. Die reaktive Programmierung beschäftigt sich mit der nebenläufigen und meist asynchronen Verarbeitung dieser Nachrichtenstörme~\cite{rappl_introduction_2016}.
 
-%TODO Nachrichtenstorm
+\subsection{Messages \& Events}
 %TODO Events: facts about things that have happend
-%TODO Reactive extensions & Observable 
-%TODO Rx are libraries for asynchronous and therefore reactive programming.
 %TODO Evolution: imperative -> functional -> reactive
+
+\subsection{}
+%TODO Reactive extensions & Observable 
+%TODO Deprecating the Observer Pattern
+%TODO Rx are libraries for asynchronous and therefore reactive programming.

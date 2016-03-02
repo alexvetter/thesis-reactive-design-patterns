@@ -4,11 +4,12 @@ set wrap
 set linebreak
 
 set columns=100
-set linespace=8
+set linespace=9
 
 set laststatus=1
 
-set guifont=Monaco:h13
+set guifont=Monaco:h12
+colorscheme wombat256mod
 
 map <Up> g<Up>
 map <Down> g<Down>

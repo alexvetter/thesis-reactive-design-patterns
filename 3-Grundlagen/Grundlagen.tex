@@ -202,20 +202,3 @@ Die Funktion \textit{findFirst} ist eine \textit{higher-order function}. Als zwe
 Durch diese generische Definition von \textit{findFirst} können nun auch andere Funktionen vom Typ \textit{String => Boolean} übergeben werden, ohne die eigentliche Suchfunktion von \textit{findFirst} zu verändern.\\
 
 Durch Nebenläufigkeit und Parallelität kann der Zugriff auf \textit{shared mutable state} nicht-deterministisch sein. Die Probleme die dadurch entstehen wurden bereits erwähnt (siehe ?). Durch funktionale Programmierung kann man \textit{mutable state} vermeiden.
-
-\pagebreak
-
-\section{Reactive programming}
-Reaktive Programmierung ist in der Entwicklung von Benutzeroberflächen üblich und verbreitet. Eine Software mit Benutzernutzeroberfläche muss stetig auf Eingaben durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Dieser stetige Nachrichtenstrom von neuen Informationen muss verarbeitet werden, ohne dabei die Benutzeroberfläche zu blockieren. Nichts ist ärgerlicher, als eine Software, die nach einem Klick auf einen Button nicht reagiert bis der Vorgang abgeschlossen ist. Ebenso verhält sich es mit Serveranwendungen, die auf eine Vielzahl von gleichzeitigen Anfragen reagieren müssen.\\
-Zu Beginn der Arbeit wurde bereits die Definition reaktiver Systeme von Harel und Pnueli genannt. Allgemeiner betrachtet bedeutet das englische Wort \textit{reactive} laut dem Merriam-Webster Wörterbuch \enquote{readily responsive to a stimulus}. Demnach ist etwas \textit{reactive}, wenn es bereitwillig auf einen Reiz reagiert. Im Bezug auf Software sind Reize zum Beispiel Cursorbewegungen, Mausklicks oder Anfragen --- allgemein formuliert sind das Nachrichten. Die reaktive Programmierung beschäftigt sich mit der nebenläufigen und meist asynchronen Verarbeitung dieser Nachrichtenstörme~\cite{rappl_introduction_2016}~\cite[S.~4]{carkci_dataflow_2014}~\cite[S.~5]{blackheath_functional_2015}.
-
-\subsection{Messages \& Events}
-%TODO Events: facts about things that have happend
-%TODO Evolution: imperative -> functional -> reactive
-
-\subsection{Observables}
-%TODO Reactive extensions & Observable 
-%TODO Deprecating the Observer Pattern
-%TODO Erik Meijer Talk about What is reactive?
-%TODO Lesli Lamport We should use mathematics!
-%TODO Rx are libraries for asynchronous and therefore reactive programming.

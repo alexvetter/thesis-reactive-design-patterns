@@ -1,6 +1,85 @@
 % !TEX root = ../Masterarbeit.tex
 \chapter{Hauptteil}
 
+\section{Design Patterns}
+Viele der angesprochenen Probleme oder Lösungsansätze sind nicht neu. Programme wartbar und erweiterbar zu gestalten ist ebenfalls nicht neu. Beispielsweise ist der Ansatz Komponenten voneinander zu entkoppeln seit Langem ein Ziel bei der Entwicklung von Software. Die meisten Probleme sind wiederkehrende Probleme, die meistens bereits schon einmal gelöst wurden. Ein Design Pattern (dt. Entwurfsmuster) ist eine Vorlage zur Lösung eines wiederkehrenden Problems. Der Architekt Christopher Alexander prägte den Begriff Design Pattern durch sein Buch \enquote{A Pattern Language}, in dem er eine allgemeingültige Sprache für wiederkehrende Probleme der Architektur definiert.\\
+Zu Beginn des Buches beschreibt er die Sprache wie folgt~\cite[S. \textit{x}]{alexander_pattern_1977}:
+
+\begin{quotation}
+The elements of this language are entities called patterns. Each pattern describes a problem which occurs over and over again in our environment, and then describes the core of the solution to that problem, in such a way that you can use this solution a million times over, without ever doing it the same way twice.
+\end{quotation}
+
+Diese Definition haben Gamma et al in ihrem Buch \enquote{Design Patterns} aufgefasst und auf die die Entwicklung objektorientierter Software übertragen. Design Pattern bietet eine gewisse Abstraktion. Diese kann auf unterschiedlichen Ebenen erfolgen. Man könnte fast schon alltägliche Konstrukte wie eine \textit{LinkedList} als Pattern beschreiben.
+
+% (enterprise integration pattern)
+% Need for reactive design patterns
+
+\pagebreak
+
+\section{Reaktive Programmierung}
+Reaktive Programmierung, im weiteren Sinne, ist in der Entwicklung von Benutzeroberflächen üblich und verbreitet. Eine Software mit Benutzernutzeroberfläche muss stetig auf Eingaben durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Dieser stetige Strom von neuen Informationen und Ereignissen muss verarbeitet werden, ohne dabei die Benutzeroberfläche zu blockieren. Nichts ist ärgerlicher, als eine Software, die nach einem Klick auf einen Button nicht reagiert bis der Vorgang abgeschlossen ist. Ebenso verhält sich es mit Serveranwendungen, die auf eine Vielzahl von gleichzeitigen Anfragen reagieren müssen.\\
+Zu Beginn der Arbeit wurde bereits die Definition reaktiver Systeme von Harel und Pnueli genannt. Allgemeiner betrachtet bedeutet das englische Wort \textit{reactive} laut dem Merriam-Webster Wörterbuch \enquote{readily responsive to a stimulus}. Demnach ist etwas \textit{reactive}, wenn es bereitwillig auf einen Reiz reagiert. Im Bezug auf Software sind Reize beispielsweise Cursorbewegungen, Mausklicks oder Anfragen. Konkreter formuliert sind diese Reize Ereignisse, die von einer Komponente verarbeitet werden. Folgich ist ein Ereignis (engl. event) ein Signal über eine Zustandsänderung. Eine Komponente sendet ein Ereignis an seine Empfänger. Die reaktive Programmierung beschäftigt sich mit der nebenläufigen und asynchronen Verarbeitung dieser Ereignisse, um die \textit{responsiveness} der Anwendung sicherzustellen~\cite{rappl_introduction_2016}~\cite[S.~4]{carkci_dataflow_2014}~\cite[S.~5]{blackheath_functional_2015}.
+
+\section{Observer-Pattern}
+Ein Ereignis (engl. event) ist ein Signal bzw. ein Fakt über eine Zustandsänderung. Eine Komponente emittiert bzw. veröffentlicht ein Ereignis an seine Empfänger bzw. Beobachter. Hierfür nutzt man traditionellerweise das Verhaltensmuster \textit{observer}. Ein Beobachter (engl. observer) hat die Möglichkeit sich für Zustandsänderungen an- und abzumelden.\\
+Folgendes Scala Codebeispiel zeigt das Observer-Pattern durch das Trait \textit{EventEmitter} (\ref{lst:lst5}). Beobachter, im Codebeispiel \textit{Observer} genannt, können sich über die Methoden \textit{subscribe} und \textit{unsubscribe} beim \textit{EventEmitter} an- und abmelden. Kommt es zu einer Zustandsänderung kann der \textit{EventEmitter} alle \textit{Observer} durch den Aufruf von \textit{emit} über das Ereignis informieren. Der \textit{EventEmitter} weiß nur, dass die \textit{Observer} die Methode \textit{handle} implementieren, die durch \textit{emit} aufgerufen wird.
+
+\begin{lstlisting}[caption={Codebeispiel für das Observer-Pattern.},label={lst:lst5}]
+trait EventEmitter {
+  private var observers: Set[Observer] = Set()
+
+  def subscribe(observer: Observer): Unit = observers += observer
+  def unsubscribe(observer: Observer): Unit = observers -= observer
+  def emit(): Unit = observers.foreach(_.handle(this))
+}
+
+trait Observer {
+  def handle(emitter: EventEmitter): Unit
+}
+\end{lstlisting}
+
+\pagebreak
+
+\begin{lstlisting}[caption={Codebeispiel für das Observer-Pattern.},label={lst:lst5}]
+class IncrementButton extends EventEmitter {
+  private var counter = 0
+
+  def getCount = counter
+  def clicked(): Unit = {
+    counter += 1
+    emit()
+  }
+}
+
+class IncrementLogger(button: IncrementButton) extends Observer {
+  button.subscribe(this)
+
+  def handle(emitter: EventEmitter): Unit = println(s"new value \${button.count}")
+}
+
+val button = new IncrementButton()
+val logger = new IncrementLogger(button)
+
+button.clicked() // prints: new value 1
+button.clicked() // prints: new value 2
+button.clicked() // prints: new value 3
+button.clicked() // prints: new value 4
+\end{lstlisting}
+
+\subsection{Messages \& Events}
+Ein reaktives System ist \textit{message-driven}, folglich nutzt es asynchrone Nachrichtenübermittlung (engl. message passing) zur Kommunikation zwischen den Komponenten. Eine Nachricht (engl. message) wird von seinem Sender an einen Empfänger geschickt. Eine Nachricht enthält somit eine Zieladresse und Daten. Die Komponenten müssen folglich adressierbar sein und auf reagieren nur auf für sie bestimmte Nachrichten. Trifft keine Nachricht für eine Komponente ein, bleibt diese inaktiv.
+
+% Enterprise Integration Patterns: Message, Message Channel, Event Message, Event-Driven Consumer
+
+% Ein Ereignis (engl. event) ist ein Signal bzw. ein Fakt über eine Zustandsänderung.
+
+\subsection{Observables}
+%TODO Reactive extensions & Observable 
+%TODO Deprecating the Observer Pattern
+%TODO Erik Meijer Talk about What is reactive?
+%TODO Lesli Lamport We should use mathematics!
+%TODO Rx are libraries for asynchronous and therefore reactive programming.
+
 \section{Reactive Design Patterns}
 \subsection{Actor Model}
 \subsection{Reactive Streams}

@@ -163,7 +163,9 @@ Die Funktion \textit{moveX} verändert den übergebenen Wert \textit{p} nicht, s
 \pagebreak
 
 \subsection{Higher-order functions}
-In funktionalen Programmiersprachen werden Funktionen, wie ein weiterer Datentyp behandelt. Funktionen können Variablen zugewiesen werden oder als Argument an eine anderen Funktion übergeben werden. Man spricht von \textit{first-class functions} und \textit{higher-order functions}~\cite[S.~50]{butcher_seven_2014}~\cite[S.~3~\&~S.~19]{chiusano_functional_2015}.\\
+In funktionalen Programmiersprachen werden Funktionen, wie ein weiterer Datentyp behandelt. Folglich kann eine Funktion einer Variable zugewiesen werden. Eine Funktion die einen \textit{String} zu einem \textit{Int} umwandelt ist vom Typ \textit{String~=>~Int}. Eine Variable die eine solche Funktion enthält ist somit ebenfalls vom Typ \textit{String~=>~Int}. Außerdem kann eine Funktion ein Rückgabewert einer Funktion sein. Beispielsweise ist es möglich Funktionen vom Typ \textit{()~=>~(String~=>~Int)} zu definieren. Eine Funktion von diesem Typ erwartet kein Argument und gibt eine Funktion vom Typ \textit{String~=>~Int} zurück. Zudem können in funktionen Programmiersprachen Funktionen als Argument an andere Funktionen übergeben werden, wie die folgenden zwei Beispiele zeigen werden (\ref{lst:lst3} \& \ref{lst:lst4}).\\
+Allgemein spricht man bei funktionalen Programmensprachen von \textit{first-class functions} und \textit{higher-order functions}~\cite[S.~50]{butcher_seven_2014}~\cite[S.~3~\&~S.~19]{chiusano_functional_2015}.\\
+
 Das nächste Beispiel zeigt die Definition einer Funktion, welche einen String als Argument übergeben bekommt und prüft, ob dessen Länge gerade ist (\ref{lst:lst3}).
 
 \begin{lstlisting}[caption={Funktion, welche prüft, ob die Länge eines Strings gerade ist.},label={lst:lst3}]
@@ -180,9 +182,9 @@ val thirdValue = list(2) // = "Servus"
 evenStringLength(thirdValue) // = true
 \end{lstlisting}
 
-Die Funktion \textit{evenStringLength} soll nun durch eine rekursive Funktion auf alle Elemente der Liste angewendet werden. Diese rekursive Funktion \textit{findFirst} wird das erste Element, bei dem die Funktion \textit{evenStringLength} den Boolschen Wert \textit{true} zurückliefert, zurückgeben (\ref{lst:lst4}).
-
 \pagebreak
+
+Die Funktion \textit{evenStringLength} soll nun durch eine rekursive Funktion auf alle Elemente der Liste angewendet werden. Diese rekursive Funktion \textit{findFirst} wird das erste Element, bei dem die Funktion \textit{evenStringLength} den Boolschen Wert \textit{true} zurückliefert, zurückgeben (\ref{lst:lst4}).
   
 \begin{lstlisting}[caption={Rekursive Funktion zur Suche des ersten passenden Elements.},label={lst:lst4}]
 def findFirst(arr: List[String], func: String => Boolean): String = {
@@ -198,7 +200,7 @@ def findFirst(arr: List[String], func: String => Boolean): String = {
 findFirst(list, evenStringLength) // = "Servus"
 \end{lstlisting}
 
-Die Funktion \textit{findFirst} ist eine \textit{higher-order function}. Als zweites Argument wird eine Funktion vom Typ \textit{String => Boolean} erwartet. Also eine Funktion, die ein Argument vom Typ String entgegen nimmt, eine Berechnung durchführt und dann einen Boolean zurückliefert. Die Funktion \textit{evenStringLength} entspricht eben genau dieser Definition.\\
+Die Funktion \textit{findFirst} ist eine \textit{higher-order function}. Als zweites Argument wird eine Funktion vom Typ \textit{String => Boolean} erwartet. Also eine Funktion, die ein Argument vom Typ \textit{String} entgegen nimmt, eine Berechnung durchführt und dann einen \textit{Boolean} zurückliefert. Die Funktion \textit{evenStringLength} entspricht eben genau dieser Definition.\\
 Durch diese generische Definition von \textit{findFirst} können nun auch andere Funktionen vom Typ \textit{String => Boolean} übergeben werden, ohne die eigentliche Suchfunktion von \textit{findFirst} zu verändern.\\
 
-Durch Nebenläufigkeit und Parallelität kann der Zugriff auf \textit{shared mutable state} nicht-deterministisch sein. Die Probleme die dadurch entstehen wurden bereits erwähnt (siehe ?). Durch funktionale Programmierung kann man \textit{mutable state} vermeiden.
+Durch Nebenläufigkeit und Parallelität kann der Zugriff auf \textit{shared mutable state} nicht-deterministisch sein. Die Probleme die dadurch entstehen wurden bereits erwähnt (siehe \ref{subsec:sharenothing}). Durch funktionale Programmierung kann man \textit{mutable state} vermeiden.

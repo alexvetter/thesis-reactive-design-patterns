@@ -19,6 +19,20 @@
   date = {2015-08-19}
 }
 
+@book{nygard_release_2007,
+  location = {{Raleigh, N.C}},
+  title = {Release it!: design and deploy production-ready software},
+  isbn = {978-0-9787392-1-8},
+  shorttitle = {Release it!},
+  pagetotal = {350},
+  timestamp = {2016-03-12T16:41:03Z},
+  series = {The pragmatic programmers},
+  publisher = {{Pragmatic Bookshelf}},
+  author = {Nygard, Michael T.},
+  date = {2007},
+  keywords = {Application software,Development,Software architecture,Testing}
+}
+
 @online{rappl_introduction_2016,
   title = {Introduction to Functional Reactive Programming with RxJS},
   url = {http://www.sitepoint.com/functional-reactive-programming-rxjs/},
@@ -28,6 +42,17 @@
   author = {Rappl, Florian},
   urldate = {2016-03-01},
   date = {2016-02-25}
+}
+
+@online{fowler_lmax_2011,
+  title = {The LMAX Architecture},
+  url = {http://martinfowler.com/articles/lmax.html},
+  abstract = {LMAX is a retail financial trading system that can handle that can 6 million orders per second on a single JVM thread. The business logic runs in-memory surrounded by disruptors using event sourcing.},
+  timestamp = {2016-03-12T16:43:36Z},
+  titleaddon = {martinfowler.com},
+  author = {Fowler, Martin},
+  urldate = {2016-03-12},
+  date = {2011-07-12}
 }
 
 @online{boner_trends_2015,
@@ -71,6 +96,20 @@
   date = {2015-07-30}
 }
 
+@collection{gamma_design_1995,
+  location = {{Reading, Mass}},
+  title = {Design patterns: elements of reusable object-oriented software},
+  isbn = {978-0-201-63361-0},
+  shorttitle = {Design patterns},
+  pagetotal = {395},
+  timestamp = {2016-03-12T16:40:20Z},
+  series = {Addison-Wesley professional computing series},
+  publisher = {{Addison-Wesley}},
+  editor = {Gamma, Erich},
+  date = {1995},
+  keywords = {Computer software,Object-oriented programming (Computer science),Reusability,Software patterns}
+}
+
 @book{blackheath_functional_2015,
   title = {Functional {{Reactive Programming}}},
   isbn = {978-1-63343-010-5},
@@ -100,6 +139,20 @@
   date = {2014-07-02}
 }
 
+@book{douglass_real-time_2003,
+  location = {{Boston, MA}},
+  title = {Real-{{Time Design Patterns}}: robust scalable architecture for {{Real}}-time systems},
+  isbn = {978-0-201-69956-2},
+  shorttitle = {Real-{{Time Design Patterns}}},
+  pagetotal = {500},
+  timestamp = {2016-03-12T17:14:33Z},
+  series = {The Addison-Wesley object technology series},
+  publisher = {{Addison-Wesley}},
+  author = {Douglass, Bruce Powel},
+  date = {2003},
+  keywords = {Computer architecture,Real-time data processing,Software patterns}
+}
+
 @online{rotem_fallacies_2008,
   title = {Fallacies of Distributed Computing Explained},
   url = {http://www.rgoarchitects.com/Files/fallacies.pdf},
@@ -107,6 +160,28 @@
   author = {Rotem-Gal-Oz, Arnon},
   urldate = {2016-02-24},
   date = {2008}
+}
+
+@online{thompson_memory_2012,
+  title = {Memory Access Patterns Are Important},
+  url = {http://mechanical-sympathy.blogspot.com/2012/08/memory-access-patterns-are-important.html},
+  shorttitle = {Mechanical Sympathy},
+  timestamp = {2016-03-12T16:45:31Z},
+  titleaddon = {Mechanical Sympathy},
+  author = {Thompson, Martin},
+  urldate = {2016-03-12},
+  date = {2012-08-05}
+}
+
+@online{thompson_single_2011,
+  title = {Single {{Writer Principle}}},
+  url = {http://mechanical-sympathy.blogspot.com/2011/09/single-writer-principle.html},
+  shorttitle = {Mechanical {{Sympathy}}},
+  timestamp = {2016-03-12T16:44:30Z},
+  titleaddon = {Mechanical Sympathy},
+  author = {Thompson, Martin},
+  urldate = {2016-03-12},
+  date = {2011-09-22}
 }
 
 @book{alexander_pattern_1977,
@@ -132,6 +207,28 @@
   author = {Webber, Kevin},
   urldate = {2016-02-18},
   date = {2014-08-19}
+}
+
+@report{thompson_disruptor_2011,
+  title = {Disruptor},
+  url = {http://lmax-exchange.github.io/disruptor/files/Disruptor-1.0.pdf},
+  timestamp = {2016-03-12T16:48:59Z},
+  author = {Thompson, Martin and Farley, Dave and Barker, Michael and Gee, Patricia and Stewart, Andrew},
+  urldate = {2016-03-12},
+  date = {2011-05/2011-05}
+}
+
+@report{Lee:EECS-2006-1,
+  title = {The {{Problem}} with {{Threads}}},
+  url = {http://www.eecs.berkeley.edu/Pubs/TechRpts/2006/EECS-2006-1.html},
+  abstract = {Threads are a seemingly straightforward adaptation of the dominant sequential model of computation to concurrent systems. Languages require little or no syntactic changes to support threads, and operating systems and architectures have evolved to efficiently support them. Many technologists are pushing for increased use of multithreading in software in order to take advantage of the predicted increases in parallelism in computer architectures. In this paper, I argue that this is not a good idea. Although threads seem to be a small step from sequential computation, in fact, they represent a huge step. They discard the most essential and appealing properties of sequential computation: understandability, predictability, and determinism. Threads, as a model of computation, are wildly nondeterministic, and the job of the programmer becomes one of pruning that nondeterminism. Although many research techniques improve the model by offering more effective pruning, I argue that this is approaching the problem backwards. Rather than pruning nondeterminism, we should build from essentially deterministic, composable components. Nondeterminism should be explicitly and judiciously introduced where needed, rather than removed where not needed. The consequences of this principle are profound. I argue for the development of concurrent coordination languages based on sound, composable formalisms. I believe that such languages will yield much more reliable, and more concurrent programs.},
+  timestamp = {2016-03-12T16:47:31Z},
+  number = {UCB/EECS-2006-1},
+  institution = {{EECS Department, University of California, Berkeley}},
+  author = {Lee, Edward A.},
+  urldate = {2016-03-12},
+  date = {2006-01},
+  note = {The published version of this paper is in IEEE Computer 39(5):33-42, May 2006.}
 }
 
 @online{sutter_free_2004,
@@ -163,6 +260,19 @@
   date = {2014-09-16}
 }
 
+@book{newman_building_2015,
+  location = {{Beijing}},
+  edition = {1. ed},
+  title = {Building microservices: {[}designing fine-grained systems]},
+  isbn = {978-1-4919-5035-7},
+  shorttitle = {Building microservices},
+  pagetotal = {259},
+  timestamp = {2016-03-12T16:41:39Z},
+  publisher = {{O'Reilly}},
+  author = {Newman, Sam},
+  date = {2015}
+}
+
 @book{armstrong_programming_2013,
   location = {{Dallas, Tex.}},
   edition = {2. ed},
@@ -176,6 +286,17 @@
   author = {Armstrong, Joe},
   date = {2013},
   keywords = {ERLANG,ERLANG (Computer program language)}
+}
+
+@online{thompson_memory_2011,
+  title = {Memory {{Barriers}}/{{Fences}}},
+  url = {http://mechanical-sympathy.blogspot.com/2011/07/memory-barriersfences.html},
+  shorttitle = {Mechanical {{Sympathy}}},
+  timestamp = {2016-03-12T16:44:55Z},
+  titleaddon = {Mechanical Sympathy},
+  author = {Thompson, Martin},
+  urldate = {2016-03-12},
+  date = {2011-07-24}
 }
 
 @book{vernon_reactive_2016,

@@ -25,6 +25,25 @@ Reaktives Software Design schließt von vornherein bereits einige Patterns aus -
 
 \pagebreak
 
+\section{Concurrency Modelle}
+
+Die Basis eines reaktiven Systems, ist das zugrundeliegende Concurrency Modell. Ein reaktives System besteht aus vielen isolierten Komponenten, die asynchron miteinander kommunizieren. Diese Komponenten können in einem Computercluster verteilt sein und arbeiten zudem weitestgehend unabhängig von einander und parallel. Die Programmierung von stark nebenläufigen Anwendungen durch systemnahe Konzepte, wie Threads und Locks ist kompliziert und fehleranfällig.\\
+Im diesem Kapitel werden zwei Concurrency Modelle erklärt, die die Komplexität nebenläufiger Anwendungen isolieren und für den Entwickler abstrahieren. Die Concurrency Modelle \enquote{Event loop} und \enquote{Actor model} arbeiten asynchron und non-blocking. Um deren Funktionalität aufrecht zu erhalten, ist es erforderlich, dass das darauf aufbauende System ebenfalls asynchron und non-blocking arbeitet.
+
+\subsubsection{Non-blocking IO}
+Traditionellerweise ist der schreibende und lesende Zugriff auf Ressourcen, wie Netzwerk oder Festplatte synchron und blockierend. Das bedeutet, die Anwendung bzw. der Thread, ist für die gesamte Dauer des Zugriffs ausschließlich mit beispielsweise dem Abspeichern einer großen Datei beschäftigt.\\
+Asynchronous oder Non-blocking IO ist ein Menchanismus moderner Betriebsysteme. Dieser ermöglicht den asynchronen und nicht blockierenden Zugriff auf IO Ressourcen.
+
+Die Anwendung informiert das Betriebsystem über das Vorhaben beispielsweise eine große Datei einzulesen, wartet jedoch nicht auf das Resultat. Das Betriebsystem ließt nun die Datei ein und informiert die Anwendung 
+
+% One Thread per Request
+
+\subsection{Event loop}
+
+\subsection{Actor model}
+
+\pagebreak
+
 \section{Reaktive Programmierung}
 Reaktive Programmierung, im weiteren Sinne, ist in der Entwicklung von Benutzeroberflächen üblich und verbreitet. Eine Software mit Benutzernutzeroberfläche muss stetig auf Eingaben durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Dieser stetige Strom von neuen Informationen und Ereignissen muss verarbeitet werden, ohne dabei die Benutzeroberfläche zu blockieren. Nichts ist ärgerlicher, als eine Software, die nach einem Klick auf einen Button nicht reagiert bis der Vorgang abgeschlossen ist. Ebenso verhält sich es mit Serveranwendungen, die auf eine Vielzahl von gleichzeitigen Anfragen reagieren müssen.\\
 Zu Beginn der Arbeit wurde bereits die Definition reaktiver Systeme von Harel und Pnueli genannt. Allgemeiner betrachtet bedeutet das englische Wort \textit{reactive} laut dem Merriam-Webster Wörterbuch \enquote{readily responsive to a stimulus}. Demnach ist etwas \textit{reactive}, wenn es bereitwillig auf einen Reiz reagiert. Im Bezug auf Software sind Reize beispielsweise Cursorbewegungen, Mausklicks oder Anfragen. Konkreter formuliert sind diese Reize Ereignisse, die von einer Komponente verarbeitet werden. Folgich ist ein Ereignis (engl. event) ein Signal über eine Zustandsänderung. Eine Komponente sendet ein Ereignis an seine Empfänger. Die reaktive Programmierung beschäftigt sich mit der nebenläufigen und asynchronen Verarbeitung dieser Ereignisse, um die \textit{responsiveness} der Anwendung sicherzustellen~\cite{rappl_introduction_2016}~\cite[S.~4]{carkci_dataflow_2014}~\cite[S.~5]{blackheath_functional_2015}.
@@ -88,6 +107,8 @@ Ein reaktives System ist \textit{message-driven}, folglich nutzt es asynchrone N
 %TODO Erik Meijer Talk about What is reactive?
 %TODO Lesli Lamport We should use mathematics!
 %TODO Rx are libraries for asynchronous and therefore reactive programming.
+
+\pagebreak
 
 \section{Reactive Design Patterns}
 \subsection{Actor Model}

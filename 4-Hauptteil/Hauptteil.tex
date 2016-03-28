@@ -55,11 +55,13 @@ Mit dem Modell der asynchronen und nicht blockierenden Datenübertragungen lasse
 
 \pagebreak
 
-\subsection{Reactor Pattern}
-Viele Anwendungen nutzen das Konzept der Events, um den Ablauf der Ausführung zu steuern. Man spricht auch von ereignisorientierer Architektur.\\ 
-Ein Event ist ein Ereignis respektive ein Signal über eine Zustandsänderung. Im Gegensatz zu einer Nachricht hat ein Event keinen expliziten Empfänger, also keine Zieladresse. Komponenten können sogenannte Event handler an einem System registrieren. Diese werden dann über Zustandsänderungen informiert bzw. aufgerufen. Solange es zu keiner Zustandsänderung kommt, wird auch kein Event handler aufgefordert, ein Event zu verarbeiten. Die Komponente bleibt somit inaktiv~\cite[S.~91]{erb_concurrent_2012}.\\
-Ereignisorientierte Anwendungen müssen in der Regel viele Events von vielen verschiedenen Quellen koordinieren und abarbeiten. Bei einer Webanwendung ist jede Anfrage ein Event und jeder Client ist eine Quelle. Die Anfragen bzw. die Events können auch parallel bei der Anwendung eintreffen.\\
-Um die Events abzuarbeiten, wird oft auf das Reactor Pattern zurückgegriffen (siehe \autoref{fig:event-loop}). Events aus verschiedensten Quellen werden serialisiert und Event für Event abgearbeitet bzw. an die entsprechenden Event handler übergeben. Die Ausführung der Event handler erfolgt synchron. Die Reactor Komponente arbeitet in einer Endlosschleife, genannt Event loop~\cite[S.~260~-~S.~261]{buschmann_pattern_2011}.
+\subsection{Ereignisbasierte Concurrency}
+Viele Anwendungen nutzen das Konzept der Events, um den Ablauf der Ausführung zu steuern. Man spricht auch von ereignisorientierter Software.\\ 
+Ein Event ist ein Ereignis respektive ein Signal über eine Zustandsänderung. Im Gegensatz zu einer Nachricht hat ein Event keinen expliziten Empfänger, also keine Zieladresse. Komponenten können sogenannte Event handler an einem System registrieren. Diese werden dann über Zustandsänderungen informiert bzw. aufgerufen. Solange es zu keiner Zustandsänderung kommt, wird auch kein Event handler aufgefordert, ein Event zu verarbeiten. Die Komponente bleibt somit inaktiv~\cite[S.~91]{erb_concurrent_2012}.
+
+\subsubsection{Reactor Pattern}
+Ereignisorientierte Anwendungen müssen in der Regel viele Events von vielen verschiedenen Quellen koordinieren und abarbeiten. Beispielsweise ist jede Anfrage an eine Webanwendung ein Event und jeder Client folglich eine Quelle. Die Anfragen bzw. die Events können auch parallel bei der Anwendung eintreffen.\\
+Um die Events abzuarbeiten, wird oft auf das Reactor Pattern zurückgegriffen (\autoref{fig:event-loop}). Events aus verschiedensten Quellen werden serialisiert und Event für Event abgearbeitet bzw. an die entsprechenden Event handler übergeben. Die Ausführung der Event handler erfolgt synchron. Die Reactor Komponente arbeitet in einer Endlosschleife, genannt Event loop~\cite[S.~260~-~S.~261]{buschmann_pattern_2011}.
 
 \begin{figure}[H]
  \centering
@@ -68,15 +70,42 @@ Um die Events abzuarbeiten, wird oft auf das Reactor Pattern zurückgegriffen (s
  \label{fig:event-loop}
 \end{figure}
 
-Die Event loop wird typischerweise von genau einem Thread ausgeführt. Um dennoch nebenläufig mehrere Anfragen verarbeiten zu können, nutzt man Asynchronous I/O (siehe \ref{subsec:async-io}). So ist es möglich nebenläufig, mit nur einem Thread, auf Events von vielen verschiedenen Quellen zu reagieren. Ein Event handler blockiert während der synchronen Ausführung, die Event loop und somit die Abarbeitung weiterer Events. Folglich ist das Reactor basierte Concurrency Modell nur für datenübertragungsintensive Applikationen, die von Asynchronous I/O profitieren, sinnvoll~\cite[S.~73]{kuhn_reactive_2015}~\cite[S.~92]{erb_concurrent_2012}.\\
+Die Event loop wird typischerweise von genau einem Thread ausgeführt. Um dennoch nebenläufig mehrere Anfragen verarbeiten zu können, nutzt man Asynchronous I/O (siehe \autoref{subsec:async-io}). So ist es möglich nebenläufig, mit nur einem Thread, auf Events von vielen verschiedenen Quellen zu reagieren. Ein Event handler blockiert während der synchronen Ausführung, die Event loop und somit die Abarbeitung weiterer Events. Folglich ist das Reactor basierte Concurrency Modell nur für datenübertragungsintensive Applikationen, die von Asynchronous I/O profitieren, sinnvoll~\cite[S.~73]{kuhn_reactive_2015}~\cite[S.~92]{erb_concurrent_2012}.\\
 Mit dem Reactor Pattern ist es möglich viele Anfrage nebenläufig, mit nur einem Thread, zu verarbeiten. Es entsteht kein Performance Overhead, wie bei traditionellen \enquote{One thread per request} Applikationen. Zudem wird die Komplexität der nebenläufigen Verarbeitung in der Reactor Komponente gekapselt und der Entwickler muss nicht mit den typischen Problemen der nebenläufigen Programmierung kämpfen. Außerdem können Event handler leicht wiederverwendet und kombiniert werden.\\
-Es gibt zwei populäre Implementierungen dieses Concurrency Modells. Zum einen das JavaScript (V8) basierte Node.js\footnote{https://nodejs.org} und zum anderen das JVM basierte Vert.x\footnote{http://vertx.io}. Beide implementieren das Reactor Pattern unterscheiden sich jedoch in ihrer Nützlichkeit für reaktive Anwendungen.\\
-Vert.x bietet dem Entwickler die Möglichkeit über einen verteilten Event Bus eine Applikation message-driven zu implementieren. Zudem skaliert Vert.x auf einem Multi-core Prozessor besser, wie das Single-Threaded Node.js. Vert.x startet in der Standardeinstellung mehrere Event loops --- so viele, wie der Prozessor Cores hat --- und nennt dieses Konzept Multi-Reactor Pattern. Durch diese beiden Mechanismen, dem verteilten Event Bus, sowie dem Multi-Reactor Pattern, ist es möglich vertikal und horizontal zu skalieren. Unter dieses Gesichtpunkten eigent sich Vert.x als Basis Framework zur Entwicklung von reaktiven Anwendungen~\cite[S.~74]{kuhn_reactive_2015}~\cite[S.~93~\&~S.~94]{erb_concurrent_2012}.
+Es gibt zwei populäre Implementierungen dieses Concurrency Modells. Zum einen das JavaScript (V8) basierte Node.js\footnote{https://nodejs.org} und zum anderen das JVM basierte Vert.x\footnote{http://vertx.io}. Beide implementieren das Reactor Pattern unterscheiden sich jedoch in ihrer Nützlichkeit (?) für reaktive Anwendungen.\\
+Vert.x bietet dem Entwickler die Möglichkeit über einen verteilten Event Bus eine Applikation message-driven zu implementieren. Zudem skaliert Vert.x auf einem Multi-core Prozessor besser, wie das Single-Threaded Node.js. Vert.x startet in der Standardeinstellung mehrere Event loops --- so viele, wie der Prozessor Cores hat --- und nennt dieses Konzept Multi-Reactor Pattern. Durch diese beiden Mechanismen, dem verteilten Event Bus, sowie dem Multi-Reactor Pattern, ist es möglich vertikal und horizontal zu skalieren. Unter dieses Gesichtpunkten eignet sich Vert.x als Basis Framework zur Entwicklung von reaktiven Anwendungen~\cite[S.~74]{kuhn_reactive_2015}~\cite[S.~93~\&~S.~94]{erb_concurrent_2012}.
 
 \pagebreak
 
-\subsection{Actor model}
+\subsection{Actor-basierte Concurrency}
+Im folgenden Abschnitt wird ein weiteres Concurrency Modell als Basis für reaktive Software vorgestellt.\\
+Actor-basierte Concurrency oder kurz das \enquote{Actor Modell} stammt ursprünglich vom Carl Hewitt et al und ihrem Artikel \enquote{A universal modular ACTOR formalism for artificial intelligence} aus dem Jahr 1973. Die grundlegende Idee des Actor Modells, ist die Abstraktion der Concurrency durch asynchronen Nachrichtenausstausch zwischen den Komponenten. Eine Komponente in einer Actor-basierten Anwendung wird Actor genannt.
 
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=1.0\textwidth]{4-Hauptteil/actor-model/actor-model.eps}
+ \caption{Graphisches Beispiel einer Actor-basierten Anwendung.}
+ \label{fig:actor-model}
+\end{figure}
+
+Jeder Actor besitzt eine sogenannte Mailbox, als Zwischenspeicher für eingehende Nachrichten, und einen Namen bzw. eine Adresse. Um nun einem Actor eine Nachricht zu schicken, wird die Adresse des Actors benötigt. Die Übertragung eine Mailbox ist von unbestimmter Dauer. Zudem wird keine Reihenfolge der eingetroffenen Nachrichten garantiert~\cite[S.~84]{erb_concurrent_2012}~\cite[S.~83]{kuhn_reactive_2015}.
+
+\pagebreak
+
+Ein Actor arbeitet jede Nachricht aus der Mailbox sequenziell ab. Deshalb muss während der Verarbeitung nicht auf Probleme bzgl. Nebenläufigkeit geachtet werden.\\
+Ein Actor kann auf drei verschiedene Weisen auf eine Nachricht reagieren~\cite[S.~84]{erb_concurrent_2012}:
+
+\begin{enumerate}
+\item Verschickt eine begrenzte Anzahl von Nachrichten an andere Akteure.
+\item Erzeugt eine begrenzte Anzahl weiterer Akteure.
+\item Ändert den eigenen internen Zustand in Folge der empfangenen Nachricht.
+\end{enumerate}
+
+Der Zustand eines Actors ist isoliert und kann nur von dem Actor selbst verändert werden. Zustandsänderungen und daraus resultierende Verhaltensänderungen wirken sich erst auf nachfolgende Nachrichten aus. 
+
+Actor-basierte Anwendung setzen somit auf \textit{mutable state} --- jedoch wird diese nicht geteilt. Ein Actor kapselt seinen Zustand und interagiert nur über Nachrichten mit anderen Actors.
+
+Das Actor Modell wurde poplär durch die Programmiersprache Erlang\footnote{https://www.erlang.org/} und das Framework Akka\footnote{http://akka.io}.
 \pagebreak
 
 \section{Reaktive Programmierung}

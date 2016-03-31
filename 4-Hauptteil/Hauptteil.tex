@@ -79,7 +79,7 @@ Vert.x bietet dem Entwickler die Möglichkeit über einen verteilten Event Bus e
 
 \subsection{Actor-basierte Concurrency}
 Im folgenden Abschnitt wird ein weiteres Concurrency Modell als Basis für reaktive Software vorgestellt.\\
-Actor-basierte Concurrency oder kurz das \enquote{Actor Modell} stammt ursprünglich von Dr. Carl Hewitt et al aus dem Jahr 1973~\cite{hewitt_universal_1973}. Die grundlegende Idee des Actor Modells, ist die Abstraktion der Concurrency durch asynchronen Nachrichtenausstausch zwischen Komponenten. Eine Komponente in einer Actor-basierten Anwendung wird Actor genannt. Alan Kay, bekannt für seine Pionierarbeit zu objektorientierter Programmierung und außerdem einer der Entwickler der einflussreichen Sprache Smalltalk, sagt in einem Interview folgendes über das Actor Modell~\cite{binstock_interview_2012}:
+Actor-basierte Concurrency oder kurz das \enquote{Actor Modell} stammt ursprünglich von Dr. Carl Hewitt et al aus dem Jahr 1973~\cite{hewitt_universal_1973}. Die grundlegende Idee des Actor Modells, ist die Abstraktion der Concurrency durch asynchronen Nachrichtenausstausch zwischen Komponenten. Eine Komponente in einer Actor-basierten Anwendung wird Actor genannt. Alan Kay, bekannt für seine Pionierarbeit zu objektorientierter Programmierung und außerdem einer der Entwickler der einflussreichen Sprache Smalltalk, sagte in einem Interview folgendes über das Actor Modell~\cite{binstock_interview_2012}:
 
 \begin{quotation}
 [...] the Actor model retained more of what I thought were the good features of the object idea [...]
@@ -95,18 +95,19 @@ Das Actor Modell setzt im Grunde an diesem Gedanken an und lässt Komponenten ü
  \label{fig:actor-model}
 \end{figure}
 
-Ein Actor ist die kleinste Einheit in einer Actor-basierten Anwendung im Sinne des \enquote{Single Responsibility Principle} (siehe ???), wie das graphische Beispiel eines Bestellvorgangs (\ref{fig:actor-model}) zeigen soll. Jeder Actor besitzt eine sogenannte Mailbox, als Zwischenspeicher für eingehende Nachrichten, und einen Namen bzw. eine Adresse. Um nun einem Actor eine Nachricht zu schicken, wird die Adresse des Actors benötigt. Die Übertragung eine Mailbox ist von unbestimmter Dauer. Zudem wird keine Reihenfolge der eingetroffenen Nachrichten garantiert~\cite[S.~84]{erb_concurrent_2012} \cite[S.~83]{kuhn_reactive_2015}.\\
-Ein Actor arbeitet jede Nachricht aus der Mailbox sequenziell ab. Deshalb muss während der Verarbeitung nicht auf Probleme bzgl. Nebenläufigkeit geachtet werden.\\
+Ein Actor ist die kleinste Einheit in einer Actor-basierten Anwendung im Sinne des \enquote{Single Responsibility Principle} (siehe \textbf{??}), wie das graphische Beispiel eines Bestellvorgangs (\ref{fig:actor-model}) zeigen soll.\\
+Jeder Actor besitzt eine sogenannte Mailbox, diese dient als Zwischenspeicher für eingehende Nachrichten. Außerdem hat jeder Actor einen Namen bzw. eine Adresse. Um einem Actor eine Nachricht zu schicken, wird die Adresse des Actors benötigt. Die Übertragung einer Nachricht an die Mailbox ist von unbestimmter Dauer. Zudem wird keine Reihenfolge der eingetroffenen Nachrichten garantiert~\cite[S.~84]{erb_concurrent_2012} \cite[S.~83]{kuhn_reactive_2015}.\\
+Ein Actor arbeitet jede Nachricht aus der Mailbox sequenziell ab. Deshalb muss während der Verarbeitung nicht auf Probleme bzgl. Nebenläufigkeit geachtet werden~\cite[S.~14]{vernon_reactive_2016}.\\
 Ein Actor kann auf drei verschiedene Weisen auf eine Nachricht reagieren \cite[S.~84]{erb_concurrent_2012}:
 
 \begin{enumerate}
-\item Verschickt eine begrenzte Anzahl von Nachrichten an andere Akteure.
-\item Erzeugt eine begrenzte Anzahl weiterer Akteure.
-\item Ändert den eigenen internen Zustand in Folge der empfangenen Nachricht.
+\item Ein Actor kann eine begrenzte Anzahl von Nachrichten an andere Actors schicken.
+\item Ein Actor kann eine begrenzte Anzahl weiterer Actors erzeugen.
+\item Ein Actor kann den eigenen internen Zustand ändern.
 \end{enumerate}
 
-Der Zustand eines Actors ist isoliert und kann nur von dem Actor selbst verändert werden. Zustandsänderungen und daraus resultierende Verhaltensänderungen wirken sich erst auf nachfolgende Nachrichten aus.\\
-Actor-basierte Anwendung setzen somit auf \textit{mutable state} --- jedoch wird dieser nicht geteilt. Ein Actor kapselt seinen Zustand und interagiert nur über Nachrichten mit anderen Akteure.
+Der Zustand eines Actors ist isoliert und kann nur von dem Actor selbst verändert werden. Zustandsänderungen und daraus resultierende Verhaltensänderungen wirken sich aufgrund der sequenziellen Abarbeitung erst auf nachfolgende Nachrichten aus. Aufgrund dieser Voraussetzung kann man einen Actor auch als endlichen Automaten betrachten und damit leicht umsetzen~\cite[S.~14]{vernon_reactive_2016}.\\
+Actor-basierte Anwendungen setzen somit auf \textit{mutable state} --- jedoch wird dieser nicht geteilt. Ein Actor kapselt seinen Zustand und interagiert nur über Nachrichten mit anderen Actors (siehe \fullref{subsec:sharenothing}). Der isolierte Zustand und die sequenzielle Verabeitung der Nachrichten ermöglichen außerdem die sogenannte \enquote{lock-free concurrency} (siehe \nameref{subsec:sharenothing}).\\
 
 Das Actor Modell wurde poplär durch die Programmiersprache Erlang\footnote{https://www.erlang.org/} und das Framework Akka\footnote{http://akka.io}.
 
@@ -162,13 +163,6 @@ button.clicked() // prints: new value 3
 button.clicked() // prints: new value 4
 \end{lstlisting}
 
-\subsection{Messages \& Events}
-Ein reaktives System ist \textit{message-driven}, folglich nutzt es asynchrone Nachrichtenübermittlung (engl. message passing) zur Kommunikation zwischen den Komponenten. Eine Nachricht (engl. message) wird von seinem Sender an einen Empfänger geschickt. Eine Nachricht enthält somit eine Zieladresse und Daten. Die Komponenten müssen folglich adressierbar sein und auf reagieren nur auf für sie bestimmte Nachrichten. Trifft keine Nachricht für eine Komponente ein, bleibt diese inaktiv.
-
-% Enterprise Integration Patterns: Message, Message Channel, Event Message, Event-Driven Consumer
-
-% Ein Ereignis (engl. event) ist ein Signal bzw. ein Fakt über eine Zustandsänderung.
-
 \subsection{Observables}
 %TODO Reactive extensions & Observable 
 %TODO Deprecating the Observer Pattern
@@ -179,15 +173,8 @@ Ein reaktives System ist \textit{message-driven}, folglich nutzt es asynchrone N
 \pagebreak
 
 \section{Reactive Design Patterns}
-\subsection{Actor Model}
+\subsection{Single Responsibility Pattern}
+\subsection{Idempotent Receiver}
 \subsection{Reactive Streams}
 \subsection{Circuit Breaker}
-
-\section{Implementierung}
-\subsection{Akka (Scala)}
-\subsection{NodeJS (JavaScript)}
-
-\section{Ergebnisse}
-\subsection{Nutzen der Patterns}
-\subsection{Einfachheit der Implementierung}
-\subsection{Unterstützung durch Frameworks}
+% Enterprise Integration Patterns: Message, Message Channel, Event Message, Event-Driven Consumer

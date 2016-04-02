@@ -55,7 +55,7 @@ Mit dem Modell der asynchronen und nicht blockierenden Datenübertragungen lasse
 
 \pagebreak
 
-\subsection{Ereignisbasierte Concurrency}
+\subsection{Ereignisbasierte Concurrency}\label{subsec:eventdriven-concurrency}
 Viele Anwendungen nutzen das Konzept der Events, um den Ablauf der Ausführung zu steuern. Man spricht auch von ereignisorientierter Software.\\ 
 Ein Event ist ein Ereignis respektive ein Signal über eine Zustandsänderung. Im Gegensatz zu einer Nachricht hat ein Event keinen expliziten Empfänger, also keine Zieladresse. Komponenten können sogenannte Event handler an einem System registrieren. Diese werden dann über Zustandsänderungen informiert bzw. aufgerufen. Solange es zu keiner Zustandsänderung kommt, wird auch kein Event handler aufgefordert, ein Event zu verarbeiten. Die Komponente bleibt somit inaktiv~\cite[S.~91]{erb_concurrent_2012}.
 
@@ -95,8 +95,8 @@ Das Actor Modell setzt im Grunde an diesem Gedanken an und lässt Komponenten ü
  \label{fig:actor-model}
 \end{figure}
 
-Ein Actor ist die kleinste Einheit in einer Actor-basierten Anwendung im Sinne des \enquote{Single Responsibility Principle} (siehe \textbf{??}), wie das graphische Beispiel eines Bestellvorgangs (\ref{fig:actor-model}) zeigen soll.\\
-Jeder Actor besitzt eine sogenannte Mailbox, diese dient als Zwischenspeicher für eingehende Nachrichten. Außerdem hat jeder Actor einen Namen bzw. eine Adresse. Um einem Actor eine Nachricht zu schicken, wird die Adresse des Actors benötigt. Die Übertragung einer Nachricht an die Mailbox ist von unbestimmter Dauer. Zudem wird keine Reihenfolge der eingetroffenen Nachrichten garantiert~\cite[S.~84]{erb_concurrent_2012} \cite[S.~83]{kuhn_reactive_2015}.\\
+Ein Actor ist die kleinste Einheit in einer Actor-basierten Anwendung im Sinne des \enquote{Single Responsibility Principle} (siehe \textbf{??}), wie das graphische Beispiel eines Bestellvorgangs (\ref{fig:actor-model}) zeigen soll~\cite[S.~13]{vernon_reactive_2016}.\\
+Jeder Actor besitzt eine sogenannte Mailbox, diese dient als Zwischenspeicher für eingehende Nachrichten. Außerdem hat jeder Actor einen Namen bzw. eine Adresse. Um einem Actor eine Nachricht zu schicken, wird die Adresse des Actors benötigt. Die Adresse ermöglicht es, mit einem Actor über eine abstrakte Referenz zu interagieren und dies wiederum ermöglicht \textit{location transparency}. Die Übertragung einer Nachricht an die Mailbox ist von unbestimmter Dauer und erfolgt asynchron. Zudem wird keine Reihenfolge der eingetroffenen Nachrichten garantiert \cite[S.~84]{erb_concurrent_2012} \cite[S.~83]{kuhn_reactive_2015}.\\
 Ein Actor arbeitet jede Nachricht aus der Mailbox sequenziell ab. Deshalb muss während der Verarbeitung nicht auf Probleme bzgl. Nebenläufigkeit geachtet werden~\cite[S.~14]{vernon_reactive_2016}.\\
 Ein Actor kann auf drei verschiedene Weisen auf eine Nachricht reagieren \cite[S.~84]{erb_concurrent_2012}:
 
@@ -106,10 +106,17 @@ Ein Actor kann auf drei verschiedene Weisen auf eine Nachricht reagieren \cite[S
 \item Ein Actor kann den eigenen internen Zustand ändern.
 \end{enumerate}
 
-Der Zustand eines Actors ist isoliert und kann nur von dem Actor selbst verändert werden. Zustandsänderungen und daraus resultierende Verhaltensänderungen wirken sich aufgrund der sequenziellen Abarbeitung erst auf nachfolgende Nachrichten aus. Aufgrund dieser Voraussetzung kann man einen Actor auch als endlichen Automaten betrachten und damit leicht umsetzen~\cite[S.~14]{vernon_reactive_2016}.\\
-Actor-basierte Anwendungen setzen somit auf \textit{mutable state} --- jedoch wird dieser nicht geteilt. Ein Actor kapselt seinen Zustand und interagiert nur über Nachrichten mit anderen Actors (siehe \fullref{subsec:sharenothing}). Der isolierte Zustand und die sequenzielle Verabeitung der Nachrichten ermöglichen außerdem die sogenannte \enquote{lock-free concurrency} (siehe \nameref{subsec:sharenothing}).\\
+Der Zustand eines Actors ist isoliert und kann nur von dem Actor selbst verändert werden. Zustandsänderungen und daraus resultierende Verhaltensänderungen wirken sich aufgrund der sequenziellen Abarbeitung erst auf nachfolgende Nachrichten aus. Aufgrund dieser Voraussetzung kann man mit einen Actor problemlos endliche Automaten implementieren \cite[S.~14]{vernon_reactive_2016} \cite[S.~84]{kuhn_reactive_2015}.\\
+Actor-basierte Anwendungen setzen somit auf \textit{mutable state} --- jedoch wird dieser nicht geteilt. Ein Actor kapselt seinen Zustand und interagiert nur über Nachrichten mit anderen Actors (siehe \fullref{subsec:sharenothing}). Der isolierte Zustand und die sequenzielle Verarbeitung der Nachrichten ermöglichen außerdem die sogenannte \enquote{lock-free concurrency} innerhalb eines Actors \cite[S.~85]{kuhn_reactive_2015}.\\
+Eine Actor-basierte Anwendung besteht aus vielen Actors. Zudem entsteht durch die o.g. zweite Eigenschaft, weitere Actors zu erzeugen, eine Actor Hierachie. Komplexe Prozesse werden aufgebrochen und jeder Actor ist für eine kleine Aufgabe bzw. einen Task im System zuständig.\\
+Die Hierarchie ermöglicht es, dass Konzept der \textit{supervision} umzusetzen. Übergeordnete Actors sind für Koordination und Verteilung der Tasks via Nachrichten verantwortlich. Tasks werden an untergeordnete Actors delegiert. Zudem übernehmen übergeordnete Actors eine Kontrollfunktion. Verhält sich ein untergeordneter Actor fehlerhaft, werden Maßnahmen, wie beispielsweise ein Neustart des fehlerhaften Actors, ergriffen. Ein Actor kann Fehler seiner untergeordneten Actors auch weiter nach oben propagieren, um dem System die Möglichkeit zu geben, Fehler zu beheben~\cite[S.~15]{vernon_reactive_2016} \cite[S.~83]{kuhn_reactive_2015} \cite[S.~86]{erb_concurrent_2012}.\\
 
-Das Actor Modell wurde poplär durch die Programmiersprache Erlang\footnote{https://www.erlang.org/} und das Framework Akka\footnote{http://akka.io}.
+Das Actor Modell wurde poplär durch die Programmiersprache Erlang\footnote{https://www.erlang.org/} und das Framework Akka\footnote{http://akka.io}. Diese Actor Systeme abstrahiert die Koordination der parallelen Ausführung. Die Verarbeitung einer Nachricht innerhalb eines Actors erfolgt immer durch einen Thread. Während dieser Verarbeitung ist ein Thread ausschließlich für einen spezifischen Actor zuständig.\\
+Die Erlang VM startet beispielsweise einen Thread pool mit so vielen Threads, wie Rechenkerne zur Verfügung stehen. Diese Threads werden nun Actors zugewiesen, deren Mailboxen Nachrichten enthalten. Aufgrund der limitierten Ressourcen darf ein Actor einen Thread nicht für immer blockieren. Ähnlich, wie bei der ereignisbasierter Concurrency (\ref{subsec:eventdriven-concurrency}), ist deshalb \textit{Asynchronous I/O} für das Actor Modell vorteilhaft. Durch Scheduling, wie man es auch von Betriebsystemen kennt, achtet das Actor System auf Fairness, um \textit{starvation} einzeler Actors zu verhindern.\\
+
+Mit einer Actor-basierten Anwendung ist es möglich eine Anwendung message-driven zu entwickeln. Beide Implementierungen, sowohl Erlang als auch Akka unterstützen die Verteilung von Actors auf mehrere Nodes und vorallem die Kommunikation via Nachrichten über mehrere Nodes hinweg. Somit skalieren Actor-basierte Systeme horizontal und vertikal. Bezüglich \textit{resilience} bietet die Actor Hierachie und das Konzept der \textit{supervision} eine gute Basis, um eine Anwendung von vornherein \textit{resilient} zu entwerfen.\\
+
+Beide Concurrency Modelle bieten je nach Implementierung essentielle Konzepte, um reaktive Anwendung zu entwickeln.
 
 \pagebreak
 

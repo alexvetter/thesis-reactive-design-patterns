@@ -1,65 +1,45 @@
-\section{Reaktive Programmierung}
-Reaktive Programmierung, im weiteren Sinne, ist in der Entwicklung von Benutzeroberflächen üblich und verbreitet. Eine Software mit Benutzernutzeroberfläche muss stetig auf Eingaben durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Dieser stetige Strom von neuen Informationen und Ereignissen muss verarbeitet werden, ohne dabei die Benutzeroberfläche zu blockieren. Nichts ist ärgerlicher, als eine Software, die nach einem Klick auf einen Button nicht reagiert bis der Vorgang abgeschlossen ist. Ebenso verhält sich es mit Serveranwendungen, die auf eine Vielzahl von gleichzeitigen Anfragen reagieren müssen.\\
-Zu Beginn der Arbeit wurde bereits die Definition reaktiver Systeme von Harel und Pnueli genannt. Allgemeiner betrachtet bedeutet das englische Wort \textit{reactive} laut dem Merriam-Webster Wörterbuch \enquote{readily responsive to a stimulus}. Demnach ist etwas \textit{reactive}, wenn es bereitwillig auf einen Reiz reagiert. Im Bezug auf Software sind Reize beispielsweise Cursorbewegungen, Mausklicks oder Anfragen. Konkreter formuliert sind diese Reize Ereignisse, die von einer Komponente verarbeitet werden. Folgich ist ein Ereignis (engl. event) ein Signal über eine Zustandsänderung. Eine Komponente sendet ein Ereignis an seine Empfänger. Die reaktive Programmierung beschäftigt sich mit der nebenläufigen und asynchronen Verarbeitung dieser Ereignisse, um die \textit{responsiveness} der Anwendung sicherzustellen~\cite{rappl_introduction_2016}~\cite[S.~4]{carkci_dataflow_2014}~\cite[S.~5]{blackheath_functional_2015}.
+\section{Reactive Design Patterns}
 
-\section{Observer-Pattern}
-Ein Ereignis (engl. event) ist ein Signal bzw. ein Fakt über eine Zustandsänderung. Eine Komponente emittiert bzw. veröffentlicht ein Ereignis an seine Empfänger bzw. Beobachter. Hierfür nutzt man traditionellerweise das Verhaltensmuster \textit{observer}. Ein Beobachter (engl. observer) hat die Möglichkeit sich für Zustandsänderungen an- und abzumelden.\\
-Folgendes Scala Codebeispiel zeigt das Observer-Pattern durch das Trait \textit{EventEmitter} (\ref{lst:lst5}). Beobachter, im Codebeispiel \textit{Observer} genannt, können sich über die Methoden \textit{subscribe} und \textit{unsubscribe} beim \textit{EventEmitter} an- und abmelden. Kommt es zu einer Zustandsänderung kann der \textit{EventEmitter} alle \textit{Observer} durch den Aufruf von \textit{emit} über das Ereignis informieren. Der \textit{EventEmitter} weiß nur, dass die \textit{Observer} die Methode \textit{handle} implementieren, die durch \textit{emit} aufgerufen wird.
+Dieser Teil der Arbeit beschäftigt sich mit Reactive Design Patterns. Dabei handelt es sich nicht um gänzlich neue Design Patterns, sondern vielmehr, um Patterns, die sich für die Entwicklung reaktiver Systeme als nützlich erweisen. Der Fokus soll vorallem auf Patterns liegen, die die Eigenschaften reaktiver Anwendungen unterstützen.
 
-\begin{lstlisting}[caption={Codebeispiel für das Observer-Pattern.},label={lst:lst5}]
-trait EventEmitter {
-  private var observers: Set[Observer] = Set()
+\subsection{Observable Pattern}
 
-  def subscribe(observer: Observer): Unit = observers += observer
-  def unsubscribe(observer: Observer): Unit = observers -= observer
-  def emit(): Unit = observers.foreach(_.handle(this))
-}
-
-trait Observer {
-  def handle(emitter: EventEmitter): Unit
-}
-\end{lstlisting}
-
-\pagebreak
-
-\begin{lstlisting}[caption={Codebeispiel für das Observer-Pattern.},label={lst:lst6}]
-class IncrementButton extends EventEmitter {
-  private var counter = 0
-
-  def getCount = counter
-  def clicked(): Unit = {
-    counter += 1
-    emit()
-  }
-}
-
-class IncrementLogger(button: IncrementButton) extends Observer {
-  button.subscribe(this)
-
-  def handle(emitter: EventEmitter): Unit = println(s"new value \${button.count}")
-}
-
-val button = new IncrementButton()
-val logger = new IncrementLogger(button)
-
-button.clicked() // prints: new value 1
-button.clicked() // prints: new value 2
-button.clicked() // prints: new value 3
-button.clicked() // prints: new value 4
-\end{lstlisting}
-
-\subsection{Observables}
 %TODO Reactive extensions & Observable 
 %TODO Deprecating the Observer Pattern
 %TODO Erik Meijer Talk about What is reactive?
 %TODO Lesli Lamport We should use mathematics!
 %TODO Rx are libraries for asynchronous and therefore reactive programming.
+%TODO Reactive streams
+
+Das Observable Pattern ist aus der reaktiven Programmierung hervorgegangen. Für viele Software Entwickler ist reaktive Programmierung gleichzusetzen mit dem Observable Pattern.\\
+Reaktive Programmierung ist --- wenn man so möchte --- seit langem in der Entwicklung von Benutzeroberflächen üblich und verbreitet. Eine Software mit Benutzernutzeroberfläche muss stetig auf Eingaben durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Dieser stetige Strom von neuen Informationen und Ereignissen muss verarbeitet werden, ohne dabei die Benutzeroberfläche zu blockieren. Nichts ist ärgerlicher, als eine Software, die nach einem Klick auf einen Button nicht reagiert bis der Vorgang abgeschlossen ist. Ebenso verhält sich es mit Serveranwendungen, die auf eine Vielzahl von gleichzeitigen Anfragen reagieren müssen.\\
+Zu Beginn der Arbeit wurde bereits die Definition reaktiver Systeme von Harel und Pnueli genannt. Allgemeiner betrachtet bedeutet das englische Wort \textit{reactive} laut dem Merriam-Webster Wörterbuch \enquote{readily responsive to a stimulus}. Demnach ist etwas \textit{reactive}, wenn es bereitwillig auf einen Reiz reagiert. Im Bezug auf Software sind Reize beispielsweise Cursorbewegungen, Mausklicks oder Anfragen. Konkreter formuliert sind diese Reize Ereignisse, die von einer Komponente verarbeitet werden. Folglich ist ein Ereignis (engl. event) ein Signal über eine Zustandsänderung. Eine Komponente sendet ein Ereignis an seine Empfänger. Die reaktive Programmierung beschäftigt sich mit der nebenläufigen und asynchronen Verarbeitung dieser Ereignisse, um die \textit{responsiveness} der Anwendung sicherzustellen~\cite{rappl_introduction_2016}~\cite[S.~4]{carkci_dataflow_2014}~\cite[S.~5]{blackheath_functional_2015}.\\
+Für die Verarbeitung von Events nutzt man traditionellerweise das Verhaltensmuster \textit{Observer}. Dieses Muster beschreibt zwei Akteure bzw. Rollen. Das beobachtbare Subjekt, emittiert bzw. veröffentlicht Events. Die Events können von beliebig vielen Empfängern verarbeitet werden. Diese Empfänger werden als Beobachter oder auch als Observer bezeichnet. Ein Observer hat die Möglichkeit sich für Zustandsänderungen des Subjekts an- und abzumelden.\\
 
 \pagebreak
 
-\section{Reactive Design Patterns}
-\subsection{Single Responsibility Pattern}
+\subsection{Single Component Pattern}
+
+DeMacro Single Responsibility Priniciple, structured analysis and system specification, Unix
+
+\pagebreak
+
 \subsection{Idempotent Receiver}
-\subsection{Reactive Streams}
-\subsection{Circuit Breaker}
-% Enterprise Integration Patterns: Message, Message Channel, Event Message, Event-Driven Consumer
+
+\pagebreak
+
+\subsection{Circuit Breaker Pattern}
+
+\pagebreak
+
+\subsection{Let-It-Crash Pattern}
+
+Prefer a full component restart to a complex internal failure handling. Vielleicht hier auch das Fail Fast Principle.
+
+\pagebreak
+
+\subsection{Bulkheads}
+
+\pagebreak
+
+\subsection{Saga Pattern}

@@ -50,7 +50,7 @@ Vert.x bietet dem Entwickler die Möglichkeit über einen verteilten Event Bus e
 
 \pagebreak
 
-\subsection{Actor-basierte Concurrency}
+\subsection{Actor-basierte Concurrency}\label{subsec:actor-model}
 Im folgenden Abschnitt wird ein weiteres Concurrency Modell als Basis für reaktive Software vorgestellt.\\
 Actor-basierte Concurrency oder kurz das \enquote{Actor Modell} stammt ursprünglich von Dr. Carl Hewitt et al aus dem Jahr 1973~\cite{hewitt_universal_1973}. Die grundlegende Idee des Actor Modells, ist die Abstraktion der Concurrency durch asynchronen Nachrichtenausstausch zwischen Komponenten. Eine Komponente in einer Actor-basierten Anwendung wird Actor genannt. Alan Kay, bekannt für seine Pionierarbeit zu objektorientierter Programmierung und außerdem einer der Entwickler der einflussreichen Sprache Smalltalk, sagte in einem Interview folgendes über das Actor Modell~\cite{binstock_interview_2012}:
 
@@ -68,7 +68,7 @@ Das Actor Modell setzt im Grunde an diesem Gedanken an und lässt Komponenten ü
  \label{fig:actor-model}
 \end{figure}
 
-Ein Actor ist die kleinste Einheit in einer Actor-basierten Anwendung im Sinne des \enquote{Single Responsibility Principle} (siehe \textbf{??}), wie das graphische Beispiel eines Bestellvorgangs (\ref{fig:actor-model}) zeigen soll~\cite[S.~13]{vernon_reactive_2016}.\\
+Ein Actor ist die kleinste Einheit in einer Actor-basierten Anwendung im Sinne des \enquote{Single Responsibility Principle} (siehe \nameref{subsec:simple-component-pattern}), wie das graphische Beispiel eines Bestellvorgangs (\ref{fig:actor-model}) zeigen soll~\cite[S.~13]{vernon_reactive_2016}.\\
 Jeder Actor besitzt eine sogenannte Mailbox, diese dient als Zwischenspeicher für eingehende Nachrichten. Außerdem hat jeder Actor einen Namen bzw. eine Adresse. Um einem Actor eine Nachricht zu schicken, wird die Adresse des Actors benötigt. Die Adresse ermöglicht es, mit einem Actor über eine abstrakte Referenz zu interagieren und dies wiederum ermöglicht \textit{location transparency}. Die Übertragung einer Nachricht an die Mailbox ist von unbestimmter Dauer und erfolgt asynchron. Zudem wird keine Reihenfolge der eingetroffenen Nachrichten garantiert \cite[S.~84]{erb_concurrent_2012} \cite[S.~83]{kuhn_reactive_2015}.\\
 Ein Actor arbeitet jede Nachricht aus der Mailbox sequenziell ab. Deshalb muss während der Verarbeitung nicht auf Probleme bzgl. Nebenläufigkeit geachtet werden~\cite[S.~14]{vernon_reactive_2016}.\\
 Ein Actor kann auf drei verschiedene Weisen auf eine Nachricht reagieren \cite[S.~84]{erb_concurrent_2012}:

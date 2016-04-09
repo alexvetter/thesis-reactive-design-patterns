@@ -3,18 +3,50 @@
 Dieser Teil der Arbeit beschäftigt sich mit Reactive Design Patterns. Dabei handelt es sich nicht um gänzlich neue Design Patterns, sondern vielmehr, um Patterns, die sich für die Entwicklung reaktiver Systeme als nützlich erweisen. Der Fokus soll vorallem auf Patterns liegen, die die Eigenschaften reaktiver Anwendungen unterstützen.
 
 \subsection{Observable Pattern}
-
-%TODO Reactive extensions & Observable 
-%TODO Deprecating the Observer Pattern
-%TODO Erik Meijer Talk about What is reactive?
-%TODO Lesli Lamport We should use mathematics!
-%TODO Rx are libraries for asynchronous and therefore reactive programming.
-%TODO Reactive streams
-
-Das Observable Pattern ist aus der reaktiven Programmierung hervorgegangen. Für viele Software Entwickler ist reaktive Programmierung gleichzusetzen mit dem Observable Pattern.\\
-Reaktive Programmierung ist --- wenn man so möchte --- seit langem in der Entwicklung von Benutzeroberflächen üblich und verbreitet. Eine Software mit Benutzernutzeroberfläche muss stetig auf Eingaben durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Dieser stetige Strom von neuen Informationen und Ereignissen muss verarbeitet werden, ohne dabei die Benutzeroberfläche zu blockieren. Nichts ist ärgerlicher, als eine Software, die nach einem Klick auf einen Button nicht reagiert bis der Vorgang abgeschlossen ist. Ebenso verhält sich es mit Serveranwendungen, die auf eine Vielzahl von gleichzeitigen Anfragen reagieren müssen.\\
-Zu Beginn der Arbeit wurde bereits die Definition reaktiver Systeme von Harel und Pnueli genannt. Allgemeiner betrachtet bedeutet das englische Wort \textit{reactive} laut dem Merriam-Webster Wörterbuch \enquote{readily responsive to a stimulus}. Demnach ist etwas \textit{reactive}, wenn es bereitwillig auf einen Reiz reagiert. Im Bezug auf Software sind Reize beispielsweise Cursorbewegungen, Mausklicks oder Anfragen. Konkreter formuliert sind diese Reize Ereignisse, die von einer Komponente verarbeitet werden. Folglich ist ein Ereignis (engl. event) ein Signal über eine Zustandsänderung. Eine Komponente sendet ein Ereignis an seine Empfänger. Die reaktive Programmierung beschäftigt sich mit der nebenläufigen und asynchronen Verarbeitung dieser Ereignisse, um die \textit{responsiveness} der Anwendung sicherzustellen~\cite{rappl_introduction_2016}~\cite[S.~4]{carkci_dataflow_2014}~\cite[S.~5]{blackheath_functional_2015}.\\
+Das Observable Pattern stammt aus dem Hause Microsoft und wurde von Erik Meijer erstmalig in dem Framework für reaktive Programming \textit{Reactive Extensions} definiert. Die reaktive Programmierung beschäftigt sich mit der nebenläufigen und asynchronen Verarbeitung von Events. Bei der Entwicklung von Benutzeroberflächen ist reaktive Programmierung seit langem üblich und verbreitet. Eine Benutzeroberfläche muss stetig auf Eingaben, also Events, durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Ebenso kann man aber auch Anfragen an eine Webapplikation als stetigen Strom von Events bezeichen.\\
+Zu Beginn der Arbeit wurde bereits die Definition reaktiver Systeme genannt. Allgemeiner betrachtet bedeutet das englische Wort \textit{reactive} laut dem Merriam-Webster Wörterbuch \enquote{readily responsive to a stimulus}. Demnach ist etwas \textit{reactive}, wenn es bereitwillig auf einen Reiz reagiert. Im Bezug auf Software sind Reize Events, die von einer Komponente verarbeitet werden müssen \cite{rappl_introduction_2016} \cite[S.~4]{carkci_dataflow_2014} \cite[S.~5]{blackheath_functional_2015}.\\
 Für die Verarbeitung von Events nutzt man traditionellerweise das Verhaltensmuster \textit{Observer}. Dieses Muster beschreibt zwei Akteure bzw. Rollen. Das beobachtbare Subjekt, emittiert bzw. veröffentlicht Events. Die Events können von beliebig vielen Empfängern verarbeitet werden. Diese Empfänger werden als Beobachter oder auch als Observer bezeichnet. Ein Observer hat die Möglichkeit sich für Zustandsänderungen des Subjekts an- und abzumelden.\\
+Ein endlicher Strom von Events, ist im Grunde nichts anderes als eine Liste. Für die Verarbeitung einer Liste nutzt man traditionellerweise das Verhaltensmuster \textit{Iterator}. Dieses Muster ermöglicht den sequenziellen Zugriff auf Elemente einer aggregierten Datenstruktur. Der Iterator definiert hierfür eine Schnittstelle für den Zugriff und das Traversieren beispielsweise einer Liste.\\
+Die beiden Patterns unterscheiden sich jedoch im Hinblick auf den Zugriff der Daten. Beim Iterator Pattern wird der Iterator nach weiteren Daten gefragt. Man nennt dies Pull-Strategie. Im Gegensatz dazu nutzt man beim Observer Pattern die Push-Strategie. Der Observer wird vom Subjekt benachrichtigt, falls weitere Daten verarbeiten werden müssen. Das Observer Pattern hat im Vergleich zum Iterator Pattern zwei weitere Nachteile. Das Pattern beschreibt keine Möglichkeit einer Fehlerbehandlung und auch die Mitteilung, dass keine weiteren Events mehr eintreffen werden ist nicht vorgesehen.\\
+Das Observables Pattern kombiniert die Vorteile beider Patterns. Zum einen verwendet es die Push-Strategie des Observer Patterns. Zum anderen kann ein Observable für das Ende des Datenstroms sowie über Fehler informiert werden. Ein Observerable definiert deshalb eine Schnittstelle mit drei Methoden:
+
+\begin{enumerate}
+\item \textit{onNext(Event)}\\
+Wird aufgerufen, falls ein Event verarbeitet werden soll.
+\item \textit{onError(Exception)}\\
+Wird aufgerufen, falls bspw. beim Aggregieren ein Fehler aufgetreten ist.
+\item \textit{onCompleted()}\\
+Wird aufgerufen, falls das Ende des Datenstroms erreicht ist.
+\end{enumerate}
+
+%TODO Cite GoF
+%TODO Deprecating the Observer Pattern
+
+\pagebreak
+
+\begin{lstlisting}[caption={Zusammenknüpfen und filtern zweiter Listen mit RxJava},label={lst:rxjava}]
+List<String> w = Arrays.asList("Anna", "Eva", "Andrea", "Christiane");
+List<String> m = Arrays.asList("Martin", "Tom", "Leon", "Alexander");
+Observable
+ .concat(Observable.from(w), Observable.from(m))
+ .filter(name -> name.startsWith("A"))
+ .subscribe(new Subscriber<String>() {
+   public void onCompleted() {
+    System.out.println("Completed");
+   }
+   public void onError(Throwable throwable) {
+    System.err.println("Error");
+   }
+   public void onNext(String name) {
+    System.out.println("Name: "+name);
+   }
+ });
+\end{lstlisting}
+
+Das Beispiel zeigt die Verwendung der Reactive Extensions für Java --- kurz RxJava. Es werden zwei Listen mit weiblichen und männlichen Vornamen verbunden (siehe Z.~5). Der daraus resultierende Strom von Vornamen wird nach Namen gefiltert, welche mit \enquote{A} beginnen (siehe Z.~6). Zum Schluss wird ein Subscriber implemententiert, welcher die Namen ausgibt.\\ 
+Anstelle der zwei Liste könnte man nun auch Anfragen von einem Sockets abarbeiten. Die einzelnen Funktion oder auch der Subscriber kann wiederverwendet werden.\\
+
+Observables eignen sich asynchrone und nicht blockierenden Daten zu verarbeiten. Zudem eignen sie sich auch zur Verarbeitung von Events bzw. Messages. Für die Entwicklung von message-driven Applikationen sind Bibliotheken, wie Reactive Extensions deshalb sehr nützlich. Jedoch wird keine der vier reaktiven Eigenschaften durch die Verwendung erfüllt.
 
 \pagebreak
 
@@ -23,7 +55,7 @@ Ein umfangreiches System erledigt meist mehrere Aufgaben und hat verschiedenste 
 Dieses Pattern trägt den Namen Simple Component und wird wie folgt definiert:
 
 \begin{quotation}
-Eine Komponente sollte nur eine Aufgabe erledigen und diese vorallem gut absolvieren \cite[S.~185]{kuhn_reactive_2015}.
+A component shall do only one thing, but do it in full \cite[S.~185]{kuhn_reactive_2015}.
 \end{quotation}
 
 Beispielsweise kann ein Textbearbeitungsprogramm mit Rechtschreibprüfung in Textberarbeitung und Rechtschreibprüfung aufgeteilt werden. Die Rechtschreibprüfung ist nicht abhängig von der eigentlichen Textbearbeitung und umgekehrt \cite[S.~185]{kuhn_reactive_2015}. Ein anderes Beispiel wäre ein Onlineshop. Ein Onlineshop besteht unter anderem aus folgenden Komponenten:
@@ -41,8 +73,11 @@ Die Liste beansprucht keine Vollständigkeit und zeigt trotzdem, dass einzelne K
 \pagebreak
 
 Das Pattern ist in keinster Weise neu. Es kann aus dem \textit{Single Responsibility Priniciple} von Robert C. Martin abgeleitet werden. Das Prinzip zielt auf objektorientierte Systeme ab und lautet: \enquote{A class should have only one reason to change}. Befolgt man dieses Prinzip maximiert man die Kohäsion und minimiert die Kopplung zwischen Klassen --- oder auch zwischen Komponenten \cite[S.~185]{kuhn_reactive_2015} \cite{martin_single_2014}.\\
-Ein System im Ganzen betrachtet ist sehr komplex und schwer zu fassen. Mithilfe des Simple Component Patterns bricht man das System Schritt für Schritt in einzelne Verantwortlichkeiten und somit in einzele Komponenten auf. Es entstehe eine Hierarchie aus Komponenten, die voneinander isoliert betrachtet werden können.\\
+Ein System im Ganzen betrachtet ist sehr komplex und schwer zu fassen. Mithilfe des Simple Component Patterns bricht man das System Schritt für Schritt in einzelne Verantwortlichkeiten und somit in einzele Komponenten auf. Es entsteht eine Hierarchie aus Komponenten, die voneinander isoliert betrachtet werden können.\\
+
 Das Simple Component Pattern ist ein grundlegendes und elementares Reactive Design Pattern. Folgt man dem Pattern können die reaktive Prinzipien \textit{supervision} (\ref{subsec:actor-model}) und \textit{share nothing} (\ref{subsec:sharenothing}) umgesetzt werden. Schlussendlich führt das zu der geforderten reaktiven Eigenschaft resilience (\ref{subsec:resilient}).
+
+\pagebreak
 
 \subsection{Let-It-Crash Pattern}
 Prefer a full component restart to a complex internal failure handling. Vielleicht hier auch das Fail Fast Principle.

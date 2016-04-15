@@ -71,9 +71,16 @@ Die Liste beansprucht keine Vollständigkeit und zeigt trotzdem, dass einzelne K
 \pagebreak
 
 Das Pattern ist in keinster Weise neu. Es kann aus dem \textit{Single Responsibility Priniciple} von Robert C. Martin abgeleitet werden. Das Prinzip zielt auf objektorientierte Systeme ab und lautet: \enquote{A class should have only one reason to change}. Befolgt man dieses Prinzip maximiert man die Kohäsion und minimiert die Kopplung zwischen Klassen --- oder auch zwischen Komponenten \cite[S.~185]{kuhn_reactive_2015} \cite{martin_single_2014}.\\
-Ein System im Ganzen betrachtet ist sehr komplex und schwer zu fassen. Mithilfe des Simple Component Patterns bricht man das System Schritt für Schritt in einzelne Verantwortlichkeiten und somit in einzele Komponenten auf. Es entsteht eine Hierarchie aus Komponenten, die voneinander isoliert betrachtet werden können.\\
+Eine weitere Definition in diesem Zusammenhang stammt von Rotem-Gal-Oz bezüglich eines Services in einer Service-orientierten Architektur:
 
-Das Simple Component Pattern ist ein grundlegendes und elementares Reactive Design Pattern. Folgt man dem Pattern können die reaktive Prinzipien \textit{supervision} (\ref{subsec:actor-model}) und \textit{share nothing} (\ref{subsec:sharenothing}) umgesetzt werden. Schlussendlich führt das zu der geforderten reaktiven Eigenschaft resilience (\ref{subsec:resilient}).
+\begin{quotation}
+[...] a service should provide a distinct business function [...]. One of the characteristics of services is \textit{service autonomy}, which means the service should be mainly self-sufficient \cite[S.~7]{rotem_soa_2012}.
+\end{quotation}
+
+Ein Service oder im übertragenen Sinn eine Komponete sollte, falls möglich, autark und unabhängig sein. Folglich empfiehlt es sich die Logik einer Funktionalität nicht über mehrere Komponenten aufzuteilen.\\
+
+Ein System im Ganzen betrachtet ist sehr komplex und schwer zu fassen. Mithilfe des Simple Component Patterns bricht man das System Schritt für Schritt in einzelne Verantwortlichkeiten und somit in einzele Komponenten auf. Es entsteht eine Hierarchie aus Komponenten und Unterkomponenten, die voneinander isoliert betrachtet werden können.\\
+Das Simple Component Pattern ist ein grundlegendes und elementares Reactive Design Pattern. Folgt man dem Pattern können die reaktive Prinzipien \textit{supervision} (\ref{subsec:actor-model}) und \textit{share nothing} (\ref{subsec:sharenothing}) umgesetzt werden. Schlussendlich ermöglicht dieses Pattern, Komponenten von einander zu isolieren und dies wiederum unterstützt bei der Umsetzung der geforderten reaktiven Eigenschaft resilience (\ref{subsec:resilient}).
 
 \pagebreak
 

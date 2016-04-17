@@ -84,8 +84,37 @@ Das Simple Component Pattern ist ein grundlegendes und elementares Reactive Desi
 
 \pagebreak
 
-\subsection{Let-It-Crash Pattern}
-Prefer a full component restart to a complex internal failure handling. Vielleicht hier auch das Fail Fast Principle.
+\subsection{Let-It-Crash Pattern}\label{subsec:let-it-crash-pattern}
+Bei dem Entwurf von reaktiver Software wird von vornherein angenommen, dass das System durch Hardware- und/oder Softwarefehler ganz oder teilweise ausfallen kann. Ein reaktives System muss gegenüber Ausfällen resilience vorweisen können (siehe \ref{subsec:resilient}).\\
+Durch die Komponenten Hierarchie, die durch das \nameref{subsec:simple-component-pattern} entsteht, ist es möglich untergeordnete Komponenten in ihrem Lebenszyklus zu beeinflussen.\\
+Tritt in einer Komponente ein zufälliger Fehler auf, versucht nicht die Komponente selbst den Fehler zu beheben, sondern lässt deren Supervisior den Fehler behandeln \cite[S.~196]{kuhn_reactive_2015} \cite[S.~200~\&~S.~201]{armstrong_programming_2013}. Die eigentliche Logik und die Fehlerbehandlung sind somit entzerrt. Treten zufällige oder selte Fehler auf, wie beispielsweise einer seltener Fehlerzustand oder eine blockierter Datenbank-Connection-Pool, wird die Komponente durch den Supervisior neugestartet. Der interne Zustand wird somit zurückgesetzt und zuvor gebundene Ressourcen (z.B. File-Handles, Datenbankverbindungen) werden freigegeben \cite[S.~197]{kuhn_reactive_2015}. Fehler, wie beispielsweise falsche oder fehlende Parameter sind hiervon ausgenommen und führen nicht zu einem Neustart.\\
+Das beschriebene Prinzip nennt sich Let-It-Crash Pattern und kann wird folgendermaßen definiert:
+
+\begin{quotation}
+Prefer a full component restart to a complex internal~failure~handling~\cite[S.~196]{kuhn_reactive_2015}.
+\end{quotation}
+
+Man verzichtet somit auf aufwendige Fehlerbehandlung innerhalb einer Komponente und zieht es vor, dass eine fehlerhafte Komponente jederzeit durch den Supervisior beendet werden kann. Der Supervisior kann darüber hinaus weitere Maßnahmen, wie beispielsweise Load Balancing, ergreifen, um fehlerhafte Nodes oder Komponenten zu umgehen.
+
+\pagebreak
+
+Das Let-It-Crash Pattern hat Einfluss auf die Verfügbarkeit des Systems. Die Verfügbarkeit lässt sich aus folgenden Zeitwerten berechnen \cite{friedrichsen_unkaputtbar_2014}:
+
+\begin{enumerate}
+\item MTTF (\textit{Mean Time To Failure}) beschreibt die durchschnittliche Zeit bis zum Auftreten eines Fehlers.
+\item MTTR (\textit{Mean Time To Recovery}) beschreibt die durchschnittliche Zeit bis zur vollständigen funktionalen Wiederherstellung des Systems.
+\end{enumerate}
+
+Diese zwei durchschnittlichen Zeitwerte stehen wie folgt in Zusammenhang:
+
+\begin{figure}[H]
+\[Availability := \frac{MTTF}{MTTF + MTTR}\]
+\caption{Formel zur Berechnung der Verfügbarkeit}
+\end{figure}
+
+Die Verfügbarkeit, in der Formel \textit{Availability} genannt, sollte einen Wert gegen 1 erreichen. Der traditionelle Ansatz ist, die MTTF zu maximieren und somit die MTTR zu vernachlässigen. Wie bereits festgestellt wurde, lassen sich Fehler nicht ausschließen. Der Let-It-Crash Ansatz, konzentriert sich vielmehr auf die MTTR und versucht diese soweit wie möglich zu minimieren \cite[S.~198]{kuhn_reactive_2015} \cite{friedrichsen_unkaputtbar_2014}.\\
+
+Das Let-It-Crash Pattern muss, wie auch das Simple Component Pattern (\ref{subsec:simple-component-pattern}), bereits beim Design der Anwendung berücksichtigt werden. Es trägt dazu bei, die \textit{resilience} eines reaktiven Systems zu erhöhen und unterstützt somit auch ganz klar die \textit{responsiveness}.
 
 \pagebreak
 

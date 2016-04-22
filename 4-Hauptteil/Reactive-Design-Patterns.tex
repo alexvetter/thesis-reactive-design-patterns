@@ -118,11 +118,39 @@ Das Let-It-Crash Pattern muss, wie auch das Simple Component Pattern (\ref{subse
 
 \pagebreak
 
-\subsection{Heartbeat Pattern}
+\subsection{Heartbeat Pattern}\label{subsec:heartbeat-pattern}
+Durch Supervision in einer Komponenten Hierarchie und dem Let-It-Crash Pattern (\ref{subsec:let-it-crash-pattern}) kann in einer reaktiven Anwendung auf explizite und definierte Weise mit Fehlerzuständen umgegangen werden. Jedoch stellt sich nun die Frage, wie Supervisior effektiv die Fehler der untergeordneten Komponenten feststellen können.\\
+Dazu ist es wichtig, zu wissen, welche Fehler eintreten bzw. in welche Kategorien Fehler eingeteilt werden können \cite{friedrichsen_unkaputtbar_2014}.
+
+\begin{enumerate}
+\item \textbf{Crash Failure} (Absturzfehler)\\
+Die Komponente antwortet nicht mehr, da es durch Hard- oder Softwarefehler zu einem Absturz kam.
+\item \textbf{Omission Failure} (Auslassungsfehler)\\
+Die Komponente reagiert auf vereinzelte Anfragen nicht, da diese Anfragen nie ankamen oder deren Antwort verloren ging.
+\item \textbf{Timing Failure} (Antwortzeitfehler)\\
+Die vereinbarte maximale Antwortzeit wurde überschritten (Timeout).
+\item \textbf{Response Failure} (Antwortfehler)\\
+Die Antwort ist fehlerhaft oder schlichtweg falsch.
+\item \textbf{Byzantine Failure} (Zufälliger Fehler)\\
+Die Komponente verhält sich zu unbestimmten und zufälligen Zeitpunkten fehlerhaft.
+\end{enumerate}
+
+Eine einfache Möglichkeit den Zustand bzw. die Verfügbarkeit einer Komponente zu überprüfen, ist das Heartbeat Pattern. Der Supervisior schickt in regelmäßigen Abständen spezielle Anfragen, die die Komponente auffordern ein Lebenszeichen, einen sogenannten Heartbeat, von sich zu geben. Erhält der Supervisior auf die Anfrage keine Antwort, kann nach Ablauf eines Timeouts, mit großer Wahrscheinlichkeit von einem Crash Failure ausgegangen werden \cite[S.~200~\&~S.~201]{kuhn_reactive_2015}.\\
+Die Komponete kann die Heartbeat Nachricht auch mit Informationen über deren Zustand erweitern, wie beispielsweise Fehlerrate oder Zahl der Anfragen.\\
+Das Heartbeat Pattern kann aus der Sicht der Komponente aktiv oder passiv umgesetzt werden. Das heißt die Komponente sendet die Heartbeat Nachricht auf Anfrage an den Supervisior oder selbstständig in regelmäßigen Abständen an eine vereinbarte Adresse. Sendet die Komponente die Heartbeats selbstständig, muss der Supervisior trotzdem prüfen, ob in gewissen Zeitabständen ein Heartbeat der überwachten Komponente eingeht. Der Supervisior ist somit nach wie vor in der Verantwortung Fehler zu erkennen.\\
+
+Eine weitere Möglichkeit den Zustand einer Komponente im System verfügbar zu machen sind pro-aktive Failure Signals. Stellt die Komponente einen Fehler fest, kann ähnlich zum aktiven Heartbeat eine Nachricht mit Informationen über den Fehler an eine vereinbarte Addresse geschickt werden \cite[S.~201~\&~S.202]{kuhn_reactive_2015}. Die Fehlerbehandlung sollte dann jedoch dem Supervisior überlassen werden.\\
+Durch pro-aktive Failure Signals können Fehler der Kategorien 2 bis 5 an den Supervisior gemeldet werden. Jedoch sollte man beachtet, dass die Komponente möglicherweise nicht jeden Fehler selbst erkennt und die Failure Signals aufgrund von Störungen in der Kommunikation nicht beim Supervisior eintreffen.\\
+
+Das Heartbeat Pattern ermöglicht es Crash Failures über die Hierarchie Ebenen hinweg festzustellen. Durch die Erweiterung des Heartbeat Patterns mit pro-aktiven Failure Signals können auch andere Fehlerkategorien erkannt werden --- jedoch nicht mit 100-prozentiger Garantie. Das Heartbeat Pattern kann ebenfalls zu den \textit{resilience} Patterns gezählt werden. 
 
 \pagebreak
 
 \subsection{Circuit Breaker Pattern}
+
+\pagebreak
+
+\subsection{Fallback Pattern}
 
 \pagebreak
 

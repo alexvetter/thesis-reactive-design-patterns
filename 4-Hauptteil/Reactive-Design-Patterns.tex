@@ -147,6 +147,39 @@ Das Heartbeat Pattern ermöglicht es Crash Failures über die Hierarchie Ebenen 
 \pagebreak
 
 \subsection{Circuit Breaker Pattern}
+Im Zuge der Erläuterung des Heartbeat Pattern (\ref{subsec:heartbeat-pattern}) wurde deutlich, dass die Fehlererkennung für bestimmte Fehlerkategorien unterschiedlich abläuft und nicht immer von der Komponente selbst übernommen werden kann. Der Supervisior muss Anfragen und deren Antworten auf Omission, Timing, Response und Byzantine Failures prüfen.\\
+Das Circuit Breaker Pattern ist eine Möglichkeit diese Fehlererkennung zu abstrahieren und in einer allgemeinen Form zur Verfügung zu stellen. Der Begriff Circuit Breaker, auf Deutsch Schutzschalter oder auch Überlastungschutz, stammt aus der Elektrotechnik und dient als Schutz für ein Stromnetz vor Überlastung durch beispielweise einem Kurzschluss \cite[S.~93]{nygard_release_2007}.\\
+Kuhn beschreibt das Circuit Breaker Pattern mit folgenden Worten:
+
+\begin{quotation}
+Protect services by breaking the connection to their users during prolonged failure conditions \cite[S.~202]{kuhn_reactive_2015}.
+\end{quotation}
+
+Wird das Circuit Breaker Pattern angewand, bedeutet dies, dass der Nachrichtenfluss zwischen zwei Komponenten durch einen Circuit Breaker geschleußt wird. Der Circuit Breaker ist zu nächst im geschlossenem Zustand (siehe Abb. \ref{fig:circuit-breaker-closed}) und lässt jede Nachricht und deren Antwort zu \cite[S.~93]{nygard_release_2007}.
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=1.0\textwidth]{4-Hauptteil/circuit-breaker/circuit-breaker-closed.eps}
+ \caption{Circuit Breaker im geschlossenem Zustand.}
+ \label{fig:circuit-breaker-closed}
+\end{figure}
+
+Ist die Kommunikation zwischen den Komponenten erfolgreich, bleibt der Circuit Breaker im geschlossenem Zustand. Im Fehlerfall hat der Circuit Breaker die Möglichkeit, den Nachrichtenfluss absichtlich zu unterbrechen. Wird der Nachrichtenfluss unterbrochen, befindet sich der Circuit Breaker im offenem Zustand (siehe Abb. \ref{fig:circuit-breaker-open}). In diesem Zustand wird jede Anfrage sofort mit einer negativen Rückmeldung quitiert --- ohne eine Anfrage verschickt zu haben \cite[S.~94]{nygard_release_2007}.
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=1.0\textwidth]{4-Hauptteil/circuit-breaker/circuit-breaker-open.eps}
+ \caption{Circuit Breaker im offenem Zustand.}
+ \label{fig:circuit-breaker-open}
+\end{figure}
+
+Der Circuit Breaker überwacht Antworten \& Antwortzeiten und protokoliert die Fehler der Kommunikation. Je nach Konfiguration wird die Verbindung, beispielsweise nach 5 fehlerhaften Antworten, absichtlich unterbrochen \cite[S.~94]{nygard_release_2007}.\\
+Gründe für den offenen Zustand können beispielsweise Überlastung oder fehlerhaftes Verhalten der angefragten Komponente sein. Überlastung kann dazu führen, dass die Antwortzeiten stetig steigen, bis hin zu Timing oder Omission Failures. Wird die Verbindung unterbrochen, kann sich die überlastete Komponente erholen \cite[S.~203]{kuhn_reactive_2015}. Häufige aufeinanderfolgende Response oder Byzantine Failures können ebenfalls Gründe für den offenen Zustand des Circuit Breaker sein.\\
+Nach einer definierten Dauer im geschlossenem Zustand, wird der Circuit Breaker in den halb-offenen Zustand versetzt. In diesem Zustand wird eine Testanfrage zugelassen. Ist diese Anfrage erfolgreich, wird der Circuit Breaker in den offenen Zustand gesetzt. Andernfalls fällt der Circuit Breaker zurück in den geschlossenen Zustand \cite[S.~94]{nygard_release_2007}.\\
+
+Das Pattern eignet sich sehr gut, um die Kommunikation zwischen den Komponenten zu entkoppeln. Somit unterstützt es auch die Isolierung von Komponenten. Kombiniert mit dem Heartbeat Pattern können alle Fehlerkategorien abgedeckt werden. Aus der Sicht des Reactive Manifestos trägt das Circuit Breaker Pattern zur \textit{resilience} bei.
+
+\pagebreak
 
 \pagebreak
 

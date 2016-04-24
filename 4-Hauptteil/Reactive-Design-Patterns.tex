@@ -1,9 +1,9 @@
 \section{Reactive Design Patterns}
 
-Dieser Teil der Arbeit beschäftigt sich mit Reactive Design Patterns. Dabei handelt es sich nicht um gänzlich neue Design Patterns, sondern vielmehr, um Patterns, die sich für die Entwicklung reaktiver Systeme als nützlich erweisen. Der Fokus soll vorallem auf Patterns liegen, die die Eigenschaften reaktiver Anwendungen unterstützen.
+Dieser Teil der Arbeit beschäftigt sich mit Reactive Design Patterns. Dabei handelt es sich nicht um gänzlich neue Design Patterns, sondern vielmehr um Patterns, die sich für die Entwicklung reaktiver Systeme als nützlich erweisen. Der Fokus soll vorallem auf Patterns liegen, die die Eigenschaften reaktiver Anwendungen unterstützen.
 
 \subsection{Observable Pattern}
-Das reaktive Observable Pattern stammt aus dem Hause Microsoft und wurde von Erik Meijer in dem Framework für reaktive Programming \textit{Reactive Extensions} definiert. Die reaktive Programmierung beschäftigt sich mit dem Datenfluss einer Anwendung und mit der asynchronen Verarbeitung von Events. Bei der Entwicklung von Benutzeroberflächen ist reaktive Programmierung seit langem üblich und verbreitet. Eine Benutzeroberfläche muss stetig auf Eingaben, also Events, durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Ebenso kann man aber auch Anfragen an eine Webapplikation als stetigen Datenstrom aus Events bezeichen.\\
+Das reaktive Observable Pattern stammt aus dem Hause Microsoft und wurde von Erik Meijer in dem Framework für reaktive Programming \textit{Reactive Extensions} definiert. Die reaktive Programmierung beschäftigt sich mit dem Datenfluss einer Anwendung und mit der asynchronen Verarbeitung von Events. Bei der Entwicklung von Benutzeroberflächen ist reaktive Programmierung seit langem üblich und verbreitet. Eine Benutzeroberfläche muss stetig auf Eingaben, also Events, durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Ebenso können die Anfragen einer Webapplikation als kontinuierlicher Datenstrom aus Events bezeichnet werden.\\
 Zu Beginn der Arbeit wurde bereits die Definition reaktiver Systeme genannt. Allgemeiner betrachtet bedeutet das englische Wort \textit{reactive} laut dem Merriam-Webster Wörterbuch \enquote{readily responsive to a stimulus}\footnote{http://www.merriam-webster.com/dictionary/reactive}. Demnach ist etwas \textit{reactive}, wenn es bereitwillig auf einen Reiz reagiert. Im Bezug auf Software sind Reize Events, die von einer Komponente verarbeitet werden müssen \cite{rappl_introduction_2016} \cite[S.~4]{carkci_dataflow_2014} \cite[S.~5]{blackheath_functional_2015}.\\
 Für die Verarbeitung von Events nutzt man traditionellerweise das Verhaltensmuster \textit{Observer}. Dieses Muster beschreibt zwei Akteure bzw. Rollen. Das beobachtbare Subjekt, emittiert bzw. veröffentlicht Events. Die Events können von beliebig vielen Empfängern verarbeitet werden. Diese Empfänger werden als Beobachter oder auch als Observer bezeichnet. Ein Observer hat die Möglichkeit sich für Zustandsänderungen des Subjekts an- und abzumelden \cite[S.~293]{gamma_design_1995}.\\
 Ein endlicher Strom von Events ist im Grunde nichts anderes als eine Liste. Für die Verarbeitung einer Liste nutzt man traditionellerweise das Verhaltensmuster \textit{Iterator}. Dieses Muster ermöglicht den sequenziellen Zugriff auf Elemente einer aggregierten Datenstruktur. Der Iterator definiert hierfür eine Schnittstelle für den Zugriff und das Traversieren beispielsweise einer Liste \cite[S.~257]{gamma_design_1995}.\\
@@ -14,7 +14,7 @@ Das Observable Pattern kombiniert beide Patterns. Zum einen verwendet es die Pus
 \item \textit{onNext(Event)}\\
 Wird aufgerufen, falls ein Event verarbeitet werden soll.
 \item \textit{onError(Exception)}\\
-Wird aufgerufen, falls bspw. beim Aggregieren ein Fehler aufgetreten ist.
+Wird aufgerufen, falls beispielsweise beim Aggregieren ein Fehler aufgetreten ist.
 \item \textit{onCompleted()}\\
 Wird aufgerufen, falls das Ende des Datenstroms erreicht ist.
 \end{enumerate}
@@ -41,15 +41,15 @@ Observable.concat(Observable.from(w), Observable.from(m))
  });
 \end{lstlisting}
 
-Das Beispiel zeigt die Verwendung der Reactive Extensions für Java\footnote{RxJava (https://github.com/ReactiveX/RxJava)}. Es werden zwei Listen mit weiblichen und männlichen Vornamen verbunden (Zeile~3). Der daraus resultierende Datenstrom von Vornamen wird nach Namen gefiltert, welche mit \enquote{A} beginnen (Zeile~4). Zum Schluss wird ein Subscriber implemententiert, welcher die Namen ausgibt.\\
+Das Beispiel zeigt die Verwendung der Reactive Extensions für Java\footnote{RxJava (https://github.com/ReactiveX/RxJava)}. Es werden zwei Listen mit weiblichen und männlichen Vornamen verbunden (Zeile~3). Der daraus resultierende Datenstrom von Vornamen wird nach Namen gefiltert, welche mit \enquote{A} beginnen (Zeile~4). Zum Schluss wird ein Subscriber implementiert, welcher die Namen ausgibt.\\
 Anstelle der zwei Listen ist es auch möglich Anfragen von einem Sockets abzuarbeiten. Die einzelnen Funktionen, wie der Filter oder auch der Subscriber können wiederverwendet und anderweitig kombiniert werden.\\
 
-Observables eignen sich sehr gut, um Datenströme zu verarbeiten. Die Verarbeitung kann asynchrone und nicht blockierend erfolgen. Die Reactive Extensions sind in ereignisbasierten Anwendungen (siehe \ref{subsec:eventdriven-concurrency}) von großem Nutzen. Für die Entwicklung von, durch Nachrichten gesteuerte, reaktive Applikationen sind die Reactive Extensions deshalb sehr nützlich. Jedoch wird durch deren Verwendung keine der vier reaktiven Eigenschaften direkt erfüllt \cite[S.~82]{kuhn_reactive_2015}.
+Observables eignen sich sehr gut, um Datenströme zu verarbeiten. Die Verarbeitung kann asynchron und nicht blockierend erfolgen. Die Reactive Extensions sind in ereignisbasierten Anwendungen (siehe \ref{subsec:eventdriven-concurrency}) von großem Nutzen. Für die Entwicklung von, durch Nachrichten gesteuerte, reaktive Applikationen sind die Reactive Extensions deshalb sehr nützlich. Jedoch wird durch deren Verwendung keine der vier reaktiven Eigenschaften direkt erfüllt \cite[S.~82]{kuhn_reactive_2015}.
 
 \pagebreak
 
 \subsection{Simple Component Pattern}\label{subsec:simple-component-pattern}
-Ein umfangreiches System erledigt meist mehrere Aufgaben und hat verschiedenste Funktionalitäten. Die einzelnen Funktionen sollten isoliert voneinander betrachtet werden. Folglich sollte auch die Software in einzelne Komponenten aufgeteilt werden. Die Komplexität des großen Ganzen, kann auf viele kleinere Komponenten heruntergebrochen werden.\\
+Ein umfangreiches System erledigt meist mehrere Aufgaben und hat verschiedenste Funktionalitäten. Die einzelnen Funktionen sollten isoliert voneinander betrachtet werden. Folglich empfiehlt es sich, die Software in einzelne Komponenten aufzuteilen. Die Komplexität des großen Ganzen, wird hiermit auf viele kleinere Komponenten heruntergebrochen.\\
 Dieses Pattern trägt den Namen Simple Component und wird wie folgt definiert:
 
 \begin{quotation}
@@ -86,9 +86,9 @@ Das Simple Component Pattern ist ein grundlegendes und elementares Reactive Desi
 
 \subsection{Let-It-Crash Pattern}\label{subsec:let-it-crash-pattern}
 Bei dem Entwurf von reaktiver Software wird von vornherein angenommen, dass das System durch Hardware- und/oder Softwarefehler ganz oder teilweise ausfallen kann. Ein reaktives System muss gegenüber Ausfällen resilience vorweisen können (siehe \ref{subsec:resilient}).\\
-Durch die Komponenten Hierarchie, die durch das \nameref{subsec:simple-component-pattern} entsteht, ist es möglich untergeordnete Komponenten in ihrem Lebenszyklus zu beeinflussen.\\
-Tritt in einer Komponente ein zufälliger Fehler auf, versucht nicht die Komponente selbst den Fehler zu beheben, sondern lässt deren Supervisior den Fehler behandeln \cite[S.~196]{kuhn_reactive_2015} \cite[S.~200~\&~S.~201]{armstrong_programming_2013}. Die eigentliche Logik und die Fehlerbehandlung sind somit entzerrt. Treten zufällige oder selte Fehler auf, wie beispielsweise einer seltener Fehlerzustand oder eine blockierter Datenbank-Connection-Pool, wird die Komponente durch den Supervisior neugestartet. Der interne Zustand wird somit zurückgesetzt und zuvor gebundene Ressourcen (z.B. File-Handles, Datenbankverbindungen) werden freigegeben \cite[S.~197]{kuhn_reactive_2015}. Fehler, wie beispielsweise falsche oder fehlende Parameter sind hiervon ausgenommen und führen nicht zu einem Neustart.\\
-Das beschriebene Prinzip nennt sich Let-It-Crash Pattern und kann wird folgendermaßen definiert:
+Durch die Komponentenhierarchie, die durch das \nameref{subsec:simple-component-pattern} entsteht, ist es möglich untergeordnete Komponenten in ihrem Lebenszyklus zu beeinflussen.\\
+Tritt in einer Komponente ein zufälliger Fehler auf, versucht nicht die Komponente selbst den Fehler zu beheben, sondern lässt deren Supervisior den Fehler behandeln \cite[S.~196]{kuhn_reactive_2015} \cite[S.~200~\&~S.~201]{armstrong_programming_2013}. Die eigentliche Logik und die Fehlerbehandlung sind somit entzerrt. Treten zufällige oder selte Fehler auf, wie beispielsweise ein seltener Fehlerzustand oder eine blockierter Datenbank-Connection-Pool, wird die Komponente durch den Supervisior neugestartet. Der interne Zustand wird somit zurückgesetzt und zuvor gebundene Ressourcen (z.B. File-Handles, Datenbankverbindungen) werden freigegeben \cite[S.~197]{kuhn_reactive_2015}. Fehler, wie beispielsweise falsche oder fehlende Parameter sind hiervon ausgenommen und führen nicht zu einem Neustart.\\
+Das beschriebene Prinzip nennt sich Let-It-Crash Pattern und wird folgendermaßen definiert:
 
 \begin{quotation}
 Prefer a full component restart to a complex internal~failure~handling~\cite[S.~196]{kuhn_reactive_2015}.
@@ -119,8 +119,8 @@ Das Let-It-Crash Pattern muss, wie auch das Simple Component Pattern (\ref{subse
 \pagebreak
 
 \subsection{Heartbeat Pattern}\label{subsec:heartbeat-pattern}
-Durch Supervision in einer Komponenten Hierarchie und dem Let-It-Crash Pattern (\ref{subsec:let-it-crash-pattern}) kann in einer reaktiven Anwendung auf explizite und definierte Weise mit Fehlerzuständen umgegangen werden. Jedoch stellt sich nun die Frage, wie Supervisior effektiv die Fehler der untergeordneten Komponenten feststellen können.\\
-Dazu ist es wichtig, zu wissen, welche Fehler eintreten bzw. in welche Kategorien Fehler eingeteilt werden können \cite{friedrichsen_unkaputtbar_2014}.
+Durch Supervision in einer Komponentenhierarchie und dem Let-It-Crash Pattern (\ref{subsec:let-it-crash-pattern}) kann in einer reaktiven Anwendung auf explizite und definierte Weise mit Fehlerzuständen umgegangen werden. Jedoch stellt sich nun die Frage, wie Supervisior effektiv die Fehler der untergeordneten Komponenten feststellen können.\\
+Dazu ist es wichtig zu wissen, welche Fehler eintreten bzw. in welche Kategorien Fehler eingeteilt werden \cite{friedrichsen_unkaputtbar_2014}.
 
 \begin{enumerate}
 \item \textbf{Crash Failure} (Absturzfehler)\\
@@ -135,14 +135,14 @@ Die Antwort ist fehlerhaft oder schlichtweg falsch.
 Die Komponente verhält sich zu unbestimmten und zufälligen Zeitpunkten fehlerhaft.
 \end{enumerate}
 
-Eine einfache Möglichkeit den Zustand bzw. die Verfügbarkeit einer Komponente zu überprüfen, ist das Heartbeat Pattern. Der Supervisior schickt in regelmäßigen Abständen spezielle Anfragen, die die Komponente auffordern ein Lebenszeichen, einen sogenannten Heartbeat, von sich zu geben. Erhält der Supervisior auf die Anfrage keine Antwort, kann nach Ablauf eines Timeouts, mit großer Wahrscheinlichkeit von einem Crash Failure ausgegangen werden \cite[S.~200~\&~S.~201]{kuhn_reactive_2015}.\\
+Eine einfache Möglichkeit den Zustand bzw. die Verfügbarkeit einer Komponente zu überprüfen, ist das Heartbeat Pattern. Der Supervisior schickt in regelmäßigen Abständen spezielle Anfragen, die die Komponente auffordert ein Lebenszeichen, einen sogenannten Heartbeat, von sich zu geben. Erhält der Supervisior auf die Anfrage keine Antwort, kann nach Ablauf eines Timeouts, mit großer Wahrscheinlichkeit von einem Crash Failure ausgegangen werden \cite[S.~200~\&~S.~201]{kuhn_reactive_2015}.\\
 Die Komponete kann die Heartbeat Nachricht auch mit Informationen über deren Zustand erweitern, wie beispielsweise Fehlerrate oder Zahl der Anfragen.\\
 Das Heartbeat Pattern kann aus der Sicht der Komponente aktiv oder passiv umgesetzt werden. Das heißt die Komponente sendet die Heartbeat Nachricht auf Anfrage an den Supervisior oder selbstständig in regelmäßigen Abständen an eine vereinbarte Adresse. Sendet die Komponente die Heartbeats selbstständig, muss der Supervisior trotzdem prüfen, ob in gewissen Zeitabständen ein Heartbeat der überwachten Komponente eingeht. Der Supervisior ist somit nach wie vor in der Verantwortung Fehler zu erkennen.\\
 
 Eine weitere Möglichkeit den Zustand einer Komponente im System verfügbar zu machen sind pro-aktive Failure Signals. Stellt die Komponente einen Fehler fest, kann ähnlich zum aktiven Heartbeat eine Nachricht mit Informationen über den Fehler an eine vereinbarte Addresse geschickt werden \cite[S.~201~\&~S.202]{kuhn_reactive_2015}. Die Fehlerbehandlung sollte dann jedoch dem Supervisior überlassen werden.\\
 Durch pro-aktive Failure Signals können Fehler der Kategorien 2 bis 5 an den Supervisior gemeldet werden. Jedoch sollte man beachtet, dass die Komponente möglicherweise nicht jeden Fehler selbst erkennt und die Failure Signals aufgrund von Störungen in der Kommunikation nicht beim Supervisior eintreffen.\\
 
-Das Heartbeat Pattern ermöglicht es Crash Failures über die Hierarchie Ebenen hinweg festzustellen. Durch die Erweiterung des Heartbeat Patterns mit pro-aktiven Failure Signals können auch andere Fehlerkategorien erkannt werden --- jedoch nicht mit 100-prozentiger Garantie. Das Heartbeat Pattern kann ebenfalls zu den \textit{resilience} Patterns gezählt werden. 
+Das Heartbeat Pattern ermöglicht, es Crash Failures über die Hierarchie Ebenen hinweg festzustellen. Durch die Erweiterung des Heartbeat Patterns mit pro-aktiven Failure Signals können auch andere Fehlerkategorien erkannt werden --- jedoch nicht mit 100-prozentiger Garantie. Das Heartbeat Pattern kann ebenfalls zu den \textit{resilience} Patterns gezählt werden. 
 
 \pagebreak
 

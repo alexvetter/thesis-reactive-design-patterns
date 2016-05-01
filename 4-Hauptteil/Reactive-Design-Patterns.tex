@@ -146,7 +146,7 @@ Das Heartbeat Pattern ermöglicht, es Crash Failures über die Hierarchie Ebenen
 
 \pagebreak
 
-\subsection{Circuit Breaker Pattern}
+\subsection{Circuit Breaker Pattern}\label{subsec:circuit-breaker-pattern}
 Im Zuge der Erläuterung des Heartbeat Pattern (\ref{subsec:heartbeat-pattern}) wurde deutlich, dass die Fehlererkennung für bestimmte Fehlerkategorien unterschiedlich abläuft und nicht immer von der Komponente selbst übernommen werden kann. Der Supervisior muss Anfragen und deren Antworten auf Omission, Timing, Response und Byzantine Failures prüfen.\\
 Das Circuit Breaker Pattern ist eine Möglichkeit diese Fehlererkennung zu abstrahieren und in einer allgemeinen Form zur Verfügung zu stellen. Der Begriff Circuit Breaker, auf Deutsch Schutzschalter oder auch Überlastungschutz, stammt aus der Elektrotechnik und dient als Schutz für ein Stromnetz vor Überlastung durch beispielweise einem Kurzschluss \cite[S.~93]{nygard_release_2007}.\\
 Kuhn beschreibt das Circuit Breaker Pattern mit folgenden Worten:
@@ -180,6 +180,22 @@ Nach einer definierten Dauer im geschlossenem Zustand, wird der Circuit Breaker 
 Das Pattern eignet sich sehr gut, um die Kommunikation zwischen den Komponenten zu entkoppeln. Somit unterstützt es auch die Isolierung von Komponenten. Kombiniert mit dem Heartbeat Pattern können alle Fehlerkategorien abgedeckt werden. Aus der Sicht des Reactive Manifestos trägt das Circuit Breaker Pattern zur \textit{resilience} bei.
 
 \pagebreak
+
+\subsection{Fail Fast Pattern}
+Eine reaktive Applikation muss \textit{responsive} sein. Das heißt, die Anwendung muss zu jederzeit auf jede Anfrage so schnell wie möglich reagieren. Langsame Antworten sind schlecht für das Nutzungserlebnis. Noch schlechter sind langsame und fehlerhafte Antworten bzw. Fehlermeldungen. Der Nutzer oder auch die Client-Software ist gezwungen auf Antworten zu warten, die schlussendlich fehlerhaft sind.\\
+Ein System sollte vorab prüfen, ob es während der Bearbeitung einer Anfrage zu möglichen Fehlern kommen kann. Eben dieses Prinzip beschreibt das Fail Fast Pattern. Eine reaktive Applikation sollte im Fehlerfall schnellstmöglich antworten. Hiermit wird unnötige Ressourcenbindung sowohl auf der Clientseite als auch auf der Serverseite vermieden. Es ist sehr schwer festzustellen bzw. zu beweisen, dass eine Software fehlerfrei ist. Das Fail Fast Pattern erwartet keinen Beweis und ist viel einfacher umzusetzen, als man annehmen könnte \cite[S.~106~\&~S.~107]{nygard_release_2007}.\\
+Vor der Durchführung einer Anfrage, sollte eine Applikation prüfen, ob alle benötigten Ressourcen zur Verfügung stehen. Beispielsweise sollte überprüft werden, ob die Datenbank oder andere externe Dienste erreichbar sind. Hierfür eignet sich vor allem das bereits erwähnte Circuit Breaker Pattern (\ref{subsec:circuit-breaker-pattern}). Ist der Circuit-Breaker für die Datenbank-Kommunikation offen, kann eine Anfrage, welche die Datenbank benötigt, sofort mit einer Fehlermeldung abgewiesen werden. Nygard beschreibt dies in einem anschaulichen Beispiel \cite[S.~106]{nygard_release_2007}:
+
+\begin{quotation}
+Ein Koch bereitet vor dem Kochen erst einmal alle Zutaten vor --- während dem Kochen festzustellen, dass eine Zutat fehlt, ist sehr ungünstig.
+\end{quotation}
+
+Eine weitere Möglichkeit Fehler schnellstmöglich zu erkennen, ist die Überprüfung der Parameter einer Anfrage bevor Ressource angefragt oder gebunden werden. Die Überprüfung sollte so einfach, wie möglich sein und keine aufwendige Berechnung oder Business Logik nach sich ziehen. Dazu gehört unteranderem die Prüfung auf \enquote{not null} oder richtige Formate bzw. richtige Datentypen. Nicht erst durch die Datenbankanfrage sollten eingehende Parameter geprüft werden \cite[S.~107]{nygard_release_2007}.\\
+
+Beispielsweise werden Entitäten überwiegend durch eine numerische ID gekennzeichnet. Bei der ID handelt es sich typischerweise um einen positiven Integerwert. Meist wird jedoch nur überprüft, ob es sich bei dem Parameter um einen Integer handelt. Die Datenbank liefert bei einem negativen Wert eine leere Menge und dies resultiert in der Regel in einen \textit{Not Found} Fehler, obwohl der eingehende Parameter falsch war.\\
+Gerne nutzt man für Konfigurationsdateien Standardwerte. Jedoch kann dies zu verzögerten und unverständlichen Fehlern führen, denn die Standardwerte sind häufig für Test- oder Entwicklungsumgebungen gedacht. Verschreibt man sich nun beispielsweise bei der Konfiguration der maximalen Datenbankverbindungen eines Datenbank-Pools kann dies in einer Produktionsumgebung unter Last zu Ausfällen führen. Standardwerte entsprechen somit nicht dem Fail Fast Pattern \cite{shore_fail_2004}.\\
+
+In beiden Fällen würde das Fail Fast Pattern dazu führen, dass die verzögerten und unverständlichen Fehler vermieden werden. Das Fail Fast Pattern trägt zur \textit{responsiveness} einer reaktiven Anwendung bei. Zudem werden unnötig langsame Antworten und daraus resultierende falsche Timing Failures vermieden. Außerdem unterbinden Systeme mit dem Circuit Breaker Pattern (\ref{subsec:circuit-breaker-pattern}) und dem Fail Fast Pattern unnötige Ressourcenbindung \cite[S.~107]{nygard_release_2007}.
 
 \pagebreak
 

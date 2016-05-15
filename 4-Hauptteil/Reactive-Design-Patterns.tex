@@ -14,7 +14,7 @@ Das Observable Pattern kombiniert beide Patterns. Zum einen verwendet es die Pus
 \item \textit{onNext(Event)}\\
 Wird aufgerufen, falls ein Event verarbeitet werden soll.
 \item \textit{onError(Exception)}\\
-Wird aufgerufen, falls beispielsweise beim Aggregieren ein Fehler aufgetreten ist.
+Wird aufgerufen, falls etwa beim Aggregieren ein Fehler aufgetreten ist.
 \item \textit{onCompleted()}\\
 Wird aufgerufen, falls das Ende des Datenstroms erreicht ist.
 \end{enumerate}
@@ -201,22 +201,23 @@ In beiden Fällen würde das Fail Fast Pattern dazu führen, dass die verzögert
 
 \subsection{Fallback Pattern}
 Die zuletzt beschriebenen Patterns helfen Fehler zu identifizieren und zu isolieren. Das Let-It-Crash Pattern (\ref{subsec:let-it-crash-pattern}) beschreibt die Möglichkeit Fehler durch den Neustart einer Komponente zu korrigieren. Mit dem Fail Fast Pattern werden schnelle und zeitnahe Fehlerantworten ermöglicht, anstatt den Client unnötig warten zu lassen. Langsame und fehlerhafte Antworten sind schlecht für das Nutzungserlebnis. Schnelle aber trotzdem noch fehlerhafte Antworten mögen zwar besser sein, aber ideal für das Nutzungserlebnis sind diese auch nicht. Im Idealfall sollte ein Benutzer den Fehler nicht bemerken.\\
-Das Fallback Pattern fordert, dass für verschiedeneste Fehlerfälle Ausweichstrategien vorliegen. Diese Ausweichstrategien sollten den eigentlichen Nutzen der Applikation widerspiegeln und die Bedürfnisse eines Nutzers unterstützen. Die Kerfrage hinter dem Fallback Pattern ist somit: Was sollte ein System im Fehlerfall tun \cite{friedrichsen_unkaputtbar_2014}?\\
+Das Fallback Pattern fordert, dass für verschiedeneste Fehlerfälle Ausweichstrategien vorliegen. Diese Ausweichstrategien sollten den eigentlichen Nutzen der Applikation widerspiegeln und die Bedürfnisse eines Nutzers unterstützen. Die Kerfrage hinter dem Fallback Pattern ist somit \cite{friedrichsen_unkaputtbar_2014}:\\
+Was sollte ein System im Fehlerfall tun?\\
 Ein Applikation besteht aufgrund des Simple Component Patterns (\ref{subsec:simple-component-pattern}) aus mehreren verschiedenen Komponenten und Diensten. Für ein vollständiges Nutzungserlebnis werden meist mehrere Komponenten benötigt und angefragt. Jede dieser Teilanfragen kann aufgrund verschiedenster Fehler (siehe Fehlerkategorien \ref{subsec:heartbeat-pattern}) misslingen. Jede dieser Teilanfragen sollte deshalb eine Ausweichstrategie haben. Es gibt verschiedenste Möglichkeiten, wie eine Anwendung bei Teilausfällen reagieren kann \cite{friedrichsen_unkaputtbar_2014}:
 
 \begin{enumerate}
 \item Der Anwender wird auf eine Fehlerseite weitergeleitet, welche den Nutzer auffordert es später noch einmal zu versuchen.
-\item Die fehlerhafte Anfrage wird ignoriert und deren Teil im Gesamtergebnis ausgelassen.
+\item Die fehlerhafte Anfrage wird ignoriert und deren Teil ausgelassen.
 \item Bei schreibenden \& fehlerhaften Anfragen, wird der Anwender auf eine Fehlerseite weitergeleitet.
 \item Bei lesenden \& fehlerhaften Anfragen, wird deren Teil aus einem Cache geladen.
 \item Bei schreibenden \& fehlerhaften Anfragen, wird die Anfrage in eine Queue aufgenommen und vom System automatisch zu einem späteren Zeitpunkt erneut durchgeführt.
 \end{enumerate}
 
-Diese Auswahl an Ausweichstrategien sind alles Varianten der \enquote{Graceful Degradation of Service} --- der kontrollierten Einschränkung von Funktionalität im Fehlerfall \cite{friedrichsen_unkaputtbar_2014} \cite[S.~207]{newman_building_2015}. Diese Ausweichstrategien beschreiben somit die Grauzone zwischen vollfunktionsfähig und Totalausfall . Jede dieser Strategien ist Timing Failures oder kryptischen Fehlermeldungen vorzuziehen. Denoch handelt es sich bei dieser Art von Fehlerbehandlung, um eine fachliche Fehlerbehandlung und nicht um eine technische Fehlerbehandlung \cite{friedrichsen_unkaputtbar_2014}. Beispielsweise müsste der Product Owner im Requirement definieren, wie sich die Anwendung zu verhalten hat.\\
-Angenommen ein Onlineshop lädt Produktinformationen, Lieferstatus sowie Preis von drei unabhängigen Diensten. Fällt einer dieser Dienste aus, sollte der Nutzer nicht auf eine Fehlerseite weitergeleitet werden, da dies den potentiellen Käufer dazu animieren könnte zu einem Konkurrenten zu wechseln. Ist beispielsweise der Lieferstatus nicht abrufbar, wird die Produktseite wird nur teilweise geladen und der Lieferstatus nicht angezeigt.\\
+Diese Auswahl an Ausweichstrategien sind alles Varianten der \enquote{Graceful Degradation of Service} --- der kontrollierten Einschränkung von Funktionalität im Fehlerfall \cite{friedrichsen_unkaputtbar_2014} \cite[S.~207]{newman_building_2015}. Diese Ausweichstrategien beschreiben somit die Grauzone zwischen vollfunktionsfähig und Totalausfall. Jede dieser Strategien ist Timing Failures oder kryptischen Fehlermeldungen vorzuziehen. Denoch handelt es sich bei dieser Art von Fehlerbehandlung, um eine fachliche Fehlerbehandlung und nicht um eine technische Fehlerbehandlung \cite{friedrichsen_unkaputtbar_2014}.\\
+Beispielsweise müsste der Product Owner im Requirement definieren, wie sich die Anwendung zu verhalten hat. Angenommen ein Onlineshop lädt Produktinformationen, Lieferstatus sowie Preis von drei unabhängigen Diensten. Fällt einer dieser Dienste aus, sollte der Nutzer nicht auf eine Fehlerseite weitergeleitet werden, da dies den potentiellen Käufer dazu animieren könnte zu einem Konkurrenten zu wechseln. Ist beispielsweise der Lieferstatus nicht abrufbar, wird die Produktseite wird nur teilweise geladen und der Lieferstatus nicht angezeigt.\\
 Ein weiteres Beispiel, ist die Suche eines Onlinehshops. Als zentralles und häufig genutztes Element in einem Onlineshop ist diese von großer Bedeutung. Statt dem Nutzer keine Ergebnisse oder gar eine Fehlermeldung zu liefern, bietet es sich an die aktuellen Verkaufsschlager zu präsentiert.\\
 
-Das Fallback Pattern fördert sich mit Ausweichstrategien und der kontrollierten Einschränkung von Funktionlität auseinanderzusetzen. Dies hilft reaktiven Anwendung bei der Umsetzung von \textit{responsivess} und \textit{resilience}. Mit dem Fallback Pattern und dem Circuit Breaker Pattern können fehlerhafte Komponenten isoliert werden ohne dabei das restliche System in mitleidenschaft zu ziehen \cite[S.~71]{hanmer_patterns_2007}.
+Durch das Fallback Pattern wird nicht nur auf technische Fehlerbehandlung beim Design der Software eingegangen. Es fordert eine auf sich mit Ausweichstrategien und der kontrollierten Einschränkung von Funktionlität auseinanderzusetzen. Dies hilft reaktiven Anwendungen bei der Umsetzung von \textit{responsivess} und \textit{resilience}. Mit dem Fallback Pattern und dem Circuit Breaker Pattern können fehlerhafte Komponenten isoliert werden --- ohne dabei das restliche System in Mitleidenschaft zu ziehen \cite[S.~71]{hanmer_patterns_2007}.
 
 \pagebreak
 

@@ -50,6 +50,7 @@ Observables eignen sich sehr gut, um Datenströme zu verarbeiten. Die Verarbeitu
 
 \subsection{Simple Component Pattern}\label{subsec:simple-component-pattern}
 Ein umfangreiches System erledigt meist mehrere Aufgaben und hat verschiedenste Funktionalitäten. Die einzelnen Funktionen sollten isoliert voneinander betrachtet werden. Folglich empfiehlt es sich, die Software in einzelne Komponenten aufzuteilen. Die Komplexität des großen Ganzen, wird hiermit auf viele kleinere Komponenten heruntergebrochen.\\
+Sind die Komponenten funktional voneinander isoliert, bedarf es bei der Entwicklung weniger Abstimmung zwischen den jeweiligen Teams hinter einer Komponente. Die Komponenten können unabhängig von einander weiterentwickelt werden \cite[S.~215]{newman_building_2015}.\\
 Dieses Pattern trägt den Namen Simple Component und wird wie folgt definiert:
 
 \begin{quotation}
@@ -112,7 +113,8 @@ Diese zwei durchschnittlichen Zeitwerte stehen wie folgt in Zusammenhang:
 \caption{Formel zur Berechnung der Verfügbarkeit}
 \end{figure}
 
-Die Verfügbarkeit, in der Formel \textit{Availability} genannt, sollte einen Wert gegen 1 erreichen. Der traditionelle Ansatz ist, die MTTF zu maximieren und somit die MTTR zu vernachlässigen. Wie bereits festgestellt wurde, lassen sich Fehler nicht ausschließen. Der Let-It-Crash Ansatz, konzentriert sich vielmehr auf die MTTR und versucht diese soweit wie möglich zu minimieren \cite[S.~198]{kuhn_reactive_2015} \cite{friedrichsen_unkaputtbar_2014}.\\
+Die Verfügbarkeit, in der Formel \textit{Availability} genannt, sollte einen Wert gegen 1 erreichen. Bei der Verfügbarkeit handelt es sich den prozentuallen Zeitanteil in der eine Software das tut was sie tun soll \cite[S.~11]{hanmer_patterns_2007}.\\
+Der traditionelle Ansatz ist, die MTTF zu maximieren und somit die MTTR zu vernachlässigen. Wie bereits festgestellt wurde, lassen sich Fehler nicht ausschließen. Der Let-It-Crash Ansatz, konzentriert sich vielmehr auf die MTTR und versucht diese soweit wie möglich zu minimieren \cite[S.~198]{kuhn_reactive_2015} \cite{friedrichsen_unkaputtbar_2014}.\\
 
 Das Let-It-Crash Pattern muss, wie auch das Simple Component Pattern (\ref{subsec:simple-component-pattern}), bereits beim Design der Anwendung berücksichtigt werden. Es trägt dazu bei, die \textit{resilience} eines reaktiven Systems zu erhöhen und unterstützt somit auch ganz klar die \textit{responsiveness}.
 
@@ -222,7 +224,7 @@ Durch das Fallback Pattern wird nicht nur auf technische Fehlerbehandlung beim D
 \pagebreak
 
 \subsection{Bulkheads Pattern}
-Ein wichtiges Prinzip bei der Konzipierung von reaktiven Anwendungen ist die Isolation. Mit dem Simple Component Pattern (\ref{subsec:simple-component-pattern}) erreicht man Isolation auf funktionaler Ebene durch möglichst unabhängige Einheiten. Für die geforderte \textit{resilience} ist jedoch auch die Isolation von Fehlerzuständen wichtig.\\
+Ein wichtiges Prinzip bei der Konzipierung von reaktiven Anwendungen ist die Isolation. Mit dem Simple Component Pattern (\ref{subsec:simple-component-pattern}) erreicht man Isolation auf funktionaler Ebene (\textit{separations of concerns}) durch möglichst unabhängige Einheiten. Für die geforderte \textit{resilience} ist jedoch auch die Isolation von Fehlerzuständen wichtig.\\
 Das Bulkheads Pattern betrachtet die Isolation von Fehlerzuständen respektive von Fehlerquellen. Der Begriff wurde aus dem Schiffsbau übernommen. Ein Schiff wird in mehrere Einheiten aufgeteilt. Die einzelnen Teile des Schiffes werden so konzipiert, dass im Falle eines Lecks die anderen Teile abgeschottet werden können (Abb. \ref{fig:bulkheads-ship}). Durch die Abschottung wird verhindert, dass sich das Wasser --- also der Fehler --- auf die anderen Teile ausbreiten kann \cite[S.~95]{nygard_release_2007} \cite[S.~214]{newman_building_2015} \cite[S.~35]{kuhn_reactive_2015}.\\
 
 \begin{figure}[H]
@@ -232,7 +234,9 @@ Das Bulkheads Pattern betrachtet die Isolation von Fehlerzuständen respektive v
  \label{fig:bulkheads-ship}
 \end{figure}
 
-Diese Prinzip lässt sich auch auf Software und deren Komponenten übertragen. Mit dem Bulkheads Pattern verhindert man die unkontrollierte Verbreitung eines Fehlerzustandes --- oft auch kaskadierende Fehler genannt \cite{friedrichsen_unkaputtbar_2014}. Im operativen Einsatz von Software gibt es viele verstecke Abhängigkeiten durch das Teilen von Ressourcen. Dies kann sich auf Hardware oder auch auf Software beziehen. Abhängigkeiten begünstigen kaskadierende Fehler \cite[S.~96]{nygard_release_2007} \cite{friedrichsen_unkaputtbar_2014}. Egal auf welcher Ebene.\\
+Diese Prinzip lässt sich auch auf Software und deren Komponenten übertragen. Mit dem Bulkheads Pattern verhindert man die unkontrollierte Verbreitung eines Fehlerzustandes --- oft auch kaskadierende Fehler genannt \cite{friedrichsen_unkaputtbar_2014}. Das Pattern wird auch oft in Zusammenhang mit \textit{Failure Units} oder \textit{Units of Mitigation} genannt \cite{friedrichsen_unkaputtbar_2014}.\\
+Im operativen Einsatz von Software gibt es viele verstecke Abhängigkeiten durch das Teilen von Ressourcen. Dies kann sich auf Hardware oder auch auf Software beziehen. Abhängigkeiten begünstigen kaskadierende Fehler \cite[S.~96]{nygard_release_2007} \cite{friedrichsen_unkaputtbar_2014}. Egal auf welcher Ebene.\\
+
 Nygard beschreibt in diesem Zusammenhang das Bulkheads Pattern sehr treffend mit folgenden Worten \cite[S.~96]{nygard_release_2007}:
 
 \begin{quotation}
@@ -247,9 +251,8 @@ Auf Applikationsebene kann ein und die selbe Anwendung mehrfach gestartet werden
 Neben der Redundanz gibt es die Möglichkeit durch Reservierung von Ressourcen für spezielle Anwendungsfälle das Bulkheads Pattern umzusetzen. Zum Beispiel können einzelne Server für eine spezielle Nutzergruppe reserviert werden. Diese Nutzergruppe wären somit unabhängiger, wie etwa in dem Fall, dass das Buchungssystem einer Fluggesellschaft für Endkunden ausfällt. Stehen für Callcenter Mitarbeiter eigens reservierte Server zur Verfügung, können diese nach wie vor Flüge buchen \cite[S.~96]{nygard_release_2007}.\\
 
 Dieses Prinzip ist auch auf der Anwendungsebene denkbar. Beispielsweise sollte eine Anwendung für administrative oder kontrollierende Anfragen zusätzliche Threads zur Verfügung stellen. Monitoring ist somit auch möglich, wenn die Anwendung unter starker Last durch reguläre Anfragen steht \cite[S.~98]{nygard_release_2007}.\\
-Auch auf der Prozessorebene kann das Bulkheads Pattern umgesetzt werden. Eine Anwendung kann an spezifische Kerne eines Multi-core Prozessors gebunden werden \cite[S.~97]{nygard_release_2007}. Bei den meisten Linux-Distributionen steht hierfür der Befehl \textit{taskset} zur Verfügung. Dies führt zur effizienteren Nutzung der CPU Caches und verhindert, dass ein Prozess die volle Leistung eines Prozessors beansprucht.
 
-\pagebreak
+Auch auf der Prozessorebene kann das Bulkheads Pattern umgesetzt werden. Eine Anwendung kann an spezifische Kerne eines Multi-core Prozessors gebunden werden \cite[S.~97]{nygard_release_2007}. Bei den meisten Linux-Distributionen steht hierfür der Befehl \textit{taskset} zur Verfügung. Dies führt zur effizienteren Nutzung der CPU Caches und verhindert, dass ein Prozess die volle Leistung eines Prozessors beansprucht.\\
 
 Ein weiteres Beispiel für verstecke Abhängigkeiten sind Connection Pools \cite[S.~214]{newman_building_2015}. Für Anfragen jeglicher Art, wie beispielsweise an eine Datenbank oder an eine Message-oriented Middleware, nutzt man aus Effizienzgründen Connection Pools. Darüber hinaus teilen sich meist mehrere Komponenten einer Software wiederum diese Connection Pools (Abb. \ref{fig:no-bulkheads}).  
 
@@ -261,10 +264,11 @@ Ein weiteres Beispiel für verstecke Abhängigkeiten sind Connection Pools \cite
 \end{figure}
 
 Die Abbildung zeigt die verstecke Abhängigkeit zwischen den zwei Komponenten, die auf einen gemeinsamen Connection Pool zugreifen \cite[S.~95]{nygard_release_2007}.\\
-Angenommen der Client A hat einen Fehler in der Programmierung und gibt die reservierten Ressourcen, also die Connections, nicht wieder frei. Durch den gemeinsam genutzen Connection Pool entwickelt sich der Fehler in der Komponente A zu einem kaskadierenden Fehler und beeiflusst nun auch Komponente B \cite[S.~95]{nygard_release_2007} \cite[S.~214]{newman_building_2015}. Der Connection Pool kann der Komponente B keine freie Connection zuweisen.\\
-Ein ähnliches Problem kann entstehen, wenn die Nutzung von Connections in verschiedenen Komponenten unterschiedlich lange dauert. Angenommen Client A führt ausschließlich schreibene Operationen auf der Connection aus. Client B hingegen führt ausschließlich lesende Operationen aus. Ferner wird angenommen, dass die schreibenden Operationen schneller ablaufen, als die lesenden Operationen. Dies kann dazu führen, dass Client B, die schneller Komponent, von Client A ausgebremst wird.\\
+Angenommen der Client~A hat einen Fehler in der Programmierung und gibt die reservierten Ressourcen, also die Connections, nicht wieder frei. Durch den gemeinsam genutzen Connection Pool entwickelt sich der Fehler in der Komponente~A zu einem kaskadierenden Fehler und beeiflusst nun auch Komponente~B \cite[S.~95]{nygard_release_2007} \cite[S.~214]{newman_building_2015}. Der Connection Pool kann der Komponente~B keine freie Connection zuweisen.\\
+Ein ähnliches Problem kann entstehen, wenn die Nutzung von Connections in verschiedenen Komponenten unterschiedlich lange dauert. Angenommen Client~A führt ausschließlich schreibene Operationen auf der Connection aus. Client~B hingegen führt ausschließlich lesende Operationen aus. Ferner wird angenommen, dass die schreibenden Operationen schneller ablaufen, als die lesenden Operationen. Dies kann dazu führen, dass Client~B, die schneller Komponent, von Client~A ausgebremst wird.\\
+Gemeinsam benutze Connection Pools können somit ansonsten isolierte Komponenten beeinflussen und kaskadierende Fehler begünstigen. Es kann also trotz höherer Ressourcenanforderungen Sinn machen, separate Connections Pools für jede Komponente zu nutzen \cite[S.~214]{newman_building_2015}.\\
 
-In jedem dieser Fälle wird deutlich, dass man sich Gedanken über verstecke Abhängigkeiten machen sollte. Das Bulkheads Pattern hilft dabei eine reaktive Anwendung \textit{resilient} zu entwerfen. Jedoch muss das Pattern mit Bedacht angewandt werden. Die Limitierung von Ressourcen, wie etwa die feste Zuweisung von Prozessorkernen kann zu Performanceeinbußen führen. Die Isolation von Komponenten durch mehrere Connection Pools kann zur überhöhten Ressourcenanforderungen führen. Die Ebene auf der man das Bulkheads Pattern anwendet spielt somit eine Rolle. Zudem ist auch der fachliche Blickwinkel von Bedeutung. Gibt es eine offensichtliche Möglichkeit eines kaskadierenden Fehlers, der das System komplett ausfallen lässt, sollte auf jeden Fall das Bulkheads Pattern in Betracht gezogen werden.
+In jedem dieser Fälle wird deutlich, dass man sich Gedanken über verstecke Abhängigkeiten machen sollte. Das Bulkheads Pattern hilft dabei eine reaktive Anwendung \textit{resilient} zu entwerfen. Jedoch muss das Pattern mit Bedacht angewandt werden. Die Limitierung von Ressourcen, wie etwa die feste Zuweisung von Prozessorkernen kann zu Performanceeinbußen führen. Die Isolation von Komponenten durch separate Connection Pools kann zur überhöhten Ressourcenanforderungen führen. Die Ebene auf der man das Bulkheads Pattern anwendet spielt somit eine Rolle. Zudem ist auch der fachliche Blickwinkel von Bedeutung. Gibt es eine offensichtliche Möglichkeit eines kaskadierenden Fehlers, der das System komplett ausfallen lässt, sollte auf jeden Fall das Bulkheads Pattern in Betracht gezogen werden.
 
 \pagebreak
 

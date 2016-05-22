@@ -272,7 +272,55 @@ In jedem dieser Fälle wird deutlich, dass man sich Gedanken über verstecke Abh
 
 \pagebreak
 
-\subsection{Idempotent Receiver}
+\subsection{Idempotent Receiver Pattern}
+Verteilte Anwendungen lassen ihre Komponenten über das Netzwerk miteinander kommunizieren. Eine reaktive Anwendung muss bedingt durch \textit{elasticity} \& \textit{resilience} verteilt sein.\\
+Bei der Kommunikation über das Netzwerk muss jederzeit mit Ausfällen oder mit verloren gegangenen Nachrichten gerechnet werden. Wie bereits erwähnt, sind Waldo et al. zu dem Schluss gekommen, dass vor allem unvorhersehbare Latenz und teilweiser Ausfall der Kommunikation unvermeidbar sind \cite{waldo_note_1994}. Folglich ist eine garantierte Zustellung einer Nachricht nicht ohne weiteres möglich. Nun stellt sich zudem die Frage was bedeutet \enquote{garantierte Zustellung}?\\
+Bedeutet dies, dass die Nachricht\ldots
+
+\begin{enumerate}
+\item \ldots in der Message Queue der anderen Komponente angekommen ist,
+\item aus der Message Queue entnommen wurde oder
+\item erfolgreich verarbeitet wurde \cite{akka_message_2016}?
+\end{enumerate}
+
+In jedem Fall muss der Empfänger dem Sender die erfolgreiche Verarbeitung oder den Empfang quittieren. Erst mit der Bestätigungsnachricht kann von einer erfolgreichen Zustellung die Rede sein. Jedoch kann auch die Bestätigungsnachricht auf dem Weg zum Sender verloren gehen (Abb. \ref{fig:failed-ack}) \cite[S.~528]{hohpe_enterprise_2004}.
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=0.54\textwidth]{4-Hauptteil/idempotent-receiver/sequence-failed-ack.eps}
+ \caption{Zeitlicher Ablauf einer Kommunikation mit Retry \cite[S.~528]{hohpe_enterprise_2004}.}
+ \label{fig:failed-ack}
+\end{figure}
+
+Ein beliebtes Mittel, um eine Zustellung zu garantieren, sind Retries im Falle eines Timeouts. Kommt es zu einem Timeout kann der Sender jedoch nicht feststellen, weshalb die Bestätigung nicht eingetroffen ist \cite[S.~382]{vernon_reactive_2016} \cite[S.~528]{hohpe_enterprise_2004}.\\
+Die Abbildung \ref{fig:failed-ack} zeigt einen Ablauf in dem die Bestätigungsnachricht beispielsweise durch einen kurzzeitigen Ausfall des Netzwerk verloren ging. Die Zustellung und die Verarbeitung waren erfolgreich, jedoch konnte der Sender nicht informiert werden. Folglich bleibt dem Sender nichts anderes übrig, als die Nachricht erneut zu schicken. Der Empfänger erhält nun zum zweiten Mal die unsprüngliche Nachricht. Angenommen bei der Nachricht handelt es sich um eine Bestellung in einem Onlineshop. Erhält der Empfänger die Nachricht mehrmals, kann dies zu mehrfachen und ungewollten Bestellungen führen.\\
+Das Idempotent Receiver Pattern beschreibt die Fähigkeit eines Empfängers mit mehrfach empfangenen und identischen Nachrichten umzugehen. Hohpe und Woolf erklären das Messaging Pattern in ihrem Buch \enquote{Enterprise Integration Patterns} deshalb wie folgt:
+
+\begin{quotation}
+Design a receiver to be an Idempotent Receiver, one that can safely receive the same message multiple times \cite[S.~529]{hohpe_enterprise_2004}.
+\end{quotation}
+
+Das heißt der Empfänger muss mit Duplikaten einer Nachricht dementsprechend umgehen können, so dass kein fehlerhafter Zustand entsteht.\\
+Der mathematische Begriff Idempotenz bedeutet, dass eine Funktion \textit{f} bei einer Verknüpfung mit sich selbst folgendes zutrifft \cite[S.~529]{hohpe_enterprise_2004}:
+\[f(x) = f(f(x))\]
+
+Analog bedeutet diese Eigenschaft in der Informatik, dass ein Funktion repektive eine Nachricht mehrfach hintereinander ausgeführt werden kann und immer das gleiche Ergebnis liefert.\\
+
+\pagebreak
+
+Die Idempotenz kann im Hinblick auf Nachrichten wie folgt umgesetzt werden \cite[S.~383]{vernon_reactive_2016} \cite[S.~529]{hohpe_enterprise_2004}:
+
+\begin{enumerate}
+\item Duplikate werden durch bestimmte Eigenschaften einer Nachricht erkannt und herausgefiltert.
+\item Die Zustandsänderung in Folge einer spezifischen Nachricht hat immer die selbe Auswirkung und ist somit \enquote{harmlos} bei mehrfacher Ausführung.
+\end{enumerate}
+
+Duplikate einer Nachricht erkennt man am einfachsten durch einen Unique Identifier, also ein eindeutiges Metaattribut --- unabhängig von den eigentlichen Daten. Der Empfänger muss somit eine Liste aller bereits empfangen bzw. verarbeiteten Nachrichten und deren Unique Identifiers vorhalten. Anhand dieser Liste kann der Empfänger abgleichen, ob eine Nachricht bereits verarbeitet wurde. Hohpe und Woolf schlagen vor die Liste auf eine gewisse Anzahl von Identifiers zu begrenzen. Als Beispiel erwähnen sie TCP/IP, bei dem es aufgrund von Routing zu Duplikaten von Paketen kommen kann. Bei TCP/IP verständigen sich Sender und Empfänger auf eine maximale Länge dieser Liste \cite[S.~530]{hohpe_enterprise_2004}. Vernon hingegen empfiehlt eine maximale Verweildauer von Einträgen in der Liste zu definieren \cite[S.~383]{vernon_reactive_2016}. Bei Lastspitzen kann es nicht dazu kommen, dass Nachrichten vorzeitig aus der Liste entfernt werden, falls beim Entwurf nicht mit dieser Anzahl von Nachrichten gerechnet wurde.\\
+
+Die zweite Möglichkeit mit Duplikaten umzugehen, ist die Zustandsänderung so zu gestalten, dass es semantisch gesehen keinen Unterschied macht, ob eine Nachricht mehrfach verarbeitet wird \cite[S.~530]{hohpe_enterprise_2004}. Da die Anforderung der garantierten Zustellung einer fachlichen Anforderung zugrund liegt, ist diese Herangehensweise durchaus sinnvoll. Dadurch ist die Idempotenz nicht an die Nachricht oder an das Messaging System gekoppelt, sondern an die Business Logik. Muss beispielsweise zugesichert werden, dass eine Bestellung maximal einmal ausgeführt wird, sollte jede Bestellung eindeutig durch eine Bestellnummer gekennzeichnet werden. Außerdem sind idempotente Datenstrukturen, wie etwa \textit{Map} in diesem Kontext hilfreich \cite[S.~386]{vernon_reactive_2016}. Manche Datenbank, wie zum Beispiel PostgreSQL, bieten die Möglichkeit anhand einer Bedingung ein \textit{UPDATE} Statement anstatt eines \textit{INSERT} Statements durchzuführen, um Konflikte durch mehrfache Ausführung zu umgehen. Dies wird meist als \textit{UPSERT} bezeichnet\footnote{https://wiki.postgresql.org/wiki/UPSERT}.\\
+
+Komponenten bei denen eine garantierte Zustellung und somit eine Bestätigungsnachricht erfolderlich ist, sollten als Idempotent Receiver implementiert werden. Dieses Vorgehen wird sowohl von Akka als auch Vert.x empfohlen. Durch das Pattern ist es möglich die einfache Fehlerbehandlung durch Retries umzusetzen ohne dabei einen fehlerhaften Zustand zu erzeugen. Wichtig ist auch, dass sich die Idempotenz auf den Zustand der Business Logik bezieht --- es spricht beispielsweise nichts dagegen mehrfache Anfrage zu protokollieren \cite[S.~216]{newman_building_2014}.
+
 
 \pagebreak
 

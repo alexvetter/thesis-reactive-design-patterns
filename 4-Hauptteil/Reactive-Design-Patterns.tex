@@ -1,6 +1,6 @@
 \section{Reactive Design Patterns}
 
-Dieser Teil der Arbeit beschäftigt sich mit Reactive Design Patterns. Dabei handelt es sich nicht um gänzlich neue Design Patterns, sondern vielmehr um Patterns, die sich für die Entwicklung reaktiver Systeme als nützlich erweisen. Der Fokus soll vorallem auf Patterns liegen, die die Eigenschaften reaktiver Anwendungen unterstützen.
+Dieser Teil der Arbeit beschäftigt sich mit Reactive Design Patterns. Dabei handelt es sich nicht um gänzlich neue Design Patterns, sondern vielmehr um Patterns, die sich für die Entwicklung reaktiver Systeme als nützlich erweisen. Der Fokus soll vor allem auf Patterns liegen, die die Eigenschaften reaktiver Anwendungen unterstützen.
 
 \subsection{Observable Pattern}
 Das reaktive Observable Pattern stammt aus dem Hause Microsoft und wurde von Erik Meijer in dem Framework für reaktive Programming \textit{Reactive Extensions} definiert. Die reaktive Programmierung beschäftigt sich mit dem Datenfluss einer Anwendung und mit der asynchronen Verarbeitung von Events. Bei der Entwicklung von Benutzeroberflächen ist reaktive Programmierung seit langem üblich und verbreitet. Eine Benutzeroberfläche muss stetig auf Eingaben, also Events, durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Ebenso können die Anfragen einer Webapplikation als kontinuierlicher Datenstrom aus Events bezeichnet werden.\\
@@ -50,7 +50,7 @@ Observables eignen sich sehr gut, um Datenströme asynchron zu verarbeiten. Die 
 
 \subsection{Simple Component Pattern}\label{subsec:simple-component-pattern}
 Ein umfangreiches System erledigt meist mehrere Aufgaben und hat verschiedenste Funktionalitäten. Die einzelnen Funktionen sollten isoliert voneinander betrachtet werden. Folglich empfiehlt es sich, die Software in einzelne Komponenten aufzuteilen. Die Komplexität des großen Ganzen, wird hiermit auf viele kleinere Komponenten heruntergebrochen.\\
-Sind die Komponenten funktional voneinander isoliert, bedarf es bei der Entwicklung weniger Abstimmung zwischen den jeweiligen Teams hinter einer Komponente. Die Komponenten können unabhängig von einander weiterentwickelt werden \cite[S.~215]{newman_building_2015}.\\
+Sind die Komponenten funktional voneinander isoliert, bedarf es bei der Entwicklung weniger Abstimmung zwischen den jeweiligen Teams hinter einer Komponente. Die Komponenten können unabhängig voneinander weiterentwickelt werden \cite[S.~215]{newman_building_2015}.\\
 Dieses Pattern trägt den Namen Simple Component und wird wie folgt definiert:
 
 \begin{quotation}
@@ -300,7 +300,7 @@ Das Idempotent Receiver Pattern beschreibt die Fähigkeit eines Empfängers mit 
 Design a receiver to be an Idempotent Receiver, one that can safely receive the same message multiple times \cite[S.~529]{hohpe_enterprise_2004}.
 \end{quotation}
 
-Das heißt der Empfänger muss mit Duplikaten einer Nachricht dementsprechend umgehen können, so dass kein fehlerhafter Zustand entsteht.\\
+Das heißt der Empfänger muss mit Duplikaten einer Nachricht dementsprechend umgehen können, sodass kein fehlerhafter Zustand entsteht.\\
 Der mathematische Begriff Idempotenz bedeutet, dass bei der Verknüpfung einer Funktion \textit{f} mit sich selbst folgendes zutrifft \cite[S.~529]{hohpe_enterprise_2004}:
 \[f(x) = f(f(x))\]
 
@@ -323,4 +323,44 @@ Komponenten bei denen eine garantierte Zustellung und somit eine Bestätigungsna
 
 \pagebreak
 
-\subsection{Saga Pattern}
+\subsection{Saga Pattern}\label{subsec:saga-pattern}
+Durch das Simple Component Pattern und durch die Isolation der Komponenten sind die Daten eines reaktiven Systems verteilt. Im Vergleich zu einer traditionellen Anwendung mit lediglich einer Datenbank ist es aufwendig und kompliziert eine Transaktion mit mehreren verteilten Komponenten durchzuführen.\\
+Bestimmte Anwendungsfälle fordern Konsistenz über mehrere verteile Komponenten hinweg. Solche Anwendungsfälle beschreiben meist mehrere Aktionen von denen entweder alle oder im Fehlerfall keine eine Auswirkung haben sollte. Dazu sind Shared Locks und Protokolle wie Two-Phase Commit nötig \cite{mccaffrey_goto_2015}.\\
+
+Das Saga Pattern erfüllt diese Anforderung ohne komplizierte und verteilte Transaktionen.\\
+Der Begriff \enquote{Saga} wurde durch Garcia-Molina und Salem in deren Artikel \enquote{SAGAS} geprägt \cite{garcia-molina_sagas_1987}. In dem Artikel wird beschrieben, wie langlebige Transaktionen in mehrere fachliche Teiltransaktionen aufgeteilt werden können. Das ist erstrebenswert, da langlebige Transaktionen ebenso lange Ressourcen durch Locks blockieren. Durch die Verwendung von Transaktionen wird Atomicity und Consistency sichergestellt. Jedoch werden nebenläufige Transaktionen, welche auf die selben Daten zugreifen, durch Wartezeiten oder gar Deadlocks negativ beeinflusst. Bei langlebigen und großen Transaktionen trifft dies umso mehr zu, denn diese binden meist viele Ressourcen an sich \cite[S.~307]{kuhn_reactive_2015}.\\
+Teilt man eine große Transaktion in mehrere fachliche Teiltransaktionen auf verliert man die Eigenschaften Atomicity und Consistency. Denn nach jeder abgeschlossenen Teiltransaktion sind deren Änderungen persistent und für andere Teilnehmer sichtbar und somit nicht mehr atomar. Bricht eine der Teiltransaktionen aufgrund eines Fehlers ab werden die anderen bereits beendeten Transaktionen nicht durch den Rollback zurückgenommen. Dies kann zu einem inkonsistenen Zustand \mbox{führen}.\\
+
+\pagebreak
+
+Garcia-Molina und Salem argumentieren, dass für bestimmte Anwendungsfälle lediglich die Consistency gewahrt werden muss und die Atomicity vernachlässigt werden kann \cite[S.~250]{garcia-molina_sagas_1987}. Um zu einem Konsens zu gelangen müssen entweder alle oder keine der Teiltransaktionen eine Auswirkung haben \cite[S.~250]{garcia-molina_sagas_1987}. Deshalb definiert eine Saga nicht nur eine Abfolge von Teiltransaktionen \textit{T} sondern auch eine Abfolge von zugehörigen Ausgleichstransaktionen \textit{C}. Die Ausgleichstransaktion \textit{C\textsubscript{n}} macht die fachlichen Auswirkungen der Teiltransaktion \textit{T\textsubscript{n}} rückgängig. Ist eine Teiltransaktion fehlerhaft, werden von allen bis dahin ausgeführten Teiltransaktionen deren Ausgleichstransaktionen ausgeführt. Somit wird trotz Fehlerfall und der Ausführungen einzelner Transaktionen die Consistency gewahrt.\\
+Angenommen in einer Abfolge von vier Teiltransaktionen schlägt die Teiltransaktion \textit{T\textsubscript{3}} fehl. Der Ablauf der Ausführung sähe dann folgendermaßen aus:
+
+\begin{quotation}
+\textit{T\textsubscript{1}} $\rightarrow$ \textit{T\textsubscript{2}} $\rightarrow$ \textit{T\textsubscript{3}}\,\textdagger\,$\rightarrow$ \textit{C\textsubscript{3}} $\rightarrow$ \textit{C\textsubscript{2}} $\rightarrow$ \textit{C\textsubscript{1}}
+\end{quotation}
+
+Um einen konsistenen Zustand zu hinterlassen, werden die Ausgleichstransaktionen \textit{C\textsubscript{3}}--\textit{C\textsubscript{1}} in umgekehrter Reihenfolge zu deren Teiltransaktionen ausgeführt. Die Zustandsänderungen von \textit{T\textsubscript{1}}--\textit{T\textsubscript{3}} werden sematisch zurückgenommen. Da die Teiltransaktion \textit{T\textsubscript{4}} nicht ausgeführt wurde, wird auch deren Ausgleichstransaktion \textit{C\textsubscript{4}} nicht ausgeführt.\\
+
+Das Prinzip einer Saga lässt sich sehr gut auf ein reaktives System und die Kommunikation zwischen mehreren Komponenten übertragen. Nicht selten kommt es vor, dass eine Anfrage mehrere Zustandsänderungen --- also Teiltransaktionen --- in verschiedenen Komponenten bewirkt. Kuhn beschreibt deshalb eine Saga im Bezug auf reaktive Systeme mit folgenden zwei Sätzen:
+
+\begin{quotation}
+Divide long-lived distributed transactions into quick local ones with compensating actions for recovery. [Therefore] create an ephemeral component to manage the execution of a sequence of actions distributed across multiple components \cite[S.~307]{kuhn_reactive_2015}.
+\end{quotation}
+
+In einem reaktiven System wird eine Saga somit von einer Anfrage ausgelöst. Diese Anfrage zieht mehrere Unteranfragen anstelle von Teiltransaktionen nach sich. Zu jeder Unteranfrage wird eine Ausgleichsanfrage definiert \cite{mccaffrey_goto_2015}.\\
+Folgendes Sequenzdiagramm zeigt einen möglichen Ablauf einer Saga in einem verteilten System mit mehreren unabhängigen Komponenten. Das Beispiel zeigt einen Onlineshop bei dem aufgrund einer Bestellung drei weitere Komponenten angefragt werden. Der Kunde bestätigt seinen Einkauf und schickt die Bestellung ab. Die Ordering Komponente informiert drei weitere Komponenten --- wovon jedoch eine die Unteranfrage nicht bearbeiten kann. Nun werden die Ausgleichanfragen der Saga ausgeführt.
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=1\textwidth]{4-Hauptteil/saga/onlineshop-saga.eps}
+ \caption{Zeitlicher Ablauf einer Saga mit einer fehlerhaften Unteranfrage.}
+ \label{fig:sequence-saga}
+\end{figure}
+
+\pagebreak
+
+Die Komponente, die die Saga initiert und koordiniert wird Saga Execution Coordinator genannt. Es empfiehlt sich die Koordination in eine eigene kleine Komponente auszulagern. Die einzelnen Schritte einer Saga müssen protokolliert und persistiert werden. Dies ist nötigt, da der Saga Execution Coordinator selbst ausfallen kann. In dem sogenannten Saga Log werden Beginn und Ende der Unteranfragen sowie Beginn und Ende der Saga protokolliert. Auch die im Fehlerfall ausgeführten Ausgleichsanfragen werden protokolliert. Mit dem Beginn der Saga müssen für den Saga Execution Coordinator alle benötigten Informationen für die Ausführung der Saga zur Verfügung stehen. Anhand des Logs kann der Execution Coordinator, beispielsweise nach einen unvorhergesehenen Neustart, erkennen in welchen Zustand die Saga ist und welche weiteren Maßnahmen ergriffen werden müssen.\\
+Um einen garantierten und sicheren Zustand nach einer fehlerhaften Saga zuerhalten, müssen die Ausgleichsanfragen bzw. deren Empfänger das Idempotent Receiver Pattern (\ref{subsec:idempotent-receiver-pattern}) implementieren \cite{mccaffrey_goto_2015}. Zudem empfiehlt es sich die Unteranfragen ebenfalls idempotent umzusetzen. Sind alle Anfragen idempotent kann eine Saga oder die fehlerhaften Teile einer Saga erneut ausgeführt werden bis alle Unteranfragen oder alle nötigen Ausgleichsanfragen erfolgreich beendet wurden.\\
+
+Das Saga Pattern hilft dabei langlebige und verteilte Aktionen in einer reaktiven Anwendung umzusetzen. Es lässt sich sehr gut mit dem Simple Component Pattern und der daraus resultierenden Isolation von Komponenten und deren Daten vereinen. Im Vergleich zu Protokollen mit Two-Phase Commit werden keine Shared Locks benötigt und die \textit{responsiveness} des Systems wird nicht eingeschränkt. Aufgrund der expliziten Definition der ausgleichenden Maßnahmen kann das Saga Pattern als Failure Management Pattern gesehen werden. Es eignet sich jedoch nur für Anwendungsfälle deren Business Logik keine atomare und isolierte Aktion vorschreibt. Trotz der Einschränkung können viele reale Anwendungsfälle mit dem Saga Pattern effizient umgesetzt werden.

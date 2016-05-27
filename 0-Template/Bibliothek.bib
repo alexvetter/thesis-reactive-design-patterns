@@ -407,6 +407,18 @@ code.},
   keywords = {ERLANG,ERLANG (Computer program language)}
 }
 
+@online{mccaffrey_goto_2015,
+  title = {GOTO Conferences: Applying the Saga Pattern},
+  url = {https://www.youtube.com/watch?v=xDuwrtwYHu8},
+  shorttitle = {Applying the Saga Pattern},
+  abstract = {As we build larger more complex applications and solutions that need to do collaborative processing the traditional ACID transaction model using coordinated 2-phase commit is often no longer suitable...},
+  timestamp = {2016-05-25T15:02:00Z},
+  author = {McCaffrey, Caitie},
+  urldate = {2016-05-25},
+  date = {2015-05-12},
+  keywords = {Caitie McCaffrey,Computer Science (Field Of Study),GOTO,GOTOcon,GOTO Conference,Mathematics (Field Of Study),Programming Language (Software Genre),Software (Industry)}
+}
+
 @online{thompson_memory_2011,
   title = {Memory {{Barriers}}/{{Fences}}},
   url = {http://mechanical-sympathy.blogspot.com/2011/07/memory-barriersfences.html},
@@ -471,6 +483,23 @@ Demultiplexing and Dispatching Handles for Synchronous Events},
   author = {Erb, Benjamin},
   date = {2012-04},
   keywords = {architecture,concurrency,scalability,web}
+}
+
+@inproceedings{garcia-molina_sagas_1987,
+  location = {{New York, NY, USA}},
+  title = {Sagas},
+  isbn = {978-0-89791-236-5},
+  url = {http://doi.acm.org/10.1145/38713.38742},
+  doi = {10.1145/38713.38742},
+  abstract = {Long lived transactions (LLTs) hold on to database resources for relatively long periods of time, significantly delaying the termination of shorter and more common transactions. To alleviate these problems we propose the notion of a saga. A LLT is a saga if it can be written as a sequence of transactions that can be interleaved with other transactions. The database management system guarantees that either all the transactions in a saga are successfully completed or compensating transactions are run to amend a partial execution. Both the concept of saga and its implementation are relatively simple, but they have the potential to improve performance significantly. We analyze the various implementation issues related to sagas, including how they can be run on an existing system that does not directly support them. We also discuss techniques for database and LLT design that make it feasible to break up LLTs into sagas.},
+  timestamp = {2016-05-25T14:46:10Z},
+  booktitle = {Proceedings of the 1987 {{ACM SIGMOD International Conference}} on {{Management}} of {{Data}}},
+  series = {SIGMOD '87},
+  publisher = {{ACM}},
+  author = {Garcia-Molina, Hector and Salem, Kenneth},
+  urldate = {2016-05-25},
+  date = {1987},
+  pages = {249--259}
 }
 
 @incollection{harel_development_1985,

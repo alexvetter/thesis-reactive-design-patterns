@@ -58,7 +58,7 @@ Die folgende Abbildung \ref{fig:four-traits} soll den Zusammenhang der vier Merk
 
 \begin{figure}[H]
  \centering
- \includegraphics[width=0.8\textwidth]{3-Grundlagen/four-traits/four-traits.eps}
+ \includegraphics[width=1.0\textwidth]{3-Grundlagen/four-traits/four-traits.eps}
  \caption{Die vier Merkmale einer reaktiven Anwendung \cite{kuhn_code_2015}}
  \label{fig:four-traits}
 \end{figure}
@@ -112,7 +112,8 @@ Es wird klar, dass diese Art der Kommunikation für \textit{responsivness}, \tex
 
 \subsubsection{Asynchrone Kommunikation}
 Sobald die Komponenten \textit{A} und \textit{B} verteilt werden, löst sich die angesprochene Kopplung. Dies kann durch Ausführung in jeweils eigenen Threads geschehen oder durch die Verteilung auf mehrere Nodes. Dies ist ein notwendiger Schritt hin zu einer reaktiven Anwendung~\cite[S.~22]{kuhn_reactive_2015}.\\
-Innerhalb verteilter Anwendungen ist synchrone Kommunikation (in seiner einfachsten Form ein Funktionsaufruf), wie bereits erwähnt, nicht wünschenswert. Oft werden die Gegebenheiten lokaler Funktionsaufrufe auf eine verteile Netzwerkkommunikation übertragen. Peter Deutsch formulierte diesbezüglich sieben Irrtümer bzw. Annahmen, die im Bezug auf verteile Systeme gemacht werden. Zum Beispiel die Annahme ein Netzwerk wäre ausfallsicher oder die Latenz der Netzwerkkommunikation geht gegen null. Diese Annahmen treffen selbstverständlich nicht zu~\cite[S.~1]{rotem_fallacies_2008}. In einem weiteren Artikel beschäftigen sich Waldo et al. ebenfalls mit der Kommunikation in einem verteilten System und kommen zu dem Schluss, dass vor allem unvorhersehbare Latenz und teilweiser Ausfall der Kommunikation (engl. \textit{partial failure}) unvermeidbar sind~\cite{waldo_note_1994}.\\
+Innerhalb verteilter Anwendungen ist synchrone Kommunikation (in seiner einfachsten Form ein Funktionsaufruf), wie bereits erwähnt, nicht wünschenswert. Oft werden die Gegebenheiten lokaler Funktionsaufrufe auf eine verteile Netzwerkkommunikation übertragen. Peter Deutsch formulierte diesbezüglich sieben Irrtümer bzw. Annahmen, die im Bezug auf verteile Systeme gemacht werden.\\
+Zum Beispiel die Annahme ein Netzwerk wäre ausfallsicher oder die Latenz der Netzwerkkommunikation geht gegen null. Diese Annahmen treffen selbstverständlich nicht zu~\cite[S.~1]{rotem_fallacies_2008}. In einem weiteren Artikel beschäftigen sich Waldo et al. ebenfalls mit der Kommunikation in einem verteilten System und kommen zu dem Schluss, dass vor allem unvorhersehbare Latenz und teilweiser Ausfall der Kommunikation (engl. \textit{partial failure}) unvermeidbar sind~\cite{waldo_note_1994}.\\
 Im Gegensatz zur synchronen Kommunikation führt der Sender bei einer asynchronen Kommunikation seine Aktivitäten und Berechnungen fort und wartet nicht auf die Empfangsbestätigung oder Antwort des Empfängers. Der Empfänger selbst verarbeitet die Nachrichten meist auch asynchron. Eingehende Nachrichten werden zuerst in einer \textit{message queue} bis zur Bearbeitung zwischengelagert. Man spricht auch von asynchroner und nicht blockierender Kommunikation. Durch die asynchrone Programmierung werden die Ressourcen nicht durch unvermeidbares Warten blockiert sondern effektiver genutzt~\cite[S.~48]{kuhn_reactive_2015}.\\
 
 Aufgrund des \textit{share nothing} Prinzips (siehe~\ref{subsec:sharenothing}) müssen Komponenten über Nachrichten miteinander interagieren. Der Abschnitt hat gezeigt, dass diese Interaktion asynchron und nicht blockierend ablaufen sollte, um die Ressourcen effizient zu nutzen~\cite[S.~48~\&~S.~49]{kuhn_reactive_2015}.

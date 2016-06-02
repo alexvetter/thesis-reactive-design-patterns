@@ -20,9 +20,22 @@ Die nachfolgenden Abschnitte erklären die Merkmale im Detail und zeigen den Zus
 Eine reaktive Anwendung muss auf variable Belastung ebenso variabel bzw. dynamisch reagieren können. Wird beispielsweise ein Online Shop in einer Fernsehwerbung oder von einem bekannten Blog erwährt, müssen kurzfristig sehr viele Anfragen angemessen und zufriedenstellend verarbeitet werden~\cite[S.~39]{kuhn_reactive_2015}.\\
 Um die gewünschten und geforderten Antwortzeiten einzuhalten, muss ein System skalieren. Traditionellerweise ist hiermit \textit{scaling up} gemeint. Aufgrund der heutigen Anforderungen stößt man schnell an die Grenzen eines einzelnen Hosts. Dementsprechend muss ein System nicht nur vertikal, sondern auch horizontal skalieren. Dazu werden Anwendungen auf einem Computercluster, einem Verbund aus mehreren Hosts bzw. Nodes, verteilt~\cite[S.~7]{vernon_reactive_2016}. Es ist deshalb wichtig, die Teilaufgaben einer Applikation zu identifizieren und auf einzelne Komponenten aufzuteilen, die dann wie bereits erwähnt auf einzelne Nodes verteilt werden können~\cite[S.~40]{kuhn_reactive_2015}.\\
 Das Reactive Manifesto fordert zudem auch, das System so zu gestalten, dass es \textit{scaling down} fähig ist. Das bedeutet ungenutze und nicht benötigte Ressourcen müssen wieder freigegeben werden. Dadurch kann man ein hochskalierbares und reaktives System kosteneffizient betreiben. Im Reactive Manifesto hat man sich auf den Begriff \textit{elastic} geeinigt, um deutlich zu machen, dass man in beide Richtungen skalieren kann. Bei reaktiven Applikationen spricht man deshalb von elastischer bzw. dymanischer Skalierung~\cite[S.~8]{vernon_reactive_2016}. Für die Software bedeutet dies, dass einzelne Nodes jederzeit hinzugefügt und entfernt werden können. Als Folge dessen muss das System \textit{location transparent} sein. Insofern dürfen dessen Komponenten und Funktionen nicht abhängig von einem Host sein~\cite[S.~8]{vernon_reactive_2016}. 
+Um die Leistungsfähigkeit einer Anwendung zu berechnen, kann auf das Gesetz von John Little zurückgeriffen werden. Meist auch \enquote{Little's Law} genannt. Das Gesetz besagt, dass die durchschnittliche Anzahl von Anfragen $L$ gleich dem Produkt der durchschnittlichen Anfragerate $\lambda$ und ihrer durchschnittlichen Bearbeitungsdauer $W$ ist.
 
-% TODO Little's Law
-% TODO Infrastructure as a Service oder Cloud Computing; Enterprise IT OpenStack
+\begin{figure}[H]
+  \[L := \lambda W\]
+  \caption{Berechnung der Leistungsfähigkeit mithilfe von \enquote{Little's Law}}
+\end{figure}
+
+Angenommen eine Anwendung benötigt für die Bearbeitung einer Anfrage $10ms$ und im Durchschnitt empfängt die Anwendung eine Anfrage pro Sekunde. 
+
+\begin{figure}[H]
+  \[L := \lambda W = \frac{1}{1s} 10ms = 0.01\]
+\end{figure}
+
+Das Gesetz von Little besagt, dass die durchschnittliche Anzahl von nebenläufigen Anfragen $0.01$ entspricht. Folglich sind die Anforderungen sehr gering und die Anwendung muss im Durchschnitt nur eine Anfrage zur selben Zeit bearbeiten. Steigt jedoch die Anzahl der Anfragen auf 500 pro Sekunde oder gar 1000 pro Sekunde müssen entsprechend 5 oder 10 Anfragen im Durchschnitt parallel verarbeitet werden können.\\
+Mit dem Gesetz von Little können die Voraussetzungen für die Leistungsfähigkeit einer Anwendung im Vorfeld betrachtet werden. Zudem eignet sich das Gesetz dazu eine dynamische Skalierung zur Laufzeit vorzunehmen. Hierfür ist ein stetiges Monitoring der eingehenden Anfragen und der Bearbeitungsdauer notwendig. Jedoch sollte beachtet werden, dass die dynamische Skalierung auf einer Cloud Plattform schneller teuer werden kann --- beispielsweise im Falle eines \glspl{denialofservice}.
+
 
 \pagebreak
 

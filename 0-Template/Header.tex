@@ -1,11 +1,12 @@
 %HEADER
 
-%KOMA-Script-Klasse: scrreprt
-%deutsches Design, Schriftgröße 12, DIN A4
-%Literaturverzeichnis und Index in Inhaltsverzerzeichnis einbinden
+% KOMA-Script-Klasse: scrreprt
+% deutsches Design, Schriftgröße 12, DIN A4
+% Literaturverzeichnis und Index in Inhaltsverzerzeichnis einbinden
+% Einseitig
 \documentclass[12pt,a4paper,listof=totoc,oneside]{scrreprt}
 
-%Seitenspiegel einstellen
+% Seitenspiegel einstellen
 \usepackage[a4paper]{geometry}
 \geometry{a4paper,left=30mm,right=25mm,bottom=20mm,top=15mm,bindingoffset=2mm,includehead,includefoot}
 
@@ -81,30 +82,26 @@
 	\renewcommand{\tablename}{Tab.}
 }
 
-% Glossar-Package (keine Seitenzahlen, Abkürzungsverzeichnis, ins Inhaltsverzeichnis)
-\usepackage[nonumberlist,acronym,toc]{glossaries}
-
 % Zitieren
 \usepackage[backend=biber,style=alphabetic,natbib=true]{biblatex}
 \bibliography{0-Template/Bibliothek.bib}
 \nocite{*}
 
-% Glossar einschalten
-\makeglossaries{}
-
 % für URLs
 \usepackage{url}
 
 % Links sollen nicht farbig sein
-\usepackage[colorlinks=false]{hyperref}
+\usepackage[colorlinks=false,unicode]{hyperref}
+
+% Glossar-Package (keine Seitenzahlen, Abkürzungsverzeichnis, ins Inhaltsverzeichnis)
+\usepackage[utf8]{inputenc}
+\usepackage[xindy={language=german,codepage=duden-utf8},nonumberlist,acronym,toc]{glossaries}
+\makeglossaries
 
 % Code Beispiele
 \usepackage{listings}
 \renewcommand{\lstlistlistingname}{Quellcodeverzeichnis}
 \renewcommand{\lstlistingname}{Quellcode}
-
-% Symbole
-\usepackage{amssymb}
 
 % Style für Listings
 \lstset{frame=single,

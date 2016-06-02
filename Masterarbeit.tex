@@ -1,8 +1,9 @@
 % Header
 \input{0-Template/Header}
 
-\pagecolor[rgb]{0.3,0.3,0.3}
-\color[rgb]{1,1,1}
+% Enable for white-on-black
+%\pagecolor[rgb]{0.3,0.3,0.3}
+%\color[rgb]{1,1,1}
 
 % Kopfzeilenstil
 \makroFH-Kopfzeilenstil
@@ -14,7 +15,6 @@
 
 % Glossar
 \input{0-Template/Glossar}
-\glsaddall{}
 
 % Titelseite
 \include{0-Template/Titelseite}
@@ -26,6 +26,7 @@
 \input{1-Abstract/Abstract-de}
 \input{1-Abstract/Abstract-en}
 
+% Reset pagestyle and page counter
 \clearpage
 \begingroup
   \renewcommand*{\chapterpagestyle}{empty}
@@ -33,7 +34,6 @@
   \tableofcontents
   \clearpage
 \endgroup
-
 \setcounter{page}{1}
 
 % Einleitung
@@ -50,10 +50,12 @@
 
 % Verzeichnisse
 \printbibliography
+
 \listoffigures
-\listoftables
 \lstlistoflistings
-\printglossary[type=main, title=Glossar,toctitle=Glossar]
-\printglossary[type=acronym, title=Akronyme,toctitle=Akronyme]
+
+\glsaddall
+\printglossary[title=Glossar,toctitle=Glossar]
+\printglossary[type=\acronymtype,title=Akronyme,toctitle=Akronyme]
 
 \end{document}

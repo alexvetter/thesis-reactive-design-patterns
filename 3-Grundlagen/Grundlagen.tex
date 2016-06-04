@@ -143,20 +143,20 @@ Aufgrund des Share nothing Prinzips (siehe~\ref{subsec:sharenothing}) sollten Ko
 \pagebreak
 
 \section{Funktionale Programmierung}
-Funktionale Programmierung ist ein Programmierparadigma, bei dem die Anwendungen ausschließlich aus Ausdrücken (engl. \textit{expressions}) bzw. Funktionen bestehen. Diese Funktionen haben keine Seiteneffekte, man nennt diese deshalb auch \textit{pure functions}. Funktionen werden zudem behandelt, wie übliche Datentypen (z.B. Integer oder Boolean) und können Variablen zugewiesen oder als Funktionswert übergeben werden. In funktionalen Programmiersprachen haben Funktionen somit den gleichen Stellenwert, wie auch andere Datentypen. Man spricht deshalb von sogenannten \textit{first-class functions}~\cite[S.~50]{butcher_seven_2014}~\cite[S.~3~\&~S.~19]{chiusano_functional_2015}.\\
-Folgende Abschnitte sollen gewisse Grundkonzepte der funktionalen Programmierung erklären und ihren Bezug zu reaktiven Anwendungen deutlich machen. 
+Die funktionale Programmierung ist ein Programmierparadigma, bei dem die Anwendungen ausschließlich aus Ausdrücken bzw. Funktionen bestehen. Zudem werden Funktionen bevorzugt, die keine Seiteneffekte besitzen und deshalb \enquote{Pure Functions} genannt werden. Funktionen werden darüber hinaus wie übliche Datenstrukturen (z.B. Integer oder Boolean) behandelt und können Variablen zugewiesen oder als Argument übergeben werden. In funktionalen Programmiersprachen haben Funktionen somit den gleichen Stellenwert, wie auch andere Datentypen. Man spricht deshalb von sogenannten \enquote{First-class Functions}~\cite[S.~50]{butcher_seven_2014}~\cite[S.~3~\&~S.~19]{chiusano_functional_2015}.\\
+Folgende Abschnitte erklären gewisse Grundkonzepte der funktionalen Programmierung und machen ihren Bezug zu reaktiven Anwendungen deutlich. 
 
 \subsection{Immutable}
-In der traditionellen und imperativen Programmierung wird meist von den so genannten veränderbaren Zuständen Gebrauch gemacht (engl.~\textit{mutable state}). Ein veränderbarer Zustand ist eine Variable, die jederzeit modifiziert werden kann. Im Abschnitt zu \fullref{subsec:sharenothing} wurde bereits deutlich gemacht, dass veränderbarer \textit{shared memory} bzw. \textit{shared mutable state} bei nebenläufigen Anwendungen zu verschiedenen Problemen führen kann. Funktionale Programmierung versucht \textit{mutable state} von vornherein zu verhindern~\cite[S.~50]{butcher_seven_2014}.\\
-Ist eine Variable \textit{immutable} bedeutet das, sie ist nach dem initialen Setzen eines Wertes nicht mehr veränderbar. Der gleichzeitige Zugriff auf einen \textit{shared immutable state} muss somit nicht mehr synchronisiert werden, da die Variable nur einmal beschrieben werden kann~\cite[S.~50]{butcher_seven_2014}~\cite[S.~62]{kuhn_reactive_2015}.
+In der imperativen Programmierung wird meist von den so genannten veränderbaren Zuständen Gebrauch gemacht (engl.~\enquote{Mutable State}). Ein veränderbarer Zustand ist eine Variable, die jederzeit modifiziert werden kann. Im Abschnitt zu \fullref{subsec:sharenothing} wurde bereits deutlich gemacht, dass veränderbarer und geteilter Speicher (engl. \enquote{Shared Mutable State}) bei nebenläufigen Anwendungen zu verschiedenen Problemen führen kann. Die funktionale Programmierung versucht \enquote{Mutable State} von vornherein zu verhindern~\cite[S.~50]{butcher_seven_2014}.\\
+Ist eine Variable \enquote{immutable} bedeutet das, sie ist nach dem initialen Setzen eines Wertes nicht mehr veränderbar. Der gleichzeitige Zugriff auf einen \enquote{Shared Immutable State} muss somit nicht mehr synchronisiert werden, da die Variable nur einmal beschrieben werden kann~\cite[S.~50]{butcher_seven_2014}~\cite[S.~62]{kuhn_reactive_2015}.
 
 \pagebreak
 
-\subsection{Pure functions}
-Die sogenannten \textit{pure functions} sind Funktionen ohne Seiteneffekte. Eine \textit{pure function} liefert bei gleicher Eingabe auch immer das gleiche Ergebnis~\cite[S.~61]{kuhn_reactive_2015}. Eine Funktion, die eine global definierte Zählvariable inkrementiert, hat somit Seiteneffekte. Desweiteren darf eine \textit{pure function} keine höheren Datentypen, wie Objekte oder Listen verändern. Auch der Zugriff auf Netzwerk oder Dateisystem gilt als Seiteneffekt~\cite[S.~3]{chiusano_functional_2015}~\cite[S.~62]{kuhn_reactive_2015}.
-Der Vorteil von \textit{pure functions} ist, dass der Aufruf durch das Ergebnis ersetzt werden kann. Verallgemeinert man dieses Prinzip auch auf Ausdrücke, spricht man von der sogenannten \textit{referential transparency}~\cite[S.~9]{chiusano_functional_2015}~\cite[S.~62]{kuhn_reactive_2015}. Folgendes Beispiel zeigt eine Funktion, die zwei Zahlen addiert (\ref{lst:lst1}). Diese Funktion ändert keine bestehenden Variablenwerte und hat auch sonst keinerlei Seiteneffekte. Der Aufruf dieser Funktion kann folglich mit dem Ergebnis ersetzt werden, wie die letzte Zeile des Beispiels zeigt.
+\subsection{Pure Functions}
+Die Pure Functions sind Funktionen ohne Seiteneffekte. Eine Pure Function liefert bei gleicher Eingabe auch immer das gleiche Ergebnis~\cite[S.~61]{kuhn_reactive_2015}. Eine Funktion, die eine global definierte Zählvariable inkrementiert, hat somit Seiteneffekte. Desweiteren darf eine Pure Function keine höheren Datentypen, wie Objekte oder Listen verändern. Auch der Zugriff auf Netzwerk oder Dateisystem gilt als Seiteneffekt~\cite[S.~3]{chiusano_functional_2015}~\cite[S.~62]{kuhn_reactive_2015}.
+Der Vorteil von Pure Functions ist, dass der Aufruf durch das Ergebnis ersetzt werden kann. Verallgemeinert man dieses Prinzip auch auf Ausdrücke, spricht man von der sogenannten \enquote{Referential Transparency}~\cite[S.~9]{chiusano_functional_2015}~\cite[S.~62]{kuhn_reactive_2015}. Folgendes Beispiel zeigt eine Funktion, die zwei Zahlen addiert (\ref{lst:lst1}). Diese Funktion ändert keine bestehenden Variablenwerte und hat auch sonst keinerlei Seiteneffekte. Der Aufruf dieser Funktion kann folglich mit dem Ergebnis ersetzt werden, wie die letzte Zeile des Beispiels zeigt.
 
-\begin{lstlisting}[caption={Beispiel für eine \textit{pure funcition}},label={lst:lst1}]
+\begin{lstlisting}[caption={Beispiel für eine Pure Funcition},label={lst:lst1}]
 def add(a: Int, b: Int): Int = {
   return a + b
 }
@@ -168,11 +168,11 @@ add(3, 7)
 // = 3 + 7 = 10
 \end{lstlisting}
 
-Dieses einfache Beispiel nutzt wiederum eine \textit{pure function}, die bereits durch die Programmiersprache, in diesem Fall Scala, bereitgestellt wird. Die Addition zweier Zahlen durch den \textit{+} Operator. Auch in nicht funktionalen Sprachen gibt es viele Ausdrücke und \textit{pure functions}, die die \textit{referential transparency} wahren. Zum Beispiel die mathematischen Operatoren oder die Funktion zur Bestimmung der Länge einer Zeichenkette --- meist \textit{length} genannt.\\
+Dieses einfache Beispiel nutzt wiederum eine Pure Function, die bereits durch die Programmiersprache, in diesem Fall Scala, bereitgestellt wird. Die Addition zweier Zahlen durch den \textit{+} Operator. Auch in nicht funktionalen Sprachen gibt es viele Ausdrücke und Pure Functions, die die Referential Transparency wahren. Zum Beispiel die mathematischen Operatoren oder die Funktion zur Bestimmung der Länge einer immutable Zeichenkette --- meist \textit{length} genannt.\\
 
-Ein weiteres Beispiel für die \textit{referential transparency} sind Funktionen, die einen bestehenden Wert kopieren und bei diesem Vorgang Veränderungen durchführen ohne den alten Wert bzw. die alte Referenz zu verändern (siehe~\autoref{lst:lst2}).
+Ein weiteres Beispiel für die Referential Transparency sind Funktionen, die einen bestehenden Wert kopieren und bei diesem Vorgang Veränderungen durchführen ohne den alten Wert bzw. die alte Referenz zu verändern (siehe~\autoref{lst:lst2}).
 
-\begin{lstlisting}[caption={Beispiel einer Funktion mit \textit{referential transparency}.},label={lst:lst2}]
+\begin{lstlisting}[caption={Beispiel einer Funktion mit Referential Transparency.},label={lst:lst2}]
 def moveX(p: Point, x: Int): Point = {
   return new Point(p.x + x, p.y)
 }
@@ -183,9 +183,9 @@ val p2 = moveX(p1, 2)
 \end{lstlisting}
 
 Die Funktion \textit{moveX} verändert den übergebenen Wert \textit{p} nicht, sondern kopiert bestehende Variablen des Typs und verändert diese. Der Wert von \textit{p1} wird somit nicht verändert und bleibt auch nach Aufruf der Funktion bestehen.\\
-Folgendes Gegenbeispiel zeigt eine Funktion \textit{badMoveX}, welche den übergebenen Wert verändert und somit die \textit{referential transparency} nicht einhält (siehe~\autoref{lst:lst22}). Dieses Verhalten kann zu unerwünschten Seiteneffekten führen.
+Folgendes Gegenbeispiel zeigt eine Funktion \textit{badMoveX}, welche den übergebenen Wert verändert und somit die Referential Transparency nicht einhält (siehe~\autoref{lst:lst22}). Dieses Verhalten kann zu unerwünschten Seiteneffekten führen.
 
-\begin{lstlisting}[caption={Beispiel einer Funktion ohne \textit{referential transparency}.},label={lst:lst22}]
+\begin{lstlisting}[caption={Beispiel einer Funktion ohne Referential Transparency.},label={lst:lst22}]
 def badMoveX(p: Point, x: Int): Point = {
   p.x += x
   return p
@@ -199,11 +199,11 @@ val p2 = badMoveX(p1, 2)
 
 \pagebreak
 
-\subsection{Higher-order functions}
+\subsection{Higher-order Functions}
 In funktionalen Programmiersprachen werden Funktionen, wie ein weiterer Datentyp behandelt. Folglich kann eine Funktion einer Variable zugewiesen werden. Eine Funktion die einen \textit{String} entgegen nimmt und eine Zahl vom Typ \textit{Int} zurückgibt, hat den Typ \textit{String~=>~Int}. Eine Variable, die eine solche Funktion enthält, ist somit ebenfalls vom Typ \textit{String~=>~Int}.\\
 Außerdem kann eine Funktion ein Rückgabewert einer Funktion sein. Beispielsweise ist es möglich Funktionen vom Typ \textit{()~=>~(String~=>~Int)} zu definieren. Eine Funktion von diesem Typ erwartet kein Argument und gibt eine Funktion vom Typ \textit{String~=>~Int} zurück.\\
-Zudem können in funktionalen Sprachen Funktionen als Argument an andere Funktionen übergeben werden, wie die folgenden zwei Beispiele zeigen (\autoref{lst:lst3} \& \ref{lst:lst4}). Funktionen die andere Funktionen als Argument entgegennehmen nennt man \textit{higher-order functions}~\cite[S.~50]{butcher_seven_2014}~\cite[S.~3~\&~S.~19]{chiusano_functional_2015}.\\
-Das nächste Beispiel zeigt die Definition einer Funktion, welche einen String als Argument übergeben bekommt und prüft, ob dessen Länge gerade ist (\ref{lst:lst3}).
+Zudem können in funktionalen Sprachen Funktionen als Argument an andere Funktionen übergeben werden, wie die folgenden zwei Beispiele zeigen (\autoref{lst:lst3} \& \ref{lst:lst4}). Funktionen die andere Funktionen als Argument entgegennehmen nennt man \enquote{Higher-order Functions}~\cite[S.~50]{butcher_seven_2014}~\cite[S.~3~\&~S.~19]{chiusano_functional_2015}.\\
+Das nächste Beispiel zeigt die Definition einer Funktion, welche einen String als Argument übergeben bekommt und prüft, ob dessen Länge gerade ist (\ref{lst:lst3}). Diese Funktion wird dann in dem nächsten \autoref{lst:lst4} an eine Higher-order Function übergeben.
 
 \begin{lstlisting}[caption={Funktion, welche prüft, ob die Länge eines Strings gerade ist.},label={lst:lst3}]
 def evenStringLength(str: String): Boolean = {
@@ -237,7 +237,7 @@ def findFirst(arr: List[String], func: String => Boolean): Option[String] = {
 findFirst(list, evenStringLength) // = "Servus"
 \end{lstlisting}
 
-Die Funktion \textit{findFirst} ist eine \textit{higher-order function}. Als zweites Argument wird eine Funktion vom Typ \textit{String => Boolean} erwartet. Also eine Funktion, die ein Argument vom Typ \textit{String} entgegen nimmt, eine Berechnung durchführt und dann einen \textit{Boolean} zurückliefert. Die Funktion \textit{evenStringLength} entspricht eben genau dieser Definition.\\
+Die Funktion \textit{findFirst} ist eine \enquote{Higher-order Function}. Als zweites Argument wird eine Funktion vom Typ \textit{String => Boolean} erwartet. Also eine Funktion, die ein Argument vom Typ \textit{String} entgegen nimmt, eine Berechnung durchführt und dann einen \textit{Boolean} zurückliefert. Die Funktion \textit{evenStringLength} entspricht eben genau dieser Definition.\\
 Durch diese generische Definition von \textit{findFirst} können nun auch andere Funktionen vom Typ \textit{String => Boolean} übergeben werden, ohne die eigentliche Suchfunktion von \textit{findFirst} zu verändern.\\
 
-Durch \gls{concurrency} und Parallelität kann der Zugriff auf \textit{shared mutable state} nicht-deterministisch sein. Die Probleme die dadurch entstehen wurden bereits erwähnt (siehe \ref{subsec:sharenothing}). Durch funktionale Programmierung kann man \textit{mutable state} vermeiden.
+Durch \gls{concurrency} und Parallelität kann der Zugriff auf \enquote{Shared Mutable State} nicht-deterministisch sein. Die Probleme die dadurch entstehen wurden bereits erwähnt (siehe \ref{subsec:sharenothing}). Durch funktionale Programmierung kann man \enquote{Mutable State} vermeiden.

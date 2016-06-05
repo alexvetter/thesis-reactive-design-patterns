@@ -3,19 +3,19 @@
 Dieser Teil der Arbeit beschäftigt sich mit Reactive Design Patterns. Dabei handelt es sich nicht um gänzlich neue Design Patterns, sondern vielmehr um Patterns, die sich für die Entwicklung reaktiver Systeme als nützlich erweisen. Der Fokus soll vor allem auf Patterns liegen, die die Eigenschaften reaktiver Anwendungen unterstützen.
 
 \subsection{Observable Pattern}\label{subsec:observable-pattern}
-Das reaktive Observable Pattern stammt aus dem Hause Microsoft und wurde von Erik Meijer in dem Framework für reaktive Programming \textit{Reactive Extensions} definiert. Die reaktive Programmierung beschäftigt sich mit dem Datenfluss einer Anwendung und mit der asynchronen Verarbeitung von Events. Bei der Entwicklung von Benutzeroberflächen ist reaktive Programmierung seit langem üblich und verbreitet. Eine Benutzeroberfläche muss stetig auf Eingaben, also Events, durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Ebenso können die Anfragen einer Webapplikation als kontinuierlicher Datenstrom aus Events bezeichnet werden.\\
-Zu Beginn der Arbeit wurde bereits die Definition reaktiver Systeme genannt. Allgemeiner betrachtet bedeutet das englische Wort \textit{reactive} laut dem Merriam-Webster Wörterbuch \enquote{readily responsive to a stimulus}\footnote{http://www.merriam-webster.com/dictionary/reactive}. Demnach ist etwas \textit{reactive}, wenn es bereitwillig auf einen Reiz reagiert. Im Bezug auf Software sind Reize Events, die von einer Komponente verarbeitet werden müssen \cite{rappl_introduction_2016} \cite[S.~4]{carkci_dataflow_2014} \cite[S.~5]{blackheath_functional_2015}.\\
-Für die Verarbeitung von Events nutzt man traditionellerweise das Verhaltensmuster \textit{Observer}. Dieses Muster beschreibt zwei Akteure bzw. Rollen. Das beobachtbare Subjekt, emittiert bzw. veröffentlicht Events. Die Events können von beliebig vielen Empfängern verarbeitet werden. Diese Empfänger werden als Beobachter oder auch als Observer bezeichnet. Ein Observer hat die Möglichkeit sich für Zustandsänderungen des Subjekts an- und abzumelden \cite[S.~293]{gamma_design_1995}.\\
-Ein endlicher Strom von Events ist im Grunde nichts anderes als eine Liste. Für die Verarbeitung einer Liste nutzt man traditionellerweise das Verhaltensmuster \textit{Iterator}. Dieses Muster ermöglicht den sequenziellen Zugriff auf Elemente einer aggregierten Datenstruktur. Der Iterator definiert hierfür eine Schnittstelle für den Zugriff und das Traversieren beispielsweise einer Liste \cite[S.~257]{gamma_design_1995}.\\
+Das reaktive Observable Pattern stammt aus dem Hause Microsoft und wurde von Erik Meijer in dem Framework für reaktive Programming \enquote{Reactive Extensions} definiert. Die reaktive Programmierung beschäftigt sich mit dem Datenfluss einer Anwendung und mit der asynchronen Verarbeitung von Events. Bei der Entwicklung von Benutzeroberflächen ist reaktive Programmierung seit langem üblich und verbreitet. Eine Benutzeroberfläche muss stetig auf Eingaben, also Events, durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Ebenso können die Anfragen einer Webapplikation als kontinuierlicher Datenstrom aus Events bezeichnet werden.\\
+Zu Beginn der Arbeit wurde bereits die Definition reaktiver Systeme genannt. Allgemeiner betrachtet bedeutet das englische Wort \enquote{reactive} laut dem Merriam-Webster Wörterbuch \enquote{readily responsive to a stimulus}\footnote{http://www.merriam-webster.com/dictionary/reactive}. Demnach ist etwas reactive, wenn es bereitwillig auf einen Reiz reagiert. Im Bezug auf Software sind Reize Events, die von einer Komponente verarbeitet werden müssen \cite{rappl_introduction_2016} \cite[S.~4]{carkci_dataflow_2014} \cite[S.~5]{blackheath_functional_2015}.\\
+Für die Verarbeitung von Events nutzt man traditionellerweise das Verhaltensmuster Observer. Dieses Muster beschreibt zwei Akteure bzw. Rollen. Das beobachtbare Subjekt, emittiert bzw. veröffentlicht Events. Die Events können von beliebig vielen Empfängern verarbeitet werden. Diese Empfänger werden als Beobachter oder auch als Observer bezeichnet. Ein Observer hat die Möglichkeit sich für Zustandsänderungen des Subjekts an- und abzumelden \cite[S.~293]{gamma_design_1995}.\\
+Ein endlicher Strom von Events ist im Grunde nichts anderes als eine Liste. Für die Verarbeitung einer Liste nutzt man traditionellerweise das Verhaltensmuster Iterator. Dieses Muster ermöglicht den sequenziellen Zugriff auf Elemente einer aggregierten Datenstruktur. Der Iterator definiert hierfür eine Schnittstelle für den Zugriff und das Traversieren beispielsweise einer Liste \cite[S.~257]{gamma_design_1995}.\\
 Die beiden Patterns unterscheiden sich jedoch im Hinblick auf den Zugriff der Daten. Beim Iterator Pattern wird der Iterator nach weiteren Daten gefragt. Man nennt dies Pull-Strategie. Im Gegensatz dazu nutzt man beim Observer Pattern die Push-Strategie. Der Observer wird vom Subjekt benachrichtigt, falls weitere Daten verarbeitet werden müssen. Das Observer Pattern hat im Vergleich zum Iterator Pattern zwei Nachteile. Das Pattern beschreibt keine Möglichkeit einer Fehlerbehandlung und auch die Mitteilung, dass keine weiteren Events mehr eintreffen werden, ist nicht vorgesehen.\\
 Das Observable Pattern kombiniert beide Patterns. Zum einen verwendet es die Push-Strategie und das Beobachten des Observer Patterns. Zum anderen kann ein Observable für das Ende des Datenstroms sowie über Fehler informiert werden. Ein Subscriber eines Observables definiert eine Schnittstelle mit den drei folgenden Methoden \cite{reactivex_2014}:
 
 \begin{enumerate}
-\item \textit{onNext(Event)}\\
+\item onNext(Event)\\
 Wird aufgerufen, falls ein Event verarbeitet werden soll.
-\item \textit{onError(Exception)}\\
+\item onError(Exception)\\
 Wird aufgerufen, falls etwa beim Aggregieren ein Fehler aufgetreten ist.
-\item \textit{onCompleted()}\\
+\item onCompleted()\\
 Wird aufgerufen, falls das Ende des Datenstroms erreicht ist.
 \end{enumerate}
 
@@ -71,17 +71,17 @@ Die Liste beansprucht keine Vollständigkeit und zeigt trotzdem, dass einzelne K
 
 \pagebreak
 
-Das Pattern ist keineswegs neu. Es kann aus dem \textit{Single Responsibility Priniciple} von Robert C. Martin abgeleitet werden. Das Prinzip zielt auf objektorientierte Systeme ab und lautet: \enquote{A class should have only one reason to change}. Befolgt man dieses Prinzip maximiert man die Kohäsion und minimiert die Kopplung zwischen Klassen --- oder auch zwischen Komponenten \cite[S.~185]{kuhn_reactive_2015} \cite{martin_single_2014}.\\
+Das Pattern ist keineswegs neu. Es kann aus dem \enquote{Single Responsibility Priniciple} von Robert C. Martin abgeleitet werden. Das Prinzip zielt auf objektorientierte Systeme ab und lautet: \enquote{A class should have only one reason to change}. Befolgt man dieses Prinzip maximiert man die Kohäsion und minimiert die Kopplung zwischen Klassen --- oder auch zwischen Komponenten \cite[S.~185]{kuhn_reactive_2015} \cite{martin_single_2014}.\\
 Eine weitere Definition in diesem Zusammenhang stammt von Rotem-Gal-Oz bezüglich eines Services in einer Service-orientierten Architektur:
 
 \begin{quotation}
-[...] a service should provide a distinct business function [...]. One of the characteristics of services is \textit{service autonomy}, which means the service should be mainly self-sufficient \cite[S.~7]{rotem_soa_2012}.
+[...] a service should provide a distinct business function [...]. One of the characteristics of services is service autonomy, which means the service should be mainly self-sufficient \cite[S.~7]{rotem_soa_2012}.
 \end{quotation}
 
 Ein Service oder im übertragenen Sinn eine Komponete sollte, falls möglich, autark und unabhängig sein. Folglich empfiehlt es sich die Logik einer Funktionalität nicht über mehrere Komponenten aufzuteilen.\\
 
 Ein System im Ganzen betrachtet ist sehr komplex und schwer zu fassen. Mithilfe des Simple Component Patterns bricht man das System Schritt für Schritt in einzelne Verantwortlichkeiten und somit in einzele Komponenten auf. Es entsteht eine Hierarchie aus Komponenten und Unterkomponenten, die voneinander isoliert betrachtet werden können.\\
-Das Simple Component Pattern ist ein grundlegendes und elementares Reactive Design Pattern. Folgt man dem Pattern können die reaktiven Prinzipien \textit{supervision} (\ref{subsec:actor-model}) und \textit{share nothing} (\ref{subsec:sharenothing}) umgesetzt werden. Schlussendlich ermöglicht dieses Pattern, Komponenten von einander zu isolieren und dies wiederum unterstützt bei der Umsetzung der geforderten reaktiven Eigenschaft \textit{resilience} (\ref{subsec:resilient}).
+Das Simple Component Pattern ist ein grundlegendes und elementares Reactive Design Pattern. Folgt man dem Pattern können die reaktiven Prinzipien Supervision (\ref{subsec:actor-model}) und Share nothing (\ref{subsec:sharenothing}) umgesetzt werden. Schlussendlich ermöglicht dieses Pattern, Komponenten von einander zu isolieren und dies wiederum unterstützt bei der Umsetzung der geforderten reaktiven Eigenschaft \textit{resilience} (\ref{subsec:resilient}).
 
 \pagebreak
 
@@ -102,8 +102,8 @@ Man verzichtet somit auf aufwendige Fehlerbehandlung innerhalb einer Komponente 
 Das Let-It-Crash Pattern hat Einfluss auf die Verfügbarkeit des Systems. Die Verfügbarkeit lässt sich aus folgenden Zeitwerten berechnen \cite{friedrichsen_unkaputtbar_2014}:
 
 \begin{enumerate}
-\item MTTF (\textit{Mean Time To Failure}) beschreibt die durchschnittliche Zeit bis zum Auftreten eines Fehlers.
-\item MTTR (\textit{Mean Time To Recovery}) beschreibt die durchschnittliche Zeit bis zur vollständigen funktionalen Wiederherstellung des Systems.
+\item MTTF (Mean Time To Failure) beschreibt die durchschnittliche Zeit bis zum Auftreten eines Fehlers.
+\item MTTR (Mean Time To Recovery) beschreibt die durchschnittliche Zeit bis zur vollständigen funktionalen Wiederherstellung des Systems.
 \end{enumerate}
 
 Diese zwei durchschnittlichen Zeitwerte stehen wie folgt in Zusammenhang:
@@ -113,7 +113,7 @@ Diese zwei durchschnittlichen Zeitwerte stehen wie folgt in Zusammenhang:
 \caption{Formel zur Berechnung der Verfügbarkeit}
 \end{figure}
 
-Die Verfügbarkeit, in der Formel \textit{Availability} genannt, sollte einen Wert gegen 1 erreichen. Bei der Verfügbarkeit handelt es sich um den prozentualen Zeitanteil in der eine Software das tut, was sie tun soll \cite[S.~11]{hanmer_patterns_2007}.\\
+Die Verfügbarkeit, in der Formel \enquote{Availability} genannt, sollte einen Wert gegen 1 erreichen. Bei der Verfügbarkeit handelt es sich um den prozentualen Zeitanteil in der eine Software das tut, was sie tun soll \cite[S.~11]{hanmer_patterns_2007}.\\
 Der traditionelle Ansatz ist, die MTTF zu maximieren und somit die MTTR zu vernachlässigen. Wie bereits festgestellt wurde, lassen sich Fehler nicht ausschließen. Der Let-It-Crash Ansatz, konzentriert sich vielmehr auf die MTTR und versucht diese soweit wie möglich zu minimieren \cite[S.~198]{kuhn_reactive_2015} \cite{friedrichsen_unkaputtbar_2014}.\\
 
 Das Let-It-Crash Pattern muss, wie auch das Simple Component Pattern (\ref{subsec:simple-component-pattern}), bereits beim Design der Anwendung berücksichtigt werden. Es trägt dazu bei, die \textit{resilience} eines reaktiven Systems zu erhöhen und unterstützt somit auch ganz klar die \textit{responsiveness}.
@@ -194,7 +194,7 @@ Ein Koch bereitet vor dem Kochen erst einmal alle Zutaten vor --- während dem K
 
 Eine weitere Möglichkeit Fehler schnellstmöglich zu erkennen, ist die Überprüfung der Parameter einer Anfrage, bevor Ressourcen angefragt oder gebunden werden. Die Überprüfung sollte so einfach, wie möglich sein und keine aufwendige Berechnung oder Business Logik nach sich ziehen. Dazu gehört unter anderem die Prüfung auf \enquote{not null} oder richtige Formate bzw. richtige Datentypen. Nicht erst durch die Datenbankanfrage sollten eingehende Parameter geprüft werden \cite[S.~107]{nygard_release_2007}.\\
 
-Beispielsweise werden Entitäten überwiegend durch eine numerische ID gekennzeichnet. Bei der ID handelt es sich typischerweise um einen positiven Integerwert. Meist wird jedoch nur überprüft, ob es sich bei dem Parameter um einen Integer handelt. Die Datenbank liefert bei einem negativen Wert eine leere Menge und dies resultiert in der Regel in einen \textit{Not Found} Fehler, obwohl der eingehende Parameter falsch war.\\
+Beispielsweise werden Entitäten überwiegend durch eine numerische ID gekennzeichnet. Bei der ID handelt es sich typischerweise um einen positiven Integerwert. Meist wird jedoch nur überprüft, ob es sich bei dem Parameter um einen Integer handelt. Die Datenbank liefert bei einem negativen Wert eine leere Menge und dies resultiert in der Regel in einen \enquote{Not Found} Fehler, obwohl der eingehende Parameter falsch war.\\
 Gerne nutzt man für Konfigurationsdateien Standardwerte. Jedoch kann dies zu verzögerten und unverständlichen Fehlern führen, denn die Standardwerte sind häufig für Test- oder Entwicklungsumgebungen gedacht. Verschreibt man sich nun beispielsweise bei der Konfiguration der maximalen Datenbankverbindungen eines Datenbank-Pools, kann dies in einer Produktionsumgebung unter Last zu Ausfällen führen. Standardwerte entsprechen somit nicht dem Fail Fast Pattern \cite{shore_fail_2004}.\\
 
 In beiden Fällen würde das Fail Fast Pattern dazu führen, dass die verzögerten und unverständlichen Fehler vermieden werden. Das Fail Fast Pattern trägt zur \textit{responsiveness} einer reaktiven Anwendung bei. Zudem werden unnötig langsame Antworten und daraus resultierende falsche Timing Failures vermieden. Außerdem unterbinden Systeme mit dem Circuit Breaker Pattern (\ref{subsec:circuit-breaker-pattern}) und dem Fail Fast Pattern unnötige Ressourcenbindung \cite[S.~107]{nygard_release_2007}.
@@ -234,7 +234,7 @@ Das Bulkheads Pattern betrachtet die Isolation von Fehlerzuständen respektive v
  \label{fig:bulkheads-ship}
 \end{figure}
 
-Dieses Prinzip lässt sich auch auf Software und deren Komponenten übertragen. Mit dem Bulkheads Pattern verhindert man die unkontrollierte Verbreitung eines Fehlerzustandes --- oft auch kaskadierende Fehler genannt \cite{friedrichsen_unkaputtbar_2014}. Das Pattern wird auch oft in Zusammenhang mit \textit{Failure Units} oder \textit{Units of Mitigation} genannt \cite{friedrichsen_unkaputtbar_2014}.\\
+Dieses Prinzip lässt sich auch auf Software und deren Komponenten übertragen. Mit dem Bulkheads Pattern verhindert man die unkontrollierte Verbreitung eines Fehlerzustandes --- oft auch kaskadierende Fehler genannt \cite{friedrichsen_unkaputtbar_2014}. Das Pattern wird auch oft in Zusammenhang mit \enquote{Failure Units} oder \enquote{Units of Mitigation} genannt \cite{friedrichsen_unkaputtbar_2014}.\\
 Im operativen Einsatz von Software gibt es viele versteckte Abhängigkeiten durch das Teilen von Ressourcen. Dies kann sich auf Hardware oder auch auf Software beziehen. Abhängigkeiten begünstigen kaskadierende Fehler, egal auf welcher Ebene \cite[S.~96]{nygard_release_2007} \cite{friedrichsen_unkaputtbar_2014}.\\
 
 Nygard beschreibt in diesem Zusammenhang das Bulkheads Pattern sehr treffend mit folgenden Worten \cite[S.~96]{nygard_release_2007}:
@@ -252,7 +252,7 @@ Neben der Redundanz gibt es die Möglichkeit durch Reservierung von Ressourcen f
 
 Dieses Prinzip ist auch auf der Anwendungsebene denkbar. Beispielsweise sollte eine Anwendung für administrative oder kontrollierende Anfragen zusätzliche Threads zur Verfügung stellen. Monitoring ist somit auch möglich, wenn die Anwendung unter starker Last durch reguläre Anfragen steht \cite[S.~98]{nygard_release_2007}.\\
 
-Auch auf der Prozessorebene kann das Bulkheads Pattern umgesetzt werden. Eine Anwendung kann an spezifische Kerne eines Multicore-Prozessors gebunden werden \cite[S.~97]{nygard_release_2007}. Bei den meisten Linux-Distributionen steht hierfür der Befehl \textit{taskset} zur Verfügung. Dies führt zur effizienteren Nutzung der CPU Caches und verhindert, dass ein Prozess die volle Leistung eines Prozessors beansprucht.\\
+Auch auf der Prozessorebene kann das Bulkheads Pattern umgesetzt werden. Eine Anwendung kann an spezifische Kerne eines Multicore-Prozessors gebunden werden \cite[S.~97]{nygard_release_2007}. Bei den meisten Linux-Distributionen steht hierfür der Befehl \enquote{taskset} zur Verfügung. Dies führt zur effizienteren Nutzung der CPU Caches und verhindert, dass ein Prozess die volle Leistung eines Prozessors beansprucht.\\
 
 Ein weiteres Beispiel für versteckte Abhängigkeiten sind Connection Pools \cite[S.~214]{newman_building_2015}. Für Anfragen jeglicher Art, wie beispielsweise an eine Datenbank oder an eine Message-oriented Middleware, nutzt man aus Effizienzgründen Connection Pools. Darüber hinaus teilen sich meist mehrere Komponenten einer Software wiederum diese Connection Pools (Abb. \ref{fig:no-bulkheads}).  
 

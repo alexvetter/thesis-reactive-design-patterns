@@ -1,6 +1,6 @@
 % !TEX root = ../Masterarbeit.tex
 \chapter{Grundlagen \& Definitionen}
-In diesem Kaptiel werden die Grundlagen beschrieben, auf die der Hauptteil aufbaut. Zudem behandelt das Kapitel die Begriffsbestimmung und die genauen Eigenschaften reaktiver Systeme. Da die Umsetzung reaktiver Systeme gewisse Programmierparadigmen vorausgesetzt, werden diese nach den reaktiven Merkmalen erklärt.
+In diesem Kaptiel werden die Grundlagen für den darauf aufbauenden Hauptteil beschrieben. Die Motivation hinter dieser Arbeit und dem Reactive Manifesto sind die neuen Anforderungen die eingangs erwähnt wurden. Zunächst werden deshalb die Kerneingeschaften des Reactive Manifestos beschrieben und erklärt. Daraufhin wird die Notwendigkeit einer nebenläufigen  Architektur für reaktiven Anwendung erläutert. Zudem wird die funktionale Programmierung vorgestellt, da dieses Programmierparadigma bewusst auf Seiteneffekte verzichtet und sich deshalb sehr gut für die Umsetzung von reaktiven Systemen eignet.
 
 \section{Eigenschaften reaktiver Systeme}
 Reaktive Anwendungen haben die Eigenschaften folgendes zu leisten bzw. folgende Punkte zu erfüllen~\cite[S.~19ff]{kuhn_reactive_2015}~\cite[S.~6]{vernon_reactive_2016}.\\
@@ -8,6 +8,9 @@ Eine reaktive Anwendung muss\ldots
 \begin{enumerate}
 \item \ldots auf variable Belastung reagieren (siehe~\fullref{subsec:elastic}). Das System ist automatisch in der Lage dynamische Skalierung durchzuführen und nicht benötigte Ressourcen wieder freizugeben.
 \item \ldots auf Fehler reagieren (siehe~\fullref{subsec:resilient}). Die Software ist von Grund auf widerständsfähig gegenüber Fehlerzuständen. Die Wiederherstellung des Normalzustand erfolgt automatisch.
+
+\pagebreak
+
 \item \ldots auf Nutzer oder Komponenten reagieren (siehe~\fullref{subsec:responsive}). Jede Anfrage wird in der geforderten Antwortzeit oder schneller bearbeitet.
 \item \ldots auf Nachrichten reagieren (siehe~\fullref{subsec:messagedriven}). Das System verwendet asynchrone Nachrichtenübertragung zur Kommunikation zwischen Komponenten.
 \end{enumerate}
@@ -18,10 +21,13 @@ Die nachfolgenden Abschnitte erklären die Merkmale im Detail und zeigen den Zus
 Eine reaktive Anwendung muss auf variable Belastung ebenso variabel bzw. dynamisch reagieren können. Wird beispielsweise ein Online Shop in einer Fernsehwerbung oder von einem bekannten Blog erwährt, müssen kurzfristig sehr viele Anfragen angemessen und zufriedenstellend verarbeitet werden~\cite[S.~39]{kuhn_reactive_2015}. Überdies muss davon ausgegangen werden, dass die Nutzerzahlen oder auch die Anforderungen bzgl. Antwortzeiten zukünfigt steigen.\\
 Folglich muss ein System dazu in der Lage sein zu skalieren. Selbst durch vertikale Skalierung, also dem Hinzufügen von weiteren Ressourcen zu einem Host, stößt man aufgrund der schnell steigenden Anforderungen in kurzer Zeit an die Grenzen eines einzelnen Hosts. Dementsprechend muss ein System nicht nur vertikal, sondern auch horizontal skalieren können. Dazu werden Anwendungen auf einem Computercluster, einem Verbund aus mehreren Hosts bzw. Nodes, verteilt~\cite[S.~7]{vernon_reactive_2016}. Bei der horizontalen Skalierung werden dem Computercluster weitere Nodes hinzugefügt.\\
 Es ist deshalb wichtig, die Teilaufgaben einer Applikation zu identifizieren und auf einzelne Komponenten aufzuteilen. Die Komponenten müssen lose gekoppelt sein, um sie wie bereits erwähnt auf einzelne Nodes verteilen zu können~\cite[S.~40]{kuhn_reactive_2015}.\\
+
+\pagebreak
+
 Das Reactive Manifesto fordert zudem auch, das System so zu gestalten, dass es \enquote{Scaling down} fähig ist. Das bedeutet ungenutze und nicht benötigte Ressourcen müssen wieder freigegeben werden. Dadurch kann man ein hochskalierbares und reaktives System kosteneffizient betreiben. Im Reactive Manifesto hat man sich auf den Begriff \textit{elastic} geeinigt, um deutlich zu machen, dass man in beide Richtungen skalieren kann. Bei reaktiven Applikationen spricht man deshalb von elastischer bzw. dynamischer Skalierung~\cite[S.~8]{vernon_reactive_2016}. Für die Software bedeutet dies, dass einzelne Nodes jederzeit hinzugefügt und entfernt werden können.\\
 In Folge dessen werden Komponenten ebenso dynamisch auf verschiedene Nodes verteilt. Insofern dürfen die Komponenten und deren Kommunikation nicht von einem physikalischen Host oder anderen \enquote{örtlichen} Gegebenheiten abhängig sein~\cite[S.~8]{vernon_reactive_2016}. Diese Eigenschaft wird \enquote{\gls{locationtransparency}} genannt.\\
 
-Um die Leistungsfähigkeit einer Anwendung zu berechnen, kann auf das Gesetz von John Little (\enquote{Little's Law}) zurückgeriffen werden. Das Gesetz besagt, dass die durchschnittliche Anzahl von Anfragen $L$ gleich dem Produkt der durchschnittlichen Anfragerate $\lambda$ und ihrer durchschnittlichen Bearbeitungsdauer $W$ ist.
+Um die Leistungsfähigkeit einer Anwendung zu berechnen, kann auf das Gesetz von John Little (\enquote{Little's Law}) zurückgeriffen werden. Das Gesetz besagt, dass die durchschnittliche Anzahl von Anfragen $L$ gleich dem Produkt der durchschnittlichen Anfragerate $\lambda$ und ihrer durchschnittlichen Bearbeitungsdauer $W$ ist \cite[S.~41]{kuhn_reactive_2015}.
 
 \begin{figure}[H]
   \[L := \lambda W\]
@@ -36,8 +42,12 @@ Angenommen eine Anwendung benötigt für die Bearbeitung einer Anfrage $10ms$ un
 
 \vspace{-0.5cm}
 
-Das Gesetz von Little besagt, dass die durchschnittliche Anzahl von nebenläufigen Anfragen $0.01$ entspricht. Folglich sind die Anforderungen sehr gering und die Anwendung muss im Durchschnitt nur eine Anfrage zur selben Zeit bearbeiten. Steigt jedoch die Anzahl der Anfragen auf 500 pro Sekunde oder gar 1000 pro Sekunde müssen entsprechend 5 oder 10 Anfragen im Durchschnitt parallel verarbeitet werden können.\\
-Mit dem Gesetz von Little können die Voraussetzungen für die Leistungsfähigkeit einer Anwendung im Vorfeld betrachtet werden. Zudem eignet sich das Gesetz dazu eine dynamische Skalierung zur Laufzeit vorzunehmen. Hierfür ist ein stetiges Monitoring der eingehenden Anfragen und der Bearbeitungsdauer notwendig. Jedoch sollte beachtet werden, dass die dynamische Skalierung auf einer Cloud Plattform schnell teuer werden kann --- beispielsweise durch einen \gls{denialofservice}.
+Das Gesetz von Little besagt, dass die durchschnittliche Anzahl von nebenläufigen Anfragen $0.01$ entspricht. Folglich sind die Anforderungen sehr gering und die Anwendung muss im Durchschnitt nur eine Anfrage zur selben Zeit bearbeiten.
+
+\pagebreak
+
+Steigt jedoch die Anzahl der Anfragen auf 500 pro Sekunde oder gar 1000 pro Sekunde müssen entsprechend 5 oder 10 Anfragen im Durchschnitt parallel verarbeitet werden können.\\
+Mit dem Gesetz von Little können die Voraussetzungen für die Leistungsfähigkeit einer Anwendung im Vorfeld betrachtet werden. Zudem eignet sich das Gesetz dazu eine dynamische Skalierung zur Laufzeit vorzunehmen. Hierfür ist ein stetiges Monitoring der eingehenden Anfragen und der Bearbeitungsdauer notwendig \cite[S.~42]{kuhn_reactive_2015}. Jedoch sollte beachtet werden, dass die dynamische Skalierung auf einer Cloud Plattform schnell teuer werden kann --- beispielsweise durch einen \gls{denialofservice}.
 
 \pagebreak
 
@@ -49,9 +59,9 @@ Schon bei dem Entwurf von Software wird versucht Fehler von vornherein zu bedenk
 Without resilience, nothing else matters. If your beautiful, production-grade, elastic, scalable, highly concurrent, non-blocking, asynchronous, highly responsive and performant application isn't running, then you're back to square one. It starts and ends with resilience.~\citetext{Bonér, Jonas; 2015}
 \end{quotation}
 
-Im Grunde ist diese Aussage trivial. Eine Software, die nicht läuft ist unbrauchbar --- egal wie komplex und durchdacht die Architektur auch sein mag.\\
+Eine Software, die nicht läuft ist unbrauchbar --- egal wie komplex und durchdacht die Architektur auch sein mag.\\
 Es ist aber nicht nur die eigene Software, die betroffen sein kann. Andere externe Softwarekomponenten, von denen man abhängt, oder auch die Hardware, kann im laufenden Betrieb Probleme bereiten~\cite[S.~33]{kuhn_reactive_2015}.\\
-Der Schluss, den man daraus ziehen sollte, lautet deshalb nicht, ob ein Fehler auftritt, sondern viel mehr wann und wie häufig das passiert. Für den Benutzer ist es nebensächlich, warum ein interner Fehler aufgetreten ist. Die Anwendung wird in diesem Moment nicht das tun, was der Benutzer von ihr erwartet~\cite[S.~33]{kuhn_reactive_2015}.\\
+Der Schluss, den man daraus ziehen sollte, lautet deshalb nicht, ob ein Fehler auftritt, sondern vielmehr wann und wie häufig das passiert. Für den Benutzer ist es nebensächlich, warum ein interner Fehler aufgetreten ist. Die Anwendung wird in diesem Moment nicht das tun, was der Benutzer von ihr erwartet~\cite[S.~33]{kuhn_reactive_2015}.\\
 
 Im Reactive Manifesto hat man für dieses Problem bzw. die Eigenschaft ganz bewusst den Begriff \textit{resilience}, also zu Deutsch Widerstandfähigkeit und nicht Ausfallsicherheit gewählt. Man möchte deutlich machen, dass es nahezu unmöglich ist, ein ausfallsicheres System zu schaffen. Deshalb setzt man auf widerstandsfähige Systeme, welche mit Fehlerzuständen sinnvoll umgehen und sich vor allem von diesen wieder erholen. Folglich ist ein reaktives System nicht nur fehlertolerant, sondern geht noch einen Schritt weiter~\cite[S.~34]{kuhn_reactive_2015}.\\
 
@@ -125,7 +135,7 @@ Zusammenfassend kann man diesem Abschnitt entnehmen, dass reaktive Anwendungen p
 \pagebreak
 
 \subsection{Share nothing}\label{subsec:sharenothing}
-Nebenläufige Komponenten nutzen traditionellerweise gemeinsame bzw. geteilte Datenstrukturen (\enquote{Shared State}), um zu interagieren und zu kommunizieren. Folglich kann der Zugriff auf diese Daten nebenläufig und parallel erfolgen. Aus diesem Grund müssen die Operationen synchronisiert werden. Hierfür nutzt man das Konzept der \enquote{\gls{mutualexclusion}}. Man stellt beispielsweise über Locks sicher, dass nur ein Thread zur selben Zeit auf die Daten zugreifen kann~\cite[S.~10]{butcher_seven_2014}. Der Zugriff auf die Daten erfolgt somit sequenziell. Die Erkenntnisse durch Amdahl's Law oder der Universal Scalabilty Law (\ref{subsec:notwendigkeit}) zeigen, dass die Vorteile einer nebenläufigen Anwendung an dieser Stelle zunichtegemacht werden~\cite[S.~45]{kuhn_reactive_2015}. Zudem haben Anwendungen mit Shared State unter anderem mit Problemen wie \gls{memorycorruption}, \glspl{deadlock} und \gls{starvation} zu kämpfen~\cite[S.~117]{vernon_reactive_2016}.\\
+Nebenläufige Komponenten nutzen traditionellerweise gemeinsame bzw. geteilte Datenstrukturen (\enquote{Shared State}), um zu interagieren und zu kommunizieren. Folglich kann der Zugriff auf diese Daten nebenläufig und parallel erfolgen. Aus diesem Grund müssen die Operationen synchronisiert werden. Hierfür nutzt man das Konzept der \enquote{\gls{mutualexclusion}}. Man stellt beispielsweise über Locks sicher, dass nur ein Thread zur selben Zeit auf die Daten zugreifen kann~\cite[S.~10]{butcher_seven_2014}. Der Zugriff auf die Daten erfolgt somit sequenziell. Die Erkenntnisse durch Amdahl's Law oder der Universal Scalabilty Law (\ref{subsec:notwendigkeit}) zeigen, dass die Vorteile einer nebenläufigen Anwendung an dieser Stelle zunichtegemacht werden~\cite[S.~45]{kuhn_reactive_2015}. Zudem haben Anwendungen mit Shared State unteranderem mit Problemen wie \gls{memorycorruption}, \glspl{deadlock} und \gls{starvation} zu kämpfen~\cite[S.~117]{vernon_reactive_2016}.\\
 Neben Locks gibt weitere Algorithmen um \gls{mutualexclusion} effizienter umzusetzen und Shared State zu ermöglichen. Locks haben den Nachteil, dass Threads zeitweilig blockiert bzw. zurückgehalten werden, wenn bereits ein anderer Thread den synchronisierten Teil --- also den kritischen Abschnitt --- ausführt. Beispielsweise können mithilfe von \enquote{Optimistic Locks} und atomaren \enquote{Compare and Swap} Operationen kritische Abschnitte ohne blockierende Locks umgesetzt werden. Die Erklärung der Algorithmen im Rahmen dieser Arbeit wäre nicht zielführend. Denn diese Algorithmen sind meist schwer zu implementieren und in Folge dessen ist deren Umsetzung meist fehlerbehaftet \cite{jenkov_non-blocking_2015}. Laut Martin Thompson et al. haben selbst \enquote{Compare and Swap} Operationen einen gewissen Koordinationsaufwand der nicht zu vernachlässigen ist \cite{thompson_disruptor_2011}.\\
 Darüber hinaus ist zu erwähnen, dass in einem verteilten System diese Algorithmen aufgrund der Netzwerkkommunikation schwer umzusetzen sind \cite[S.~45]{butcher_seven_2014}.\\
 
@@ -140,7 +150,7 @@ Durch die lose Kopplung erhält man klare Grenzen zwischen den Komponenten. Dies
 \pagebreak
 
 \subsection{Kommunikation \& Interaktion}\label{subsec:communication}
-Eine reaktive Anwendung ist \textit{message-driven}. Hierzu müssen Nachrichten zwischen den Komponenten ausgetauscht werden. Es gibt zwei Möglichkeiten der Kommunikation. Zum einen die synchrone und zum anderen die asynchrone Kommunikation.
+Eine reaktive Anwendung ist \textit{message-driven}. Hierzu werden Nachrichten zwischen den Komponenten ausgetauscht. Es gibt zwei Möglichkeiten der Kommunikation. Zum einen die synchrone und zum anderen die asynchrone Kommunikation.
 
 \subsubsection{Synchrone Kommunikation}
 Die traditionelle Kommunikation zwischen zwei Komponenten ist die synchrone Kommunikation. Komponente \textit{A} ruft eine Funktion \textit{f} der Komponente \textit{B} auf. Die Berechnung erfolgt synchron und deshalb wartet Komponente \textit{A} auf das Ergebnis und kann dann erst die weiteren Schritte sequenziell abarbeiten. Die weiteren Schritte müssen jedoch nicht von dem Ergebnis der Funktion \textit{f} abhängig sein und trotzdem wird deren Berechnung blockiert. Sollte bei dem Funktionsaufruf ein Fehler auftreten, werden die nachfolgenden Befehle nicht ausgeführt. Die Komponente \textit{B} ist von diesem Fehler ebenfalls betroffen, solange die beiden Komponenten im gleichen Thread ausgeführt werden. Folglich sind die Komponenten \textit{A} und \textit{B} stark voneinander abhängig~\cite[S.~22]{kuhn_reactive_2015}~\cite{jackson_how_2016}.\\

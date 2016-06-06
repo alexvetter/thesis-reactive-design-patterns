@@ -65,11 +65,16 @@ Ist eine Anwendung nicht \textit{elastic} (siehe~\ref{subsec:elastic}) und/oder 
 \pagebreak
 
 \subsection{Message-driven}\label{subsec:messagedriven}
-Um die bereits erwähnten Eigenschaften \textit{elasticity} (\ref{subsec:elastic}), \textit{resilience} (\ref{subsec:resilient}), sowie die daraus folgende \textit{responsiveness} (\ref{subsec:responsive}) zu erfüllen, müssen reaktive Anwendungen \textit{message-driven} sein~\cite{webber_what_2014}~\cite[S.~43]{kuhn_reactive_2015}. Somit ist die Basis einer reaktiven Anwendung die vierte Eigenschaft aus dem Reactive Manifesto~\cite{boner_reactive_2014}.\\
-Ist ein System \textit{message-driven}, erfolgt die Kommunikation ausschließlich über asynchronen Nachrichtenaustausch zwischen den Komponenten, wodurch eine strikte Abgrenzung der Komponenten erfolgt. Durch die Abstraktion der Kommunikation wird eine lose Kopplung zwischen den Komponenten sichergestellt. Darüber hinaus sind die Komponenten voneinander isoliert, wodurch es möglich ist, Fehler als Nachrichten zu delegieren (siehe~\ref{subsec:resilient}).\\
-Durch den expliziten Nachrichtenaustausch kann über \glspl{messagequeue} und \gls{flowcontrol} die Last verteilt und kontrolliert werden. Ebenso wird die gewünschte \gls{locationtransparency} durch die Entkopplung über den asynchronen Nachrichtenaustausch ermöglicht~\cite{boner_reactive_2015}~\cite[S.~43]{kuhn_reactive_2015}.\\
+Um die bereits erwähnten Eigenschaften \textit{elasticity} (\ref{subsec:elastic}), \textit{resilience} (\ref{subsec:resilient}), sowie die daraus folgende \textit{responsiveness} (\ref{subsec:responsive}) zu erfüllen, müssen reaktive Anwendungen \textit{message-driven} sein~\cite{webber_what_2014}~\cite[S.~43]{kuhn_reactive_2015}. Die Basis einer reaktiven Anwendung ist somit die vierte Eigenschaft aus dem Reactive Manifesto~\cite{boner_reactive_2014}.\\
+Ist ein System \textit{message-driven}, erfolgt die Kommunikation ausschließlich über asynchronen Nachrichtenaustausch zwischen den Komponenten, wodurch eine strikte Abgrenzung der Komponenten erfolgt. Durch die Abstraktion der Kommunikation wird eine lose Kopplung zwischen den Komponenten sichergestellt. Darüber hinaus sind die Komponenten voneinander isoliert, wodurch es möglich ist, Fehler als Nachrichten zu delegieren (siehe~\ref{subsec:resilient}). Durch den expliziten Nachrichtenaustausch kann über \glspl{messagequeue} und \gls{flowcontrol} die Last verteilt und kontrolliert werden. Ebenso wird die gewünschte \gls{locationtransparency} durch die Entkopplung über den asynchronen Nachrichtenaustausch ermöglicht~\cite{boner_reactive_2015}~\cite[S.~43]{kuhn_reactive_2015}.\\
 
-Die folgende Abbildung \ref{fig:four-traits} verdeutlicht den Zusammenhang der vier Eigenschaften des Reactive Manifestos. Neben dem wohl wichtigsten Ziel der \textit{responsiveness} hat die reaktive Architektur weitere Vorteile, wie beispielsweise Wartbarkeit und Erweiterbarkeit. Jedoch werden diese weiteren Vorteile nur in der Einleitung des Reactive Manifestos beschrieben und nicht als Kerneigenschaft formuliert~\cite{boner_reactive_2014}. Die Ziele erreicht man durch die Eigenschaften \textit{elasticity} und \textit{resilience}. Die Grundvoraussetzung ist im wesentlichen die asynchrone, nicht-blockierende und nachrichtengetriebene Kommunikation, welche durch die Eigenschaft \textit{message-driven} ausgedrückt wird. Man kann argumentieren, dass auch traditionelle Software Architekturen \textit{responsiveness}, Wartbarkeit und Erweiterbarkeit zum Ziel haben. Jedoch werden dabei die für heutige Anforderungen wichtigen Eigenschaften \textit{elasticity} und \textit{resilience} vernachlässigt oder ignoriert.
+Folglich ist die reaktive Eigenschaft \textit{message-driven} zwingend erforderlich und nicht nur ein Detail der Implementierung. Auf den Unterschied zwischen synchroner und asynchroner Kommunikation wird später nochmals eingegangen (siehe \ref{subsec:communication}).\\
+
+Die folgende Abbildung \ref{fig:four-traits} verdeutlicht den Zusammenhang der vier Eigenschaften des Reactive Manifestos. Neben dem wohl wichtigsten Ziel der \textit{responsiveness} hat die reaktive Architektur weitere Vorteile, wie beispielsweise Wartbarkeit und Erweiterbarkeit. Jedoch werden diese weiteren Vorteile nur in der Einleitung des Reactive Manifestos beschrieben und nicht als Kerneigenschaft formuliert~\cite{boner_reactive_2014}. Die Ziele erreicht man durch die Eigenschaften \textit{elasticity} und \textit{resilience}. Die Grundvoraussetzung ist im wesentlichen die asynchrone, nicht-blockierende und nachrichtengetriebene Kommunikation, welche durch die Eigenschaft \textit{message-driven} ausgedrückt wird.
+
+\pagebreak
+
+Man kann argumentieren, dass auch traditionelle Software Architekturen \textit{responsiveness}, Wartbarkeit und Erweiterbarkeit zum Ziel haben. Jedoch werden dabei die für heutige Anforderungen wichtigen Eigenschaften \textit{elasticity} und \textit{resilience} vernachlässigt oder ignoriert.
 
 \begin{figure}[H]
  \centering
@@ -158,7 +163,7 @@ Folgende Abschnitte erklären gewisse Grundkonzepte der funktionalen Programmier
 
 \subsection{Immutable}
 In der imperativen Programmierung wird meist von den so genannten veränderbaren Zuständen Gebrauch gemacht (engl.~\enquote{Mutable State}). Ein veränderbarer Zustand ist eine Variable, die jederzeit modifiziert werden kann. Im Abschnitt zu \fullref{subsec:sharenothing} wurde bereits deutlich gemacht, dass veränderbarer und geteilter Speicher (engl. \enquote{Shared Mutable State}) bei nebenläufigen Anwendungen zu verschiedenen Problemen führen kann. Die funktionale Programmierung versucht \enquote{Mutable State} von vornherein zu verhindern~\cite[S.~50]{butcher_seven_2014}.\\
-Ist eine Variable \enquote{immutable} bedeutet das, sie ist nach dem initialen Setzen eines Wertes nicht mehr veränderbar. Der gleichzeitige Zugriff auf einen \enquote{Shared Immutable State} muss somit nicht mehr synchronisiert werden, da die Variable nur einmal beschrieben werden kann~\cite[S.~50]{butcher_seven_2014}~\cite[S.~62]{kuhn_reactive_2015}.
+Ist eine Variable \enquote{immutable} bedeutet das, sie ist nach dem initialen Setzen eines Wertes nicht mehr veränderbar. Der gleichzeitige Zugriff auf einen \enquote{Shared Immutable State} muss somit nicht mehr synchronisiert werden, da die Variable nur einmal beschrieben werden kann~\cite[S.~50]{butcher_seven_2014}~\cite[S.~62]{kuhn_reactive_2015}.\\
 
 \pagebreak
 
@@ -234,20 +239,18 @@ evenStringLength(thirdValue) // = true
 Die Funktion \textit{evenStringLength} soll nun durch eine rekursive Funktion auf alle Elemente der Liste angewendet werden. Diese rekursive Funktion \textit{findFirst} wird das erste Element, bei dem die Funktion \textit{evenStringLength} den Boolschen Wert \textit{true} zurückliefert, zurückgeben (\ref{lst:lst4}).
   
 \begin{lstlisting}[caption={Rekursive Funktion zur Suche des ersten passenden Elements.},label={lst:lst4}]
-def findFirst(arr: List[String], func: String => Boolean): Option[String] = {
+def findFirst(arr: List[String], fn: String=>Boolean):Option[String]={
   if (arr.isEmpty) {
     None
-  } else if (func(arr.head)) {
+  } else if (fn(arr.head)) {
     Some(arr.head)
   } else {
-    findFirst(arr.tail, func)
+    findFirst(arr.tail, fn)
   }
 }
-
 findFirst(list, evenStringLength) // = "Servus"
 \end{lstlisting}
 
-Die Funktion \textit{findFirst} ist eine \enquote{Higher-order Function}. Als zweites Argument wird eine Funktion vom Typ \textit{String => Boolean} erwartet. Also eine Funktion, die ein Argument vom Typ \textit{String} entgegen nimmt, eine Berechnung durchführt und dann einen \textit{Boolean} zurückliefert. Die Funktion \textit{evenStringLength} entspricht eben genau dieser Definition.\\
-Durch diese generische Definition von \textit{findFirst} können nun auch andere Funktionen vom Typ \textit{String => Boolean} übergeben werden, ohne die eigentliche Suchfunktion von \textit{findFirst} zu verändern.\\
+Die Funktion \textit{findFirst} ist eine \enquote{Higher-order Function}. Als zweites Argument wird eine Funktion vom Typ \textit{String => Boolean} erwartet. Also eine Funktion, die ein Argument vom Typ \textit{String} entgegen nimmt, eine Berechnung durchführt und dann einen \textit{Boolean} zurückliefert. Die Funktion \textit{evenStringLength} entspricht eben genau dieser Definition. Durch diese generische Definition von \textit{findFirst} können nun auch andere Funktionen vom Typ \textit{String => Boolean} übergeben werden, ohne die eigentliche Suchfunktion von \textit{findFirst} zu verändern.\\
 
-Durch \gls{concurrency} und Parallelität kann der Zugriff auf \enquote{Shared Mutable State} nicht-deterministisch sein. Die Probleme die dadurch entstehen wurden bereits erwähnt (siehe \ref{subsec:sharenothing}). Durch funktionale Programmierung kann man \enquote{Mutable State} vermeiden.
+Der Zugriff auf \enquote{Shared Mutable State} in nebenläufigen Anwendungen ist problematisch (siehe \ref{subsec:sharenothing}). Die Herangehensweise der funktionalen Programmierung durch unveränderliche Datenstrukturen ermöglicht \enquote{Shared State} ohne \gls{mutualexclusion}. Die Komposition von Anwendungen durch Funktionen, Pure Functions sowie Higher-order Functions macht komplexere Abläufe nachvollziehbarer und wartbarer --- wie das Observable Pattern (\ref{subsec:observable-pattern}) zeigen wird. Funktionale Programmierung wird darüber hinaus auch beim ereignisbasierten Concurrency Modell (\ref{subsec:eventdriven-concurrency}) verwendet.

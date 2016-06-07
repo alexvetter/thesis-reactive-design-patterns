@@ -5,19 +5,21 @@ Dieser Teil der Arbeit beschäftigt sich mit Reactive Design Patterns. Dabei han
 \subsection{Observable Pattern}\label{subsec:observable-pattern}
 Das reaktive Observable Pattern stammt aus dem Hause Microsoft und wurde von Erik Meijer in dem Framework für reaktive Programming \enquote{Reactive Extensions} definiert. Die reaktive Programmierung beschäftigt sich mit dem Datenfluss einer Anwendung und mit der asynchronen Verarbeitung von Events. Bei der Entwicklung von Benutzeroberflächen ist reaktive Programmierung seit langem üblich und verbreitet. Eine Benutzeroberfläche muss stetig auf Eingaben, also Events, durch den Benutzer reagieren. Dazu gehören neben Tastatureingaben und Mausklicks auch Cursorbewegungen. Ebenso können die Anfragen einer Webapplikation als kontinuierlicher Datenstrom aus Events bezeichnet werden.\\
 Zu Beginn der Arbeit wurde bereits die Definition reaktiver Systeme genannt. Allgemeiner betrachtet bedeutet das englische Wort \enquote{reactive} laut dem Merriam-Webster Wörterbuch \enquote{readily responsive to a stimulus}\footnote{http://www.merriam-webster.com/dictionary/reactive}. Demnach ist etwas reactive, wenn es bereitwillig auf einen Reiz reagiert. Im Bezug auf Software sind Reize Events, die von einer Komponente verarbeitet werden müssen \cite{rappl_introduction_2016} \cite[S.~4]{carkci_dataflow_2014} \cite[S.~5]{blackheath_functional_2015}.\\
-Für die Verarbeitung von Events nutzt man traditionellerweise das Verhaltensmuster Observer. Dieses Muster beschreibt zwei Akteure bzw. Rollen. Das beobachtbare Subjekt, emittiert bzw. veröffentlicht Events. Die Events können von beliebig vielen Empfängern verarbeitet werden. Diese Empfänger werden als Beobachter oder auch als Observer bezeichnet. Ein Observer hat die Möglichkeit sich für Zustandsänderungen des Subjekts an- und abzumelden \cite[S.~293]{gamma_design_1995}.\\
+Für die Verarbeitung von Events nutzt man traditionellerweise das Verhaltensmuster Observer. Dieses Muster beschreibt zwei Akteure bzw. Rollen. Das beobachtbare Subjekt, emittiert bzw. veröffentlicht Events. Die Events können von beliebig vielen Empfängern verarbeitet werden. Diese Empfänger werden als Beobachter oder auch als Observer bezeichnet.\\
+Ein Observer hat die Möglichkeit sich für Zustandsänderungen des Subjekts an- und abzumelden \cite[S.~293]{gamma_design_1995}.\\
 Ein endlicher Strom von Events ist im Grunde nichts anderes als eine Liste. Für die Verarbeitung einer Liste nutzt man traditionellerweise das Verhaltensmuster Iterator. Dieses Muster ermöglicht den sequenziellen Zugriff auf Elemente einer aggregierten Datenstruktur. Der Iterator definiert hierfür eine Schnittstelle für den Zugriff und das Traversieren beispielsweise einer Liste \cite[S.~257]{gamma_design_1995}.\\
 Die beiden Patterns unterscheiden sich jedoch im Hinblick auf den Zugriff der Daten. Beim Iterator Pattern wird der Iterator nach weiteren Daten gefragt. Man nennt dies Pull-Strategie. Im Gegensatz dazu nutzt man beim Observer Pattern die Push-Strategie. Der Observer wird vom Subjekt benachrichtigt, falls weitere Daten verarbeitet werden müssen. Das Observer Pattern hat im Vergleich zum Iterator Pattern zwei Nachteile. Das Pattern beschreibt keine Möglichkeit einer Fehlerbehandlung und auch die Mitteilung, dass keine weiteren Events mehr eintreffen werden, ist nicht vorgesehen.\\
 Das Observable Pattern kombiniert beide Patterns. Zum einen verwendet es die Push-Strategie und das Beobachten des Observer Patterns. Zum anderen kann ein Observable für das Ende des Datenstroms sowie über Fehler informiert werden. Ein Subscriber eines Observables definiert eine Schnittstelle mit den drei folgenden Methoden \cite{reactivex_2014}:
 
+\vspace{-0.15cm}
 \begin{enumerate}
-\item onNext(Event)\\
-Wird aufgerufen, falls ein Event verarbeitet werden soll.
-\item onError(Exception)\\
-Wird aufgerufen, falls etwa beim Aggregieren ein Fehler aufgetreten ist.
-\item onCompleted()\\
-Wird aufgerufen, falls das Ende des Datenstroms erreicht ist.
+\item Die Methode \textit{onNext(Event)} wird aufgerufen, falls ein Event verarbeitet werden soll.
+\vspace{-0.25cm}
+\item Die Methode \textit{onError(Exception)} wird aufgerufen, falls etwa beim Aggregieren ein Fehler aufgetreten ist.
+\vspace{-0.25cm}
+\item Die Methode \textit{onCompleted()} wird aufgerufen, falls das Ende des Datenstroms erreicht wurde.
 \end{enumerate}
+\vspace{-0.15cm}
 
 Observables abstrahieren den Datenfluss und durch die Observer Eigenschaften können Implementierungsdetails, wie beispielsweise \gls{concurrency} versteckt werden. Zudem wird eine asynchrone und nicht blockierende Verarbeitung von Events ermöglicht \cite[S.~81]{kuhn_reactive_2015}.
 
@@ -88,14 +90,14 @@ Das Simple Component Pattern ist ein grundlegendes und elementares Reactive Desi
 \subsection{Let-It-Crash Pattern}\label{subsec:let-it-crash-pattern}
 Beim Entwurf reaktiver Software wird von vornherein angenommen, dass das System durch Hardware- und/oder Softwarefehler ganz oder teilweise ausfallen kann. Ein reaktives System muss gegenüber Ausfällen \textit{resilience} vorweisen können (siehe \ref{subsec:resilient}).\\
 Durch die Komponentenhierarchie, die durch das \nameref{subsec:simple-component-pattern} entsteht, ist es möglich untergeordnete Komponenten in ihrem Lebenszyklus zu beeinflussen.\\
-Tritt in einer Komponente ein zufälliger Fehler auf, versucht nicht die Komponente selbst den Fehler zu beheben, sondern lässt deren Supervisor den Fehler behandeln \cite[S.~196]{kuhn_reactive_2015} \cite[S.~200~\&~S.~201]{armstrong_programming_2013}. Die eigentliche Logik und die Fehlerbehandlung sind somit entzerrt. Treten zufällige oder seltene Fehler auf, wie beispielsweise ein ungewöhnlicher Fehlerzustand oder ein blockierter Datenbank-Connection-Pool, wird die Komponente durch den Supervisor neugestartet. Der interne Zustand wird somit zurückgesetzt und zuvor gebundene Ressourcen (z.B. File-Handles, Datenbankverbindungen) werden freigegeben \cite[S.~197]{kuhn_reactive_2015}. Fehler, wie beispielsweise falsche oder fehlende Parameter sind hiervon ausgenommen und führen nicht zu einem Neustart.\\
+Tritt in einer Komponente ein zufälliger Fehler auf, versucht nicht die Komponente selbst den Fehler zu beheben, sondern lässt deren Supervisor den Fehler behandeln \cite[S.~196]{kuhn_reactive_2015} \cite[S.~200~\&~S.~201]{armstrong_programming_2013}. Die eigentliche Logik und die Fehlerbehandlung sind somit entzerrt. Treten zufällige oder seltene Fehler auf, wie beispielsweise ein ungewöhnlicher Fehlerzustand oder ein blockierter Datenbank-\gls{connectionpool}, wird die Komponente durch den Supervisor neugestartet. Der interne Zustand wird somit zurückgesetzt und zuvor gebundene Ressourcen (z.B. File-Handles, Datenbankverbindungen) werden freigegeben \cite[S.~197]{kuhn_reactive_2015}. Fehler, wie beispielsweise falsche oder fehlende Parameter sind hiervon ausgenommen und führen nicht zu einem Neustart.\\
 Das beschriebene Prinzip nennt sich Let-It-Crash Pattern und wird folgendermaßen definiert:
 
 \begin{quotation}
 Prefer a full component restart to a complex internal~failure~handling~\cite[S.~196]{kuhn_reactive_2015}.
 \end{quotation}
 
-Man verzichtet somit auf aufwendige Fehlerbehandlung innerhalb einer Komponente und zieht es vor, dass eine fehlerhafte Komponente jederzeit durch den Supervisor beendet werden kann. Der Supervisor kann darüber hinaus weitere Maßnahmen, wie beispielsweise Load Balancing, ergreifen, um fehlerhafte Nodes oder Komponenten zu umgehen.
+Man verzichtet somit auf aufwendige Fehlerbehandlung innerhalb einer Komponente und zieht es vor, dass eine fehlerhafte Komponente jederzeit durch den Supervisor beendet werden kann. Der Supervisor kann darüber hinaus weitere Maßnahmen, wie beispielsweise \gls{loadbalancing}, ergreifen, um fehlerhafte Nodes oder Komponenten zu umgehen.
 
 \pagebreak
 
@@ -138,6 +140,7 @@ Die Komponente verhält sich zu unbestimmten und zufälligen Zeitpunkten fehlerh
 \end{enumerate}
 
 Eine einfache Möglichkeit den Zustand bzw. die Verfügbarkeit einer Komponente zu überprüfen, ist das Heartbeat Pattern. Der Supervisor schickt in regelmäßigen Abständen spezielle Anfragen, die die Komponente auffordert ein Lebenszeichen, einen sogenannten Heartbeat, von sich zu geben. Erhält der Supervisor auf die Anfrage keine Antwort, kann nach Ablauf eines Timeouts, mit großer Wahrscheinlichkeit von einem Crash Failure ausgegangen werden \cite[S.~200~\&~S.~201]{kuhn_reactive_2015}.\\
+
 Die Komponente kann die Heartbeat Nachricht auch mit Informationen über deren Zustand erweitern, wie beispielsweise Fehlerrate oder Zahl der Anfragen.\\
 Das Heartbeat Pattern kann aus der Sicht der Komponente aktiv oder passiv umgesetzt werden. Das heißt die Komponente sendet die Heartbeat Nachricht auf Anfrage an den Supervisor oder selbstständig in regelmäßigen Abständen an eine vereinbarte Adresse. Sendet die Komponente die Heartbeats selbstständig, muss der Supervisor trotzdem prüfen, ob in gewissen Zeitabständen ein Heartbeat der überwachten Komponente eingeht. Der Supervisor ist somit nach wie vor in der Verantwortung Fehler zu erkennen.\\
 
@@ -161,16 +164,18 @@ Wird das Circuit Breaker Pattern angewandt, bedeutet dies, dass der Nachrichtenf
 
 \begin{figure}[H]
  \centering
- \includegraphics[width=1.0\textwidth]{4-Hauptteil/circuit-breaker/circuit-breaker-closed.eps}
+ \includegraphics[width=0.8\textwidth]{4-Hauptteil/circuit-breaker/circuit-breaker-closed.eps}
  \caption{Circuit Breaker im geschlossenem Zustand.}
  \label{fig:circuit-breaker-closed}
 \end{figure}
 
-Ist die Kommunikation zwischen den Komponenten erfolgreich, bleibt der Circuit Breaker im geschlossenem Zustand. Im Fehlerfall hat der Circuit Breaker die Möglichkeit, den Nachrichtenfluss absichtlich zu unterbrechen. Wird der Nachrichtenfluss unterbrochen, befindet sich der Circuit Breaker im offenem Zustand (siehe Abb. \ref{fig:circuit-breaker-open}). In diesem Zustand wird jede Anfrage sofort mit einer negativen Rückmeldung quittiert --- ohne eine Anfrage verschickt zu haben \cite[S.~94]{nygard_release_2007}.
+Ist die Kommunikation zwischen den Komponenten erfolgreich, bleibt der Circuit Breaker im geschlossenem Zustand.\\
+
+Im Fehlerfall hat der Circuit Breaker die Möglichkeit, den Nachrichtenfluss absichtlich zu unterbrechen. Wird der Nachrichtenfluss unterbrochen, befindet sich der Circuit Breaker im offenem Zustand (siehe Abb. \ref{fig:circuit-breaker-open}). In diesem Zustand wird jede Anfrage sofort mit einer negativen Rückmeldung quittiert --- ohne eine Anfrage verschickt zu haben \cite[S.~94]{nygard_release_2007}.
 
 \begin{figure}[H]
  \centering
- \includegraphics[width=1.0\textwidth]{4-Hauptteil/circuit-breaker/circuit-breaker-open.eps}
+ \includegraphics[width=0.8\textwidth]{4-Hauptteil/circuit-breaker/circuit-breaker-open.eps}
  \caption{Circuit Breaker im offenem Zustand.}
  \label{fig:circuit-breaker-open}
 \end{figure}
@@ -192,10 +197,13 @@ Vor der Durchführung einer Anfrage, sollte eine Applikation prüfen, ob alle be
 Ein Koch bereitet vor dem Kochen erst einmal alle Zutaten vor --- während dem Kochen festzustellen, dass eine Zutat fehlt, ist sehr ungünstig.
 \end{quotation}
 
-Eine weitere Möglichkeit Fehler schnellstmöglich zu erkennen, ist die Überprüfung der Parameter einer Anfrage, bevor Ressourcen angefragt oder gebunden werden. Die Überprüfung sollte so einfach, wie möglich sein und keine aufwendige Berechnung oder Business Logik nach sich ziehen. Dazu gehört unteranderem die Prüfung auf \enquote{not null} oder richtige Formate bzw. richtige Datentypen. Nicht erst durch die Datenbankanfrage sollten eingehende Parameter geprüft werden \cite[S.~107]{nygard_release_2007}.\\
+Eine weitere Möglichkeit Fehler schnellstmöglich zu erkennen, ist die Überprüfung der Parameter einer Anfrage, bevor Ressourcen angefragt oder gebunden werden. Die Überprüfung sollte so einfach, wie möglich sein und keine aufwendige Berechnung oder Business Logik nach sich ziehen.
 
+\pagebreak
+
+Dazu gehört unteranderem die Prüfung auf \enquote{not null} oder richtige Formate bzw. richtige Datentypen. Nicht erst durch die Datenbankanfrage sollten eingehende Parameter geprüft werden \cite[S.~107]{nygard_release_2007}.\\
 Beispielsweise werden Entitäten überwiegend durch eine numerische ID gekennzeichnet. Bei der ID handelt es sich typischerweise um einen positiven Integerwert. Meist wird jedoch nur überprüft, ob es sich bei dem Parameter um einen Integer handelt. Die Datenbank liefert bei einem negativen Wert eine leere Menge und dies resultiert in der Regel in einen \enquote{Not Found} Fehler, obwohl der eingehende Parameter falsch war.\\
-Gerne nutzt man für Konfigurationsdateien Standardwerte. Jedoch kann dies zu verzögerten und unverständlichen Fehlern führen, denn die Standardwerte sind häufig für Test- oder Entwicklungsumgebungen gedacht. Verschreibt man sich nun beispielsweise bei der Konfiguration der maximalen Datenbankverbindungen eines Datenbank-Pools, kann dies in einer Produktionsumgebung unter Last zu Ausfällen führen. Standardwerte entsprechen somit nicht dem Fail Fast Pattern \cite{shore_fail_2004}.\\
+Gerne nutzt man für Konfigurationsdateien Standardwerte. Jedoch kann dies zu verzögerten und unverständlichen Fehlern führen, denn die Standardwerte sind häufig für Test- oder Entwicklungsumgebungen gedacht. Verschreibt man sich nun beispielsweise bei der Konfiguration der maximalen Datenbankverbindungen eines Datenbank-\glspl{connectionpool}, kann dies in einer Produktionsumgebung unter Last zu Ausfällen führen. Standardwerte entsprechen somit nicht dem Fail Fast Pattern \cite{shore_fail_2004}.\\
 
 In beiden Fällen würde das Fail Fast Pattern dazu führen, dass die verzögerten und unverständlichen Fehler vermieden werden. Das Fail Fast Pattern trägt zur \textit{responsiveness} einer reaktiven Anwendung bei. Zudem werden unnötig langsame Antworten und daraus resultierende falsche Timing Failures vermieden. Außerdem unterbinden Systeme mit dem Circuit Breaker Pattern (\ref{subsec:circuit-breaker-pattern}) und dem Fail Fast Pattern unnötige Ressourcenbindung \cite[S.~107]{nygard_release_2007}.
 
@@ -216,7 +224,8 @@ Ein Applikation besteht aufgrund des Simple Component Patterns (\ref{subsec:simp
 \end{enumerate}
 
 Diese Auswahl an Ausweichstrategien sind alles Varianten der \enquote{Graceful Degradation of Service} --- der kontrollierten Einschränkung von Funktionalität im Fehlerfall \cite{friedrichsen_unkaputtbar_2014} \cite[S.~207]{newman_building_2015}. Diese Ausweichstrategien beschreiben somit die Grauzone zwischen vollfunktionsfähig und Totalausfall. Jede dieser Strategien ist Timing Failures oder kryptischen Fehlermeldungen vorzuziehen. Dennoch handelt es sich bei dieser Art von Fehlerbehandlung um eine fachliche Fehlerbehandlung und nicht um eine technische Fehlerbehandlung \cite{friedrichsen_unkaputtbar_2014}.\\
-Beispielsweise müsste der Product Owner im Requirement definieren, wie sich die Anwendung zu verhalten hat. Angenommen ein Onlineshop lädt Produktinformationen, Lieferstatus sowie Preis von drei unabhängigen Diensten. Fällt einer dieser Dienste aus, sollte der Nutzer nicht auf eine Fehlerseite weitergeleitet werden, da dies den potentiellen Käufer dazu animieren könnte zu einem Konkurrenten zu wechseln. Ist beispielsweise der Lieferstatus nicht abrufbar, wird die Produktseite nur teilweise geladen und der Lieferstatus nicht angezeigt.\\
+Das bedeutet, die Produktverantwortlichen müssen definieren, wie sich die Anwendung im Fehlerfall zu verhalten hat.\\
+Angenommen ein Onlineshop lädt Produktinformationen, Lieferstatus sowie Preis von drei unabhängigen Diensten. Fällt einer dieser Dienste aus, sollte der Nutzer nicht auf eine Fehlerseite weitergeleitet werden, da dies den potentiellen Käufer dazu animieren könnte zu einem Konkurrenten zu wechseln. Ist beispielsweise der Lieferstatus nicht abrufbar, wird die Produktseite nur teilweise geladen und der Lieferstatus nicht angezeigt.\\
 Ein weiteres Beispiel ist die Suche eines Onlinehshops. Als zentrales und häufig genutztes Element in einem Onlineshop ist diese von großer Bedeutung. Statt dem Nutzer keine Ergebnisse oder gar eine Fehlermeldung zu liefern, bietet es sich an die aktuellen Verkaufsschlager zu präsentieren.\\
 
 Durch das Fallback Pattern wird nicht nur auf technische Fehlerbehandlung beim Design der Software eingegangen. Es fordert einen auf, sich mit Ausweichstrategien und der kontrollierten Einschränkung von Funktionlität auseinanderzusetzen. Dies hilft reaktiven Anwendungen bei der Umsetzung von \textit{responsivess} und \textit{resilience}. Mit dem Fallback Pattern und dem Circuit Breaker Pattern können fehlerhafte Komponenten isoliert werden --- ohne dabei das restliche System in Mitleidenschaft zu ziehen \cite[S.~71]{hanmer_patterns_2007}.
@@ -237,6 +246,8 @@ Das Bulkheads Pattern betrachtet die Isolation von Fehlerzuständen respektive v
 Dieses Prinzip lässt sich auch auf Software und deren Komponenten übertragen. Mit dem Bulkheads Pattern verhindert man die unkontrollierte Verbreitung eines Fehlerzustandes --- oft auch kaskadierende Fehler genannt \cite{friedrichsen_unkaputtbar_2014}. Das Pattern wird auch oft in Zusammenhang mit \enquote{Failure Units} oder \enquote{Units of Mitigation} genannt \cite{friedrichsen_unkaputtbar_2014}.\\
 Im operativen Einsatz von Software gibt es viele versteckte Abhängigkeiten durch das Teilen von Ressourcen. Dies kann sich auf Hardware oder auch auf Software beziehen. Abhängigkeiten begünstigen kaskadierende Fehler, egal auf welcher Ebene \cite[S.~96]{nygard_release_2007} \cite{friedrichsen_unkaputtbar_2014}.\\
 
+\pagebreak
+
 Nygard beschreibt in diesem Zusammenhang das Bulkheads Pattern sehr treffend mit folgenden Worten \cite[S.~96]{nygard_release_2007}:
 
 \begin{quotation}
@@ -245,7 +256,7 @@ The bulkhead enforces a principle of damage containment.
 
 Dementsprechend werden Fehler als gegeben angesehen und durch technische Maßnahmen eingedämmt.\\
 
-Die geläufigste Form zur Absicherung gegen kaskadierende Fehler ist die Redundanz \cite{friedrichsen_unkaputtbar_2014} \cite[S.~95]{nygard_release_2007}. So kann der Ausfall einer Hardwarekomponente durch Hardware-Redundanz abgefangen werden. Physikalische Einheiten, wie beispielswiese Netzteile, Festplatten, ganze Server oder sogar ganze Serverracks werden mehrfach und redundant vorgehalten. Fällt ein Netzteil oder ein ganzer Server aus, können die redundanten Teile die Last durch Konzepte, wie Failover oder Load Balancing übernehmen.\\
+Die geläufigste Form zur Absicherung gegen kaskadierende Fehler ist die Redundanz \cite{friedrichsen_unkaputtbar_2014} \cite[S.~95]{nygard_release_2007}. So kann der Ausfall einer Hardwarekomponente durch Hardware-Redundanz abgefangen werden. Physikalische Einheiten, wie beispielswiese Netzteile, Festplatten, ganze Server oder sogar ganze Serverracks werden mehrfach und redundant vorgehalten. Fällt ein Netzteil oder ein ganzer Server aus, können die redundanten Teile die Last durch Konzepte, wie Failover oder \gls{loadbalancing} übernehmen.\\
 Auf Applikationsebene kann ein und die selbe Anwendung mehrfach gestartet werden, um Software-Redundanz herzustellen. Fällt beispielsweise ein Prozess durch einen Speicherzugriffsfehler aus, kann die zweite Instanz die Arbeit übernehmen.\\
 
 Neben der Redundanz gibt es die Möglichkeit durch Reservierung von Ressourcen für spezielle Anwendungsfälle das Bulkheads Pattern umzusetzen. Zum Beispiel können einzelne Server für eine spezielle Nutzergruppe reserviert werden. Diese Nutzergruppe wären somit unabhängiger, wie etwa in dem Fall, dass das Buchungssystem einer Fluggesellschaft für Endkunden ausfällt. Stehen für Callcenter Mitarbeiter reservierte Server zur Verfügung, können diese nach wie vor Flüge buchen \cite[S.~96]{nygard_release_2007}.\\
@@ -254,7 +265,7 @@ Dieses Prinzip ist auch auf der Anwendungsebene denkbar. Beispielsweise sollte e
 
 Auch auf der Prozessorebene kann das Bulkheads Pattern umgesetzt werden. Eine Anwendung kann an spezifische Kerne eines Multicore-Prozessors gebunden werden \cite[S.~97]{nygard_release_2007}. Bei den meisten Linux-Distributionen steht hierfür der Befehl \enquote{taskset} zur Verfügung. Dies führt zur effizienteren Nutzung der CPU Caches und verhindert, dass ein Prozess die volle Leistung eines Prozessors beansprucht.\\
 
-Ein weiteres Beispiel für versteckte Abhängigkeiten sind Connection Pools \cite[S.~214]{newman_building_2015}. Für Anfragen jeglicher Art, wie beispielsweise an eine Datenbank oder an eine Message-oriented Middleware, nutzt man aus Effizienzgründen Connection Pools. Darüber hinaus teilen sich meist mehrere Komponenten einer Software wiederum diese Connection Pools (Abb. \ref{fig:no-bulkheads}).  
+Ein weiteres Beispiel für versteckte Abhängigkeiten sind \glspl{connectionpool} \cite[S.~214]{newman_building_2015}. Für Anfragen jeglicher Art, wie beispielsweise an eine Datenbank oder an eine Message-oriented Middleware, nutzt man aus Effizienzgründen \glspl{connectionpool}. Darüber hinaus teilen sich meist mehrere Komponenten einer Software wiederum diese \glspl{connectionpool} (Abb. \ref{fig:no-bulkheads}).  
 
 \begin{figure}[H]
  \centering
@@ -263,12 +274,15 @@ Ein weiteres Beispiel für versteckte Abhängigkeiten sind Connection Pools \cit
  \label{fig:no-bulkheads}
 \end{figure}
 
-Die Abbildung zeigt die versteckte Abhängigkeit zwischen den zwei Komponenten, die auf einen gemeinsamen Connection Pool zugreifen \cite[S.~95]{nygard_release_2007}.\\
-Angenommen der Client~A hat einen Fehler in der Programmierung und gibt die reservierten Ressourcen, also die Connections nicht wieder frei. Durch den gemeinsam genutzen Connection Pool entwickelt sich der Fehler in der Komponente~A zu einem kaskadierenden Fehler und beeinflusst nun auch Komponente~B \cite[S.~95]{nygard_release_2007} \cite[S.~214]{newman_building_2015}. Der Connection Pool kann der Komponente~B keine freie Connection zuweisen.\\
-Ein ähnliches Problem kann entstehen, wenn die Nutzung von Connections in verschiedenen Komponenten unterschiedlich lange dauert. Angenommen Client~A führt ausschließlich schreibende Operationen auf der Connection aus. Client~B hingegen führt ausschließlich lesende Operationen aus. Ferner wird angenommen, dass die schreibenden Operationen schneller ablaufen, als die lesenden Operationen. Dies kann dazu führen, dass Client~A, die schnellere Komponente, von Client~B ausgebremst wird.\\
-Gemeinsam benutzte Connection Pools können somit ansonsten isolierte Komponenten beeinflussen und kaskadierende Fehler begünstigen. Es kann also trotz höherer Ressourcenanforderungen Sinn machen, separate Connections Pools für jede Komponente zu nutzen \cite[S.~214]{newman_building_2015}.\\
+Die Abbildung zeigt die versteckte Abhängigkeit zwischen den zwei Komponenten, die auf einen gemeinsamen \gls{connectionpool} zugreifen \cite[S.~95]{nygard_release_2007}.\\
+Angenommen der Client~A hat einen Fehler in der Programmierung und gibt die reservierten Ressourcen, also die Connections nicht wieder frei. Durch den gemeinsam genutzen \gls{connectionpool} entwickelt sich der Fehler in der Komponente~A zu einem kaskadierenden Fehler und beeinflusst nun auch Komponente~B \cite[S.~95]{nygard_release_2007} \cite[S.~214]{newman_building_2015}. Der \gls{connectionpool} kann der Komponente~B keine freie Connection zuweisen.\\
 
-In jedem dieser Fälle wird deutlich, dass man sich Gedanken über versteckte Abhängigkeiten machen sollte. Das Bulkheads Pattern hilft dabei eine reaktive Anwendung \textit{resilient} zu entwerfen. Jedoch muss das Pattern mit Bedacht angewandt werden. Die Limitierung von Ressourcen, wie etwa die feste Zuweisung von Prozessorkernen kann zu Performanceeinbußen führen. Die Isolation von Komponenten durch separate Connection Pools kann zur überhöhten Ressourcenanforderungen führen. Die Ebene auf der man das Bulkheads Pattern anwendet spielt somit eine Rolle. Zudem ist auch der fachliche Blickwinkel von Bedeutung. Gibt es eine offensichtliche Möglichkeit eines kaskadierenden Fehlers, der das System komplett ausfallen lässt, sollte auf jeden Fall das Bulkheads Pattern in Betracht gezogen werden.
+\pagebreak
+
+Ein ähnliches Problem kann entstehen, wenn die Nutzung von Connections in verschiedenen Komponenten unterschiedlich lange dauert. Angenommen Client~A führt ausschließlich schreibende Operationen auf der Connection aus. Client~B hingegen führt ausschließlich lesende Operationen aus. Ferner wird angenommen, dass die schreibenden Operationen schneller ablaufen, als die lesenden Operationen. Dies kann dazu führen, dass Client~A, die schnellere Komponente, von Client~B ausgebremst wird.\\
+Gemeinsam benutzte \glspl{connectionpool} können somit ansonsten isolierte Komponenten beeinflussen und kaskadierende Fehler begünstigen. Es kann also trotz höherer Ressourcenanforderungen Sinn machen, separate \glspl{connectionpool} für jede Komponente zu nutzen \cite[S.~214]{newman_building_2015}.\\
+
+In jedem dieser Fälle wird deutlich, dass man sich Gedanken über versteckte Abhängigkeiten machen sollte. Das Bulkheads Pattern hilft dabei eine reaktive Anwendung \textit{resilient} zu entwerfen. Jedoch muss das Pattern mit Bedacht angewandt werden. Die Limitierung von Ressourcen, wie etwa die feste Zuweisung von Prozessorkernen kann zu Performanceeinbußen führen. Die Isolation von Komponenten durch separate \glspl{connectionpool} kann zur überhöhten Ressourcenanforderungen führen. Die Ebene auf der man das Bulkheads Pattern anwendet spielt somit eine Rolle. Zudem ist auch der fachliche Blickwinkel von Bedeutung. Gibt es eine offensichtliche Möglichkeit eines kaskadierenden Fehlers, der das System komplett ausfallen lässt, sollte auf jeden Fall das Bulkheads Pattern in Betracht gezogen werden.
 
 \pagebreak
 
@@ -317,7 +331,9 @@ Die Idempotenz kann im Hinblick auf Nachrichten wie folgt umgesetzt werden \cite
 
 Duplikate einer Nachricht erkennt man am einfachsten durch einen Unique Identifier, also ein eindeutiges Metaattribut --- unabhängig von den eigentlichen Daten. Der Empfänger muss somit eine Liste aller bereits empfangenen bzw. verarbeiteten Nachrichten und deren Unique Identifiers vorhalten. Anhand dieser Liste kann der Empfänger abgleichen, ob eine Nachricht bereits verarbeitet wurde. Hohpe und Woolf schlagen vor, die Liste auf eine gewisse Anzahl von Identifiers zu begrenzen. Als Beispiel erwähnen sie TCP/IP, bei dem es aufgrund von Routing zu Duplikaten von Paketen kommen kann. Bei TCP/IP verständigen sich Sender und Empfänger auf eine maximale Länge dieser Liste \cite[S.~530]{hohpe_enterprise_2004}. Vernon hingegen empfiehlt eine maximale Verweildauer von Einträgen in der Liste zu definieren \cite[S.~383]{vernon_reactive_2016}. Bei Lastspitzen kann es nicht dazu kommen, dass Nachrichten vorzeitig aus der Liste entfernt werden, falls beim Entwurf nicht mit dieser Anzahl von Nachrichten gerechnet wurde.\\
 
-Die zweite Möglichkeit mit Duplikaten umzugehen, ist die Zustandsänderung so zu gestalten, dass es semantisch gesehen keinen Unterschied macht, ob eine Nachricht mehrfach verarbeitet wird \cite[S.~530]{hohpe_enterprise_2004}. Da die Anforderung der garantierten Zustellung einer fachlichen Anforderung zugrunde liegt, ist diese Herangehensweise durchaus sinnvoll. Dadurch ist die Idempotenz nicht an die Nachricht oder an das Messaging System gekoppelt, sondern an die Business Logik. Muss beispielsweise zugesichert werden, dass eine Bestellung maximal einmal ausgeführt wird, sollte jede Bestellung eindeutig durch eine Bestellnummer gekennzeichnet werden. Außerdem sind idempotente Datenstrukturen, wie etwa \textit{Map} in diesem Kontext von Vorteil \cite[S.~386]{vernon_reactive_2016}. Manche Datenbank, wie zum Beispiel PostgreSQL, bieten die Möglichkeit anhand einer Bedingung ein \textit{UPDATE} Statement anstatt eines \textit{INSERT} Statements durchzuführen, um Konflikte durch mehrfache Ausführung zu umgehen. Dies wird meist als \textit{UPSERT} bezeichnet\footnote{https://wiki.postgresql.org/wiki/UPSERT}.\\
+Die zweite Möglichkeit mit Duplikaten umzugehen, ist die Zustandsänderung so zu gestalten, dass es semantisch gesehen keinen Unterschied macht, ob eine Nachricht mehrfach verarbeitet wird \cite[S.~530]{hohpe_enterprise_2004}. Da die Anforderung der garantierten Zustellung einer fachlichen Anforderung zugrunde liegt, ist diese Herangehensweise durchaus sinnvoll. Dadurch ist die Idempotenz nicht an die Nachricht oder an das Nachrichtensystem gekoppelt, sondern an die Business Logik. Muss beispielsweise zugesichert werden, dass eine Bestellung maximal einmal ausgeführt wird, sollte jede Bestellung eindeutig durch eine Bestellnummer gekennzeichnet werden.\\
+
+Außerdem sind idempotente Datenstrukturen, wie etwa \textit{Map} in diesem Kontext von Vorteil \cite[S.~386]{vernon_reactive_2016}. Manche Datenbank, wie zum Beispiel PostgreSQL, bieten die Möglichkeit anhand einer Bedingung ein \textit{UPDATE} Statement anstatt eines \textit{INSERT} Statements durchzuführen, um Konflikte durch mehrfache Ausführung zu umgehen. Dies wird meist als \textit{UPSERT} bezeichnet\footnote{https://wiki.postgresql.org/wiki/UPSERT}.\\
 
 Komponenten bei denen eine garantierte Zustellung und somit eine Bestätigungsnachricht erforderlich ist, sollten als Idempotent Receiver implementiert werden. Dieses Vorgehen wird sowohl von Akka als auch Vert.x empfohlen. Durch das Pattern ist es möglich, die einfache Fehlerbehandlung durch Retries umzusetzen ohne dabei einen fehlerhaften Zustand zu erzeugen. Wichtig ist auch, dass sich die Idempotenz auf den Zustand der Business Logik bezieht --- es spricht beispielsweise nichts dagegen mehrfache Anfragen zu protokollieren \cite[S.~216]{newman_building_2015}.
 

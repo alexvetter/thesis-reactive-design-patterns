@@ -1,7 +1,3 @@
-%Akronyme
-
-%\newacronym{MOM}{MOM}{Message-oriented Middlware\protect\glsadd{glos:MOM}}
-
 % Glossareinträge
 
 \newglossaryentry{webscale}{
@@ -67,4 +63,14 @@ description={Starvation beschreibt ein Problem der Concurrency bei dem ein Proze
 \newglossaryentry{contextswitching}{
 name={Context Switching},
 description={Context Switching beschreibt den Vorgang einen Betriebssystems bei dem ein Task, also ein Prozess oder ein Thread, unterbrochen wird und Rechenkapzität einem anderen Task zugeordnet wird. Dabei wird der Zustand und Ablauf des Tasks gesichert und durch den bereits gesicherten Context des anderen Tasks ersetzt}
+}
+
+\newglossaryentry{loadbalancing}{
+name={Load Balancing},
+description={Mittels Load Balancing werden Anfragen auf mehrere redundante Systeme verteilt. Dies kann auf Hardware- oder Softwareebene erfolgen. Die Lastverteilung ist notwendig, da einzelne Server oder Prozesse nur eine gewisse Anzahl von Anfragen verarbeiten können. Oft wird Load Balancing auch genutzt um Ausfallsicherheit zu gewährleisten}
+}
+
+\newglossaryentry{connectionpool}{
+name={Connection-Pool},
+description={Ein Connection Pool ist ein Cache bzw. ein Zwischenspeicher aus bestehenden Verbindungen beispielsweise zu einer Datenbank. Das Aufbauen einer Verbindung ist aufwendig. Anstatt bei jeder Anfrage ein neue Verbindung aufzubauen, können Verbindungen aus dem Pool entnommen werden und nach Fertigstellung der Anfrage wieder zurück- bzw. freigegeben werden}
 }

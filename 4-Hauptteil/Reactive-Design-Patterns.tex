@@ -59,7 +59,7 @@ Dieses Pattern trägt den Namen Simple Component und wird wie folgt definiert:
 A component shall do only one thing, but do it in full \cite[S.~185]{kuhn_reactive_2015}.
 \end{quotation}
 
-Beispielsweise kann ein Textbearbeitungsprogramm mit Rechtschreibprüfung in Textbearbeitung und Rechtschreibprüfung aufgeteilt werden. Die Rechtschreibprüfung ist nicht abhängig von der eigentlichen Textbearbeitung und umgekehrt \cite[S.~185]{kuhn_reactive_2015}. Ein anderes Beispiel wäre ein Onlineshop. Ein Onlineshop besteht unteranderem aus folgenden Komponenten:
+Beispielsweise kann ein Textbearbeitungsprogramm mit Rechtschreibprüfung in Textbearbeitung und Rechtschreibprüfung aufgeteilt werden. Die Rechtschreibprüfung ist nicht abhängig von der eigentlichen Textbearbeitung und umgekehrt \cite[S.~185]{kuhn_reactive_2015}. Ein anderes Beispiel wäre ein Onlineshop. Ein Onlineshop besteht unter anderem aus folgenden Komponenten:
 
 \begin{enumerate}
 \item Produktverwaltung
@@ -201,7 +201,7 @@ Eine weitere Möglichkeit Fehler schnellstmöglich zu erkennen, ist die Überpr�
 
 \pagebreak
 
-Dazu gehört unteranderem die Prüfung auf \enquote{not null} oder richtige Formate bzw. richtige Datentypen. Nicht erst durch die Datenbankanfrage sollten eingehende Parameter geprüft werden \cite[S.~107]{nygard_release_2007}.\\
+Dazu gehört unter anderem die Prüfung auf \enquote{not null} oder richtige Formate bzw. richtige Datentypen. Nicht erst durch die Datenbankanfrage sollten eingehende Parameter geprüft werden \cite[S.~107]{nygard_release_2007}.\\
 Beispielsweise werden Entitäten überwiegend durch eine numerische ID gekennzeichnet. Bei der ID handelt es sich typischerweise um einen positiven Integerwert. Meist wird jedoch nur überprüft, ob es sich bei dem Parameter um einen Integer handelt. Die Datenbank liefert bei einem negativen Wert eine leere Menge und dies resultiert in der Regel in einen \enquote{Not Found} Fehler, obwohl der eingehende Parameter falsch war.\\
 Gerne nutzt man für Konfigurationsdateien Standardwerte. Jedoch kann dies zu verzögerten und unverständlichen Fehlern führen, denn die Standardwerte sind häufig für Test- oder Entwicklungsumgebungen gedacht. Verschreibt man sich nun beispielsweise bei der Konfiguration der maximalen Datenbankverbindungen eines Datenbank-\glspl{connectionpool}, kann dies in einer Produktionsumgebung unter Last zu Ausfällen führen. Standardwerte entsprechen somit nicht dem Fail Fast Pattern \cite{shore_fail_2004}.\\
 
